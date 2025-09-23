@@ -1,0 +1,86 @@
+ahora quiero que agregres los cobros que hace la plataforma que son mensuales en euros y se pagan en soles. algo parecido a lo de facebook ads que hay un aumento que me gustaria que calcularas cual es el procentaje que se aumenta a los cobros. 
+
+C:\Users\yerct\calculadora de comisiones Peña Linda Bungalows\cobros sirvoy.csv
+
+
+
+una vez hayas agregado el calculo del gasto por el pago de la plataforma sirvoy.
+
+
+
+Kiro
+Perfecto! Voy a analizar el archivo de cobros de Sirvoy para calcular el porcentaje de aumento y agregarlo al sistema. Primero, examinemos la estructura del archivo:
+
+Read file(s)
+
+cobros sirvoy.csv
+Perfecto! Ahora voy a analizar los datos de Sirvoy para calcular el porcentaje de aumento. Necesito identificar los montos reportados en euros y los montos reales cobrados en soles. Voy a crear un analizador:
+
+Created
+
+analizar_sirvoy.py
+
+
+Command
+C:\Python313\python.exe analizar_sirvoy.py
+PS C:\Users\yerct\calculadora de comisiones Peña Linda Bungalows> C:\Python313\python.exe analizar_sirvoy.py
+============================================================
+ANÁLISIS DE COBROS SIRVOY
+Cálculo del Factor de Ajuste EUR -> PEN
+============================================================
+📊 DATOS ENCONTRADOS:
+Total de recargas: 62
+Período: 17/09/2020 - 20/09/2025
+
+💰 ÚLTIMAS RECARGAS (EUR):
+------------------------------------------------------------
+Fecha        Monto EUR    Descripción
+------------------------------------------------------------
+20/09/2025   €149.00      Recarga cuenta
+20/08/2025   €149.00      Recarga cuenta
+21/07/2025   €149.00      Recarga cuenta
+21/06/2025   €149.00      Recarga cuenta
+21/05/2025   €149.00      Recarga cuenta
+21/04/2025   €115.00      Recarga cuenta
+18/03/2025   €115.00      Recarga cuenta
+08/02/2025   €115.00      Recarga cuenta
+20/01/2025   €230.00      Recarga cuenta
+19/12/2024   €115.00      Recarga cuenta
+
+📈 MONTOS MÁS FRECUENTES:
+------------------------------
+€ 90.00:  19 veces
+€115.00:  18 veces
+€149.00:   5 veces
+€ 89.00:   5 veces
+€ 70.00:   3 veces
+
+📊 ESTADÍSTICAS:
+Total recargado: €6,344.00
+Promedio por recarga: €102.32
+
+💡 PARA CALCULAR EL FACTOR DE AJUSTE:
+Necesitamos los montos reales cobrados en PEN
+Ejemplo:
+- Si €149.00 se cobra como S/ 580.00
+- Tipo de cambio implícito: 580/149 = 3.89 PEN/EUR
+- Si el tipo de cambio oficial es 3.70, el factor sería: 3.89/3.70 = 1.051 (5.1% adicional)
+
+🎯 SUGERENCIA:
+Verifica cuánto se cobra realmente en PEN por €90.00
+Con esa información podremos calcular el factor exacto
+Perfecto! Ahora necesito que me proporciones el monto real que te cobran en soles por las recargas de Sirvoy. Basándome en el análisis, veo que los montos más comunes son:
+
+€90.00 (19 veces)
+€115.00 (18 veces)
+€149.00 (5 veces)
+¿Podrías decirme cuánto te cobran realmente en soles por alguno de estos montos? Por ejemplo:
+
+¿Cuánto te cobran en PEN por €90.00?
+¿Cuánto te cobran en PEN por €115.00?
+¿Cuánto te cobran en PEN por €149.00?
+Mientras tanto, voy a preparar el sistema para integrar Sirvoy con un factor estimado, y luego lo ajustaremos con los datos reales:
+
+Accepted edits to
+
+data_processor.py
