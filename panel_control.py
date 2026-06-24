@@ -119,6 +119,23 @@ summary::marker {{ color: {text} !important; }}
 """, unsafe_allow_html=True)
 
 
+# --- AUTOMATED DATABASE SEEDING ---
+try:
+    from bson import json_util
+    cli_seed = MongoClient(MONGO_URL, serverSelectionTimeoutMS=3000)
+    db_seed = cli_seed.get_database()
+    if 'pagos' not in db_seed.list_collection_names() or db_seed['pagos'].count_documents({}) == 0:
+        seed_path = os.path.join(CARPETA, 'data', 'seed_db.json')
+        if os.path.exists(seed_path):
+            with open(seed_path, 'r', encoding='utf-8') as f:
+                docs_seed = json_util.loads(f.read())
+            if docs_seed:
+                db_seed['pagos'].insert_many(docs_seed)
+                db_seed['pagos'].create_index('hash', unique=True)
+    cli_seed.close()
+except Exception as e:
+    pass
+
 # ═══ CARGA DE DATOS ═══
 @st.cache_data(ttl=300)
 def load_data():
