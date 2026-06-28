@@ -183,6 +183,17 @@ fecha_min, fecha_max = sv['date_pe'].min().date(), sv['date_pe'].max().date()
 with st.sidebar:
     st.button("🌙/☀️ Toggle Theme", on_click=toggle_theme, use_container_width=True)
     st.markdown("<br>", unsafe_allow_html=True)
+    
+    # 🔄 Botón de actualización de datos
+    if st.button("🔄 Actualizar datos", use_container_width=True, type="primary"):
+        st.cache_data.clear()
+        st.session_state.ultima_actualizacion = datetime.now()
+        st.rerun()
+    
+    if 'ultima_actualizacion' in st.session_state:
+        st.caption(f"Última actualización: {st.session_state.ultima_actualizacion.strftime('%H:%M:%S')}")
+    
+    st.markdown("<br>", unsafe_allow_html=True)
     with st.expander("📅 Período de Consulta", expanded=True):
         modo = st.radio("Modalidad:", ['Rango','Día','Semana','Mes','Todo'], key="modo")
         if modo == 'Rango':
@@ -252,12 +263,29 @@ comision_desde_mar = float(sv_desde_mar['amount'].sum() * 0.05)
 
 costos_desde_mar = sv[(sv['date_pe'].dt.date >= fecha_base) & (sv['tipo_pago']=='Costo')]
 # Excluimos 'Saldo Base' para evitar sumarlo dos veces, ya que se agrega como constante de 9654.83
-total_costos_desde_mar = float(costos_desde_mar[costos_desde_mar['fuente'] != 'Saldo Base']['amount'].sum())
+adeudado = comision + total_costos
 
-adeudado = 9654.83 + comision_desde_mar + total_costos_desde_mar
-pagos_recibidos = sv[sv['fuente']=='Abono Chamba']
-total_abonos = float(pagos_recibidos['amount'].sum())
-saldo_pendiente = max(0.0, adeudado - total_abonos)
+# Pagos recibidos de Peña Linda (abonos a deuda) - desde tabla cobros
+try:
+    cli_aux = MongoClient(MONGO_URL, serverSelectionTimeoutMS=2000)
+    # Filtrar por fecha del sidebar (fi, ff)
+    cobros_data = list(cli_aux['pena_linda']['cobros'].find({
+        'fecha': {'$gte': pd.Timestamp(fi), '$lte': pd.Timestamp(ff) + pd.Timedelta(days=1)}
+    }))
+    cli_aux.close()
+    total_abonos = sum(c['monto'] for c in cobros_data if c.get('tipo') == 'abono')
+    total_comision = sum(c['monto'] for c in cobros_data if c.get('tipo') == 'comision')
+    total_costos_cobros = sum(c['monto'] for c in cobros_data if c.get('tipo') in ['costo','saldo_inicial'])
+    adeudado = total_comision + total_costos_cobros
+    saldo_pendiente = max(0, adeudado - total_abonos)
+except:
+    pagos_recibidos = sv[sv['fuente']=='Abono Chamba']
+    total_abonos = float(pagos_recibidos['amount'].sum()) if not pagos_recibidos.empty else 0
+    saldo_pendiente = max(0, adeudado - total_abonos)
+
+# Asegurar que pagos_recibidos siempre este definido (filtrado por fecha)
+if 'pagos_recibidos' not in dir() or pagos_recibidos is None:
+    pagos_recibidos = sv[(sv['fuente']=='Abono Chamba') & (sv['date_pe'].dt.date >= fi) & (sv['date_pe'].dt.date <= ff)]
 
 # ═══ HEADER PRINCIPAL ═══
 st.markdown(f"""
@@ -290,6 +318,11 @@ st.markdown(f"""
         <div class="bento-value" style="color:#ef4444;">S/ {saldo_pendiente:,.2f}</div>
         <div class="bento-sub">Deuda histórica acumulada</div>
     </div>
+    <div class="bento-item" style="border-top:3px solid #8b5cf6;">
+        <div class="bento-label">📊 Comisión Acumulada (desde 03/03)</div>
+        <div class="bento-value" style="color:#8b5cf6;">S/ {comision_desde_mar:,.2f}</div>
+        <div class="bento-sub">5% sobre ventas Sirvoy históricas</div>
+    </div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -302,8 +335,25 @@ tabs = st.tabs([
     "📊 Ventas Generadas", 
     "💸 Costos Operativos", 
     "🔄 Conciliación de Pagos",
+    "📋 Historial y Conciliación",
     "📤 Exportar y Reportes"
 ])
+
+# ================= HELPER: Exportar a CSV/Excel =================
+def df_to_csv(df):
+    return df.to_csv(index=False).encode('utf-8-sig')
+
+def df_to_excel(df):
+    output = io.BytesIO()
+    # Remove timezone info from datetime columns (Excel doesn't support tz-aware datetimes)
+    df_clean = df.copy()
+    for col in df_clean.columns:
+        if pd.api.types.is_datetime64_any_dtype(df_clean[col]):
+            if df_clean[col].dt.tz is not None:
+                df_clean[col] = df_clean[col].dt.tz_localize(None)
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df_clean.to_excel(writer, index=False, sheet_name='Reporte')
+    return output.getvalue()
 
 # ================= TAB 1: VENTAS GENERADAS =================
 with tabs[0]:
@@ -380,6 +430,25 @@ with tabs[0]:
                       
         st.markdown(f"**Total en Vista:** {len(det)} registros | **Monto total:** S/ {det['amount'].sum():,.2f}")
         
+        # 📤 Botones de exportación
+        exp_c1, exp_c2 = st.columns(2)
+        with exp_c1:
+            st.download_button(
+                "📥 Descargar CSV (Transacciones filtradas)",
+                data=df_to_csv(det),
+                file_name=f"transacciones_{fi}_{ff}.csv",
+                mime="text/csv",
+                use_container_width=True
+            )
+        with exp_c2:
+            st.download_button(
+                "📥 Descargar Excel (Transacciones filtradas)",
+                data=df_to_excel(det),
+                file_name=f"transacciones_{fi}_{ff}.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                use_container_width=True
+            )
+
         # Paginador
         limit = st.selectbox("Filas por página", [25, 50, 100], index=0)
         total_p = max(1, (len(det) + limit - 1) // limit)
@@ -407,8 +476,22 @@ with tabs[0]:
             page_df['Método'] = page_df['method']
             page_df['Origen'] = page_df['fuente']
             page_df['Es Link'] = page_df['es_link'].apply(lambda x: "Sí 🚫" if x else "No")
+            page_df['estado'] = page_df['estado_deposito'].fillna('—') if 'estado_deposito' in page_df.columns else '—'
             
-            st.dataframe(page_df[['Fecha', 'Origen', 'Monto', 'Tipo', 'Método', 'Es Link', 'referencia']], hide_index=True, use_container_width=True)
+            st.data_editor(
+                page_df[['Fecha', 'Origen', 'Monto', 'Tipo', 'Método', 'Es Link', 'referencia', 'estado']].rename(
+                    columns={'estado': 'Estado'}),
+                column_config={
+                    'Método': st.column_config.TextColumn(disabled=True),
+                    'Monto': st.column_config.TextColumn(disabled=True),
+                    'Estado': st.column_config.SelectboxColumn(
+                        options=['depositado', 'pendiente', 'revisado'],
+                        help="Estado del depósito"
+                    ),
+                    'referencia': st.column_config.TextColumn('Referencia', help="Editar referencia")
+                },
+                hide_index=True, use_container_width=True, key=f"editor_det_{st.session_state.v_page}"
+            )
         else:
             st.info("Sin registros para mostrar con los filtros actuales")
 
@@ -424,6 +507,66 @@ with tabs[0]:
         with col_c3:
             st.metric("Comisión Acumulada Histórica (desde 03/03)", f"S/ {comision_desde_mar:,.2f}")
             
+        st.markdown("---")
+        
+        # 📊 GRÁFICOS DE COMISIÓN - Vistas Diaria/Semanal/Mensual/Anual
+        st.markdown("#### 📈 Evolución de Comisión (5% sobre Sirvoy)")
+        com_vista = st.radio(
+            "Vista:",
+            ["📅 Diaria", "📆 Semanal", "📊 Mensual", "📈 Anual"],
+            horizontal=True,
+            key="comision_vista"
+        )
+        
+        if not sv_sales_sirvoy.empty:
+            sv_com = sv_sales_sirvoy.copy()
+            sv_com['Comisión'] = sv_com['amount'] * 0.05
+            
+            if com_vista == "📅 Diaria":
+                com_grp = sv_com.set_index('date_pe').resample('D')['Comisión'].sum().reset_index()
+                com_grp.columns = ['Fecha', 'Comisión']
+                x_col = 'Fecha'
+            elif com_vista == "📆 Semanal":
+                sv_com['sem_key'] = sv_com['date_pe'].dt.strftime('%Y-W%U')
+                com_grp = sv_com.groupby('sem_key')['Comisión'].sum().reset_index()
+                com_grp.columns = ['Semana', 'Comisión']
+                x_col = 'Semana'
+            elif com_vista == "📊 Mensual":
+                sv_com['mes_key'] = sv_com['date_pe'].dt.strftime('%Y-%m')
+                com_grp = sv_com.groupby('mes_key')['Comisión'].sum().reset_index()
+                com_grp.columns = ['Mes', 'Comisión']
+                x_col = 'Mes'
+            else:  # Anual
+                sv_com['año_key'] = sv_com['date_pe'].dt.strftime('%Y')
+                com_grp = sv_com.groupby('año_key')['Comisión'].sum().reset_index()
+                com_grp.columns = ['Año', 'Comisión']
+                x_col = 'Año'
+            
+            fig_com = px.bar(
+                com_grp, x=x_col, y='Comisión',
+                color_discrete_sequence=['#3b82f6'],
+                labels={x_col: com_vista.replace('📅 ', '').replace('📆 ', '').replace('📊 ', '').replace('📈 ', ''), 'Comisión': 'Comisión (S/)'}
+            )
+            fig_com.update_layout(
+                height=350, margin=dict(l=10,r=10,t=30,b=10),
+                plot_bgcolor=bg, paper_bgcolor=bg_card, font_color=text,
+                title=f"Comisión 5% - {com_vista}"
+            )
+            fig_com.update_yaxes(tickprefix="S/ ", gridcolor=border, **get_yscale())
+            fig_com.update_xaxes(gridcolor=border)
+            st.plotly_chart(fig_com, use_container_width=True)
+            
+            # Métricas resumen
+            c_m1, c_m2, c_m3 = st.columns(3)
+            with c_m1:
+                st.metric(f"Total {com_vista.split()[1]}", f"S/ {com_grp['Comisión'].sum():,.2f}")
+            with c_m2:
+                st.metric("Promedio", f"S/ {com_grp['Comisión'].mean():,.2f}")
+            with c_m3:
+                st.metric("Máximo", f"S/ {com_grp['Comisión'].max():,.2f}")
+        else:
+            st.info("Sin ventas Sirvoy en el período para mostrar evolución de comisión.")
+        
         st.markdown("---")
         st.markdown("#### 📋 Detalle de Comisiones por Transacción")
         
@@ -480,7 +623,7 @@ with tabs[0]:
 
 # ================= TAB 2: COSTOS OPERATIVOS =================
 with tabs[1]:
-    c_tab1, c_tab2 = st.tabs(["📋 Detalle de Costos", "➕ Registrar Costo Extra"])
+    c_tab1, c_tab2, c_tab3 = st.tabs(["📋 Detalle de Costos", "➕ Registrar Costo Extra", "🔧 Costos Extra"])
     
     with c_tab1:
         # Mostramos los costos sin filtro por método de pago de venta (ts)
@@ -500,6 +643,25 @@ with tabs[1]:
         with col_cm4:
             st.metric("📊 Total Costos", f"S/ {costos_periodo['amount'].sum():,.2f}")
             
+        # 📤 Botones de exportación Costos
+        exp_cc1, exp_cc2 = st.columns(2)
+        with exp_cc1:
+            st.download_button(
+                "📥 Descargar CSV (Costos filtrados)",
+                data=df_to_csv(costos_periodo),
+                file_name=f"costos_{fi}_{ff}.csv",
+                mime="text/csv",
+                use_container_width=True
+            )
+        with exp_cc2:
+            st.download_button(
+                "📥 Descargar Excel (Costos filtrados)",
+                data=df_to_excel(costos_periodo),
+                file_name=f"costos_{fi}_{ff}.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                use_container_width=True
+            )
+
         st.markdown("---")
         
         if not costos_periodo.empty:
@@ -509,9 +671,17 @@ with tabs[1]:
             df_c['Monto'] = df_c['amount'].apply(lambda x: f"S/ {x:,.2f}")
             df_c['Concepto'] = df_c['method']
             
-            st.dataframe(df_c[['Fecha', 'Categoría', 'Concepto', 'Monto', 'referencia']], hide_index=True, use_container_width=True)
+            st.data_editor(
+                df_c[['Fecha', 'transaction_id', 'Categoría', 'Concepto', 'Monto', 'referencia']].rename(
+                    columns={'transaction_id': 'ID', 'referencia': 'Ref'}),
+                column_config={
+                    'Monto': st.column_config.NumberColumn('Monto', format="S/ %.2f"),
+                    'Concepto': st.column_config.TextColumn('Concepto', help="Editar concepto"),
+                    'Ref': st.column_config.TextColumn('Referencia', help="Editar referencia")
+                },
+                hide_index=True, use_container_width=True, key="editor_costos"
+            )
             
-            # Gráfico de evolución mensual de costos
             st.markdown("### 📈 Costos por Mes")
             costos_mensuales = costos_periodo.groupby('mes_label')['amount'].sum().reset_index()
             fig_c = px.bar(costos_mensuales, x='mes_label', y='amount', color_discrete_sequence=['#f97316'], labels={'mes_label':'Mes','amount':'Monto S/'})
@@ -520,39 +690,102 @@ with tabs[1]:
             st.plotly_chart(fig_c, use_container_width=True)
         else:
             st.info("No hay costos registrados en este período.")
-            
+    
     with c_tab2:
-        st.markdown("### ➕ Registrar Nuevo Costo")
-        col_nc1, col_nc2 = st.columns(2)
-        with col_nc1:
-            fecha_c = st.date_input("Fecha de Gasto", datetime.now(), key="new_costo_date")
-            cat_c = st.selectbox("Categoría de Costo", ["Facebook Ads", "Sirvoy", "Asistente", "Otro"], key="new_costo_cat")
-        with col_nc2:
-            monto_c = st.number_input("Monto en Soles (S/)", min_value=0.0, step=10.0, format="%.2f", key="new_costo_monto")
-            ref_c = st.text_input("Concepto / Descripción", placeholder="Detalle del pago...", key="new_costo_ref")
+        st.markdown("**➕ Registrar Nuevo Costo**")
+        with st.form("form_nuevo_costo", clear_on_submit=True):
+            col_n1, col_n2 = st.columns(2)
+            with col_n1:
+                nueva_fecha = st.date_input("Fecha", datetime.now(), key="costo_fecha2")
+                nueva_cat = st.selectbox("Categoría", ["Facebook Ads", "Sirvoy", "Asistente", "Otro"], key="costo_cat2")
+            with col_n2:
+                nuevo_monto = st.number_input("Monto S/", min_value=0.0, step=50.0, format="%.2f", key="costo_monto2")
+                nuevo_ref = st.text_input("Concepto", placeholder="Descripción", key="costo_ref2")
             
-        if st.button("💾 Guardar en Base de Datos", type="primary", use_container_width=True, disabled=(monto_c <= 0)):
-            try:
-                cli = MongoClient(MONGO_URL, serverSelectionTimeoutMS=2000)
-                cat_map = {"Facebook Ads": "Costo FB Ads", "Sirvoy": "Costo Sirvoy", "Asistente": "Costo Asistente", "Otro": "Costo Extra"}
-                doc = {
-                    "fuente": cat_map.get(cat_c, "Costo Extra"),
-                    "fecha": datetime.combine(fecha_c, datetime.min.time()),
-                    "monto": monto_c,
-                    "moneda": "PEN",
-                    "metodo": ref_c or f"Costo {cat_c}",
-                    "categoria": cat_c,
-                    "tipo_pago": "Costo"
-                }
-                raw = f"COSTO|{fecha_c}|{monto_c}|{ref_c}"
-                doc['hash'] = hashlib.md5(raw.encode()).hexdigest()
-                cli['pena_linda']['pagos'].insert_one(doc)
-                cli.close()
-                st.success(f"✅ Costo de S/ {monto_c:,.2f} registrado correctamente.")
-                st.cache_data.clear()
-                st.rerun()
-            except Exception as e:
-                st.error(f"Error al registrar costo: {e}")
+            submitted = st.form_submit_button("💾 Guardar costo", type="primary", use_container_width=True)
+            
+            if submitted and nuevo_monto > 0:
+                try:
+                    cli_c = MongoClient(MONGO_URL, serverSelectionTimeoutMS=2000)
+                    cat_map = {"Facebook Ads":"Costo FB Ads", "Sirvoy":"Costo Sirvoy", "Asistente":"Costo Asistente", "Otro":"Costo Extra"}
+                    doc = {
+                        "fuente": cat_map.get(nueva_cat, "Costo Extra"),
+                        "fecha": datetime.combine(nueva_fecha, datetime.min.time()),
+                        "monto": nuevo_monto,
+                        "moneda": "PEN",
+                        "metodo": nuevo_ref or f"Costo {nueva_cat}",
+                        "categoria": nueva_cat,
+                        "tipo_pago": "Costo"
+                    }
+                    import hashlib
+                    doc['hash'] = hashlib.md5(f"COSTO|{nueva_fecha}|{nuevo_monto}|{nuevo_ref}".encode()).hexdigest()
+                    cli_c['pena_linda']['pagos'].insert_one(doc)
+                    # Tambien insertar en cobros
+                    import hashlib as hl
+                    doc_cobro = {
+                        "fecha": datetime.combine(nueva_fecha, datetime.min.time()),
+                        "monto": nuevo_monto, "moneda": "PEN", "tipo": "costo",
+                        "categoria": nueva_cat, "concepto": nuevo_ref or f"Costo {nueva_cat}",
+                        "detalle": nuevo_ref or "", 
+                        "hash": hl.md5(f"COBRO_COSTO|{nueva_fecha}|{nuevo_monto}|{nuevo_ref}".encode()).hexdigest()
+                    }
+                    cli_c['pena_linda']['cobros'].insert_one(doc_cobro)
+                    cli_c.close()
+                    st.success(f"✅ Costo de S/ {nuevo_monto:,.2f} registrado")
+                    st.cache_data.clear()
+                    st.session_state.ultima_actualizacion = datetime.now()
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Error: {e}")
+    
+    with c_tab3:
+        st.markdown("**🔧 Desglose de Costos Extra**")
+        st.caption("Costos categoría 'Otro' registrados manualmente")
+        
+        extra_df = costos_df[costos_df['fuente'] == 'Costo Extra'].copy() if not costos_df.empty and 'fuente' in costos_df.columns else pd.DataFrame()
+        
+        if not extra_df.empty:
+            extra_df['Fecha'] = extra_df['date_pe'].dt.strftime('%d/%m/%Y')
+            extra_df['Monto'] = extra_df['amount'].apply(lambda x: f"S/ {x:,.2f}")
+            extra_df['Concepto'] = extra_df['method']
+            
+            col_ex1, col_ex2 = st.columns(2)
+            with col_ex1:
+                st.metric("📦 Costos Extra", f"{len(extra_df)} docs")
+            with col_ex2:
+                st.metric("💰 Total", f"S/ {extra_df['amount'].sum():,.0f}")
+
+            # 📤 Botones de exportación Costos Extra
+            exp_ec1, exp_ec2 = st.columns(2)
+            with exp_ec1:
+                st.download_button(
+                    "📥 Descargar CSV (Costos Extra filtrados)",
+                    data=df_to_csv(extra_df),
+                    file_name=f"costos_extra_{fi}_{ff}.csv",
+                    mime="text/csv",
+                    use_container_width=True
+                )
+            with exp_ec2:
+                st.download_button(
+                    "📥 Descargar Excel (Costos Extra filtrados)",
+                    data=df_to_excel(extra_df),
+                    file_name=f"costos_extra_{fi}_{ff}.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    use_container_width=True
+                )
+
+            st.data_editor(
+                extra_df[['Fecha','Concepto','Monto','categoria','transaction_id']].rename(
+                    columns={'categoria':'Categoría','transaction_id':'ID'}),
+                column_config={
+                    'Concepto': st.column_config.TextColumn('Concepto', help="Editar concepto"),
+                    'Monto': st.column_config.NumberColumn('Monto', format="S/ %.2f"),
+                    'Categoría': st.column_config.TextColumn('Categoría', help="Editar categoría")
+                },
+                hide_index=True, use_container_width=True, key="editor_extras"
+            )
+        else:
+            st.info("No hay costos extra registrados. Usa la pestaña '➕ Registrar Costo Extra' con categoría 'Otro' para agregar.")
 
 # ================= TAB 3: CONCILIACIÓN DE PAGOS =================
 with tabs[2]:
@@ -609,6 +842,25 @@ with tabs[2]:
             total_links_per = len(la)
             st.metric("Total Links en Rango", total_links_per)
             
+        # 📤 Botones de exportación Links
+        exp_lc1, exp_lc2 = st.columns(2)
+        with exp_lc1:
+            st.download_button(
+                "📥 Descargar CSV (Links filtrados)",
+                data=df_to_csv(la),
+                file_name=f"links_{fi}_{ff}.csv",
+                mime="text/csv",
+                use_container_width=True
+            )
+        with exp_lc2:
+            st.download_button(
+                "📥 Descargar Excel (Links filtrados)",
+                data=df_to_excel(la),
+                file_name=f"links_{fi}_{ff}.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                use_container_width=True
+            )
+
         st.markdown("---")
         
         sub_l1, sub_l2 = st.columns([3, 2])
@@ -680,15 +932,65 @@ with tabs[2]:
         st.markdown("### 💳 Registro de Abonos a Chamba Digital")
         st.write("Verifica y registra los abonos de saldo que realiza Peña Linda para amortizar la deuda de comisiones y costos.")
         
-        ca1, ca2, ca3 = st.columns(3)
+        # Leer cobros extra desde MongoDB
+        try:
+            cli_cob = MongoClient(MONGO_URL, serverSelectionTimeoutMS=2000)
+            cobros_all = list(cli_cob['pena_linda']['cobros'].find({}))
+            cli_cob.close()
+            cobros_df = pd.DataFrame(cobros_all)
+            cobros_extra = cobros_df[cobros_df['categoria'] == 'Extra'].copy() if not cobros_df.empty else pd.DataFrame()
+            total_extra = float(cobros_extra['monto'].sum()) if not cobros_extra.empty else 0
+        except:
+            cobros_extra = pd.DataFrame()
+            total_extra = 0
+
+        ca1, ca2, ca3, ca4 = st.columns(4)
         with ca1:
             st.metric("Total Adeudado Histórico", f"S/ {adeudado:,.2f}")
         with ca2:
             st.metric("Total Abonado", f"S/ {total_abonos:,.2f}")
         with ca3:
             st.metric("Saldo Deudor Actual", f"S/ {saldo_pendiente:,.2f}", delta=f"{saldo_pendiente:,.2f}", delta_color="inverse")
-            
+        with ca4:
+            st.metric("📌 Costos Extra (detalle)", f"S/ {total_extra:,.2f}", help="Costos categoria 'Extra' en tabla cobros")
+
+        # 📤 Botones de exportación Abonos / Conciliación
+        exp_ac1, exp_ac2 = st.columns(2)
+        with exp_ac1:
+            st.download_button(
+                "📥 Descargar CSV (Abonos filtrados)",
+                data=df_to_csv(pagos_recibidos) if not pagos_recibidos.empty else df_to_csv(pd.DataFrame()),
+                file_name=f"abonos_{fi}_{ff}.csv",
+                mime="text/csv",
+                use_container_width=True
+            )
+        with exp_ac2:
+            st.download_button(
+                "📥 Descargar Excel (Abonos filtrados)",
+                data=df_to_excel(pagos_recibidos) if not pagos_recibidos.empty else df_to_excel(pd.DataFrame()),
+                file_name=f"abonos_{fi}_{ff}.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                use_container_width=True
+            )
+
         st.markdown("---")
+        
+        # Desglose de Costos Extra
+        if not cobros_extra.empty:
+            st.markdown("#### 🔍 Desglose de Costos Extra (Categoría 'Extra')")
+            cobros_extra['Fecha'] = pd.to_datetime(cobros_extra['fecha']).dt.strftime('%d/%m/%Y')
+            cobros_extra['Monto'] = cobros_extra['monto'].apply(lambda x: f"S/ {x:,.2f}")
+            
+            st.data_editor(
+                cobros_extra[['Fecha', 'concepto', 'Monto', 'detalle', 'tipo']].rename(
+                    columns={'concepto': 'Concepto', 'detalle': 'Detalle', 'tipo': 'Tipo'}),
+                column_config={
+                    'Concepto': st.column_config.TextColumn('Concepto', help="Editar concepto"),
+                    'Monto': st.column_config.NumberColumn('Monto', format="S/ %.2f"),
+                    'Detalle': st.column_config.TextColumn('Detalle', help="Editar detalle")
+                },
+                hide_index=True, use_container_width=True, key="editor_cobros_extra"
+            )
         
         sa1, sa2 = st.columns([3, 2])
         
@@ -699,7 +1001,15 @@ with tabs[2]:
                 ab_df['Fecha'] = ab_df['date_pe'].dt.strftime('%d/%m/%Y')
                 ab_df['Monto'] = ab_df['amount'].apply(lambda x: f"S/ {x:,.2f}")
                 ab_df['Referencia / Método'] = ab_df['method']
-                st.dataframe(ab_df[['Fecha', 'Monto', 'Referencia / Método']], hide_index=True, use_container_width=True)
+                st.data_editor(
+                    ab_df[['Fecha', 'Monto', 'Referencia / Método', 'transaction_id']].rename(
+                        columns={'transaction_id': 'ID'}),
+                    column_config={
+                        'Monto': st.column_config.NumberColumn('Monto', format="S/ %.2f"),
+                        'Referencia / Método': st.column_config.TextColumn('Referencia', help="Editar referencia")
+                    },
+                    hide_index=True, use_container_width=True, key="editor_abonos"
+                )
             else:
                 st.info("No hay abonos registrados aún.")
                 
@@ -724,6 +1034,15 @@ with tabs[2]:
                     raw = f"ABONO|{ab_fecha}|{ab_monto}|{ab_ref}"
                     doc['hash'] = hashlib.md5(raw.encode()).hexdigest()
                     cli['pena_linda']['pagos'].insert_one(doc)
+                    # Tambien insertar en cobros
+                    doc_cobro = {
+                        "fecha": datetime.combine(ab_fecha, datetime.min.time()),
+                        "monto": ab_monto, "moneda": "PEN", "tipo": "abono",
+                        "categoria": "Abono", "concepto": "Pago recibido de Peña Linda",
+                        "detalle": ab_ref or "Abono manual",
+                        "hash": hashlib.md5(f"COBRO_ABONO|{ab_fecha}|{ab_monto}|{ab_ref}".encode()).hexdigest()
+                    }
+                    cli['pena_linda']['cobros'].insert_one(doc_cobro)
                     cli.close()
                     st.success(f"✅ Abono de S/ {ab_monto:,.2f} registrado correctamente.")
                     st.cache_data.clear()
@@ -765,8 +1084,188 @@ with tabs[2]:
             else:
                 st.caption("No hay abonos registrados para eliminar.")
 
-# ================= TAB 4: EXPORTAR Y REPORTES =================
+# ================= TAB 4: HISTORIAL Y CONCILIACIÓN =================
 with tabs[3]:
+    st.markdown("### 📋 Historial y Conciliación de Operaciones")
+    st.write("Cruce entre facturas QuickBooks (comisiones + costos) y abonos registrados. Identifica coincidencias y discrepancias para consolidar.")
+    
+    # Cargar datos de cobros (facturas + abonos) desde MongoDB
+    try:
+        cli_hist = MongoClient(MONGO_URL, serverSelectionTimeoutMS=2000)
+        cobros_all = list(cli_hist['pena_linda']['cobros'].find({}))
+        cli_hist.close()
+        cobros_df = pd.DataFrame(cobros_all)
+        
+        if not cobros_df.empty:
+            cobros_df['fecha_dt'] = pd.to_datetime(cobros_df['fecha'], errors='coerce')
+            cobros_df = cobros_df.sort_values('fecha_dt', ascending=False)
+            
+            # Separar por tipo
+            facturas_qb = cobros_df[cobros_df['origen_importacion'] == 'QuickBooks'].copy()
+            abonos_qb = cobros_df[(cobros_df['tipo'] == 'abono') & (cobros_df['origen_importacion'] == 'QuickBooks')].copy()
+            facturas_manual = cobros_df[(cobros_df['tipo'] == 'comision') & (cobros_df['origen_importacion'] != 'QuickBooks')].copy()
+            costos_manual = cobros_df[(cobros_df['tipo'] == 'costo') & (cobros_df['origen_importacion'] != 'QuickBooks')].copy()
+            abonos_manual = cobros_df[(cobros_df['tipo'] == 'abono') & (cobros_df['origen_importacion'] != 'QuickBooks')].copy()
+            
+            # KPIs resumen
+            h1, h2, h3, h4 = st.columns(4)
+            with h1:
+                st.metric("📄 Facturas QB (Comisión)", f"S/ {facturas_qb[facturas_qb['tipo']=='comision']['monto'].sum():,.2f}", 
+                         help=f"{len(facturas_qb[facturas_qb['tipo']=='comision'])} facturas")
+            with h2:
+                st.metric("📄 Facturas QB (Costos)", f"S/ {facturas_qb[facturas_qb['tipo']=='costo']['monto'].sum():,.2f}",
+                         help=f"{len(facturas_qb[facturas_qb['tipo']=='costo'])} facturas")
+            with h3:
+                st.metric("💰 Abonos QB", f"S/ {abonos_qb['monto'].sum():,.2f}",
+                         help=f"{len(abonos_qb)} abonos (nov 2025 - mar 2026)")
+            with h4:
+                st.metric("💰 Abonos Manuales (desde 03/03)", f"S/ {abonos_manual['monto'].sum():,.2f}",
+                         help=f"{len(abonos_manual)} abonos")
+            
+            st.markdown("---")
+            
+            # === CRUCE: Facturas vs Abonos ===
+            st.markdown("#### 🔍 Cruce Facturas QuickBooks ↔ Abonos")
+            
+            # Mostrar facturas de comisión con estado de pago
+            com_qb = facturas_qb[facturas_qb['tipo'] == 'comision'].copy()
+            cost_qb = facturas_qb[facturas_qb['tipo'] == 'costo'].copy()
+            
+            tab_c1, tab_c2 = st.tabs(["💼 Comisión (Chamba → Peña Linda)", "💸 Costos Operativos (Chamba → Peña Linda)"])
+            
+            with tab_c1:
+                st.markdown("**Facturas de Comisión emitidas por Chamba Digital a Peña Linda**")
+                if not com_qb.empty:
+                    com_qb['Fecha'] = com_qb['fecha_dt'].dt.strftime('%d/%m/%Y')
+                    com_qb['Monto'] = com_qb['monto'].apply(lambda x: f"S/ {x:,.2f}")
+                    com_qb['Estado QB'] = com_qb['qbo_estado']
+                    com_qb['Referencia'] = com_qb['qbo_ref']
+                    
+                    st.dataframe(
+                        com_qb[['Fecha', 'Referencia', 'Monto', 'Estado QB']].rename(
+                            columns={'Referencia': 'Factura', 'Estado QB': 'Estado en QB'}
+                        ),
+                        hide_index=True, use_container_width=True
+                    )
+                    
+                    # Export
+                    exp_fc1, exp_fc2 = st.columns(2)
+                    with exp_fc1:
+                        st.download_button("📥 CSV Facturas Comisión", df_to_csv(com_qb), 
+                                         file_name=f"facturas_comision_{fi}_{ff}.csv", mime="text/csv")
+                    with exp_fc2:
+                        st.download_button("📥 Excel Facturas Comisión", df_to_excel(com_qb),
+                                         file_name=f"facturas_comision_{fi}_{ff}.xlsx",
+                                         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                else:
+                    st.info("No hay facturas de comisión importadas de QuickBooks.")
+            
+            with tab_c2:
+                st.markdown("**Facturas de Costos Operativos emitidas por Chamba Digital a Peña Linda**")
+                if not cost_qb.empty:
+                    cost_qb['Fecha'] = cost_qb['fecha_dt'].dt.strftime('%d/%m/%Y')
+                    cost_qb['Monto'] = cost_qb['monto'].apply(lambda x: f"S/ {x:,.2f}")
+                    cost_qb['Estado QB'] = cost_qb['qbo_estado']
+                    cost_qb['Referencia'] = cost_qb['qbo_ref']
+                    
+                    st.dataframe(
+                        cost_qb[['Fecha', 'Referencia', 'Monto', 'Estado QB']].rename(
+                            columns={'Referencia': 'Factura', 'Estado QB': 'Estado en QB'}
+                        ),
+                        hide_index=True, use_container_width=True
+                    )
+                    
+                    exp_fco1, exp_fco2 = st.columns(2)
+                    with exp_fco1:
+                        st.download_button("📥 CSV Facturas Costos", df_to_csv(cost_qb),
+                                         file_name=f"facturas_costos_{fi}_{ff}.csv", mime="text/csv")
+                    with exp_fco2:
+                        st.download_button("📥 Excel Facturas Costos", df_to_excel(cost_qb),
+                                         file_name=f"facturas_costos_{fi}_{ff}.xlsx",
+                                         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                else:
+                    st.info("No hay facturas de costos importadas de QuickBooks.")
+            
+            st.markdown("---")
+            
+            # === ABONOS RECIBIDOS ===
+            st.markdown("#### 💳 Abonos Recibidos de Peña Linda")
+            
+            tab_a1, tab_a2 = st.tabs(["📥 Abonos QuickBooks (históricos)", "✏️ Abonos Manuales (desde 03/03)"])
+            
+            with tab_a1:
+                if not abonos_qb.empty:
+                    abonos_qb['Fecha'] = abonos_qb['fecha_dt'].dt.strftime('%d/%m/%Y')
+                    abonos_qb['Monto'] = abonos_qb['monto'].apply(lambda x: f"S/ {x:,.2f}")
+                    abonos_qb['Referencia'] = abonos_qb['metodo']
+                    
+                    st.dataframe(
+                        abonos_qb[['Fecha', 'Referencia', 'Monto']].rename(
+                            columns={'Referencia': 'Ref. / Método'}
+                        ),
+                        hide_index=True, use_container_width=True
+                    )
+                    st.caption(f"Total histórico: S/ {abonos_qb['monto'].sum():,.2f} ({len(abonos_qb)} abonos)")
+                else:
+                    st.info("Sin abonos históricos de QuickBooks.")
+            
+            with tab_a2:
+                if not abonos_manual.empty:
+                    abonos_manual['Fecha'] = pd.to_datetime(abonos_manual['fecha']).dt.strftime('%d/%m/%Y')
+                    abonos_manual['Monto'] = abonos_manual['monto'].apply(lambda x: f"S/ {x:,.2f}")
+                    abonos_manual['Referencia'] = abonos_manual['metodo']
+                    
+                    st.dataframe(
+                        abonos_manual[['Fecha', 'Referencia', 'Monto']].rename(
+                            columns={'Referencia': 'Ref. / Método'}
+                        ),
+                        hide_index=True, use_container_width=True
+                    )
+                    st.caption(f"Total desde 03/03: S/ {abonos_manual['monto'].sum():,.2f} ({len(abonos_manual)} abonos)")
+                else:
+                    st.info("Sin abonos manuales registrados.")
+            
+            st.markdown("---")
+            
+            # === DISCREPANCIAS / REVISIÓN PENDIENTE ===
+            st.markdown("#### ⚠️ Discrepancias y Pendientes de Revisión")
+            
+            # Facturas QB con estado "Vencido" (no pagadas en QB)
+            vencidas = facturas_qb[facturas_qb['qbo_estado'].str.contains('Vencido', na=False)]
+            if not vencidas.empty:
+                st.warning(f"⚠️ **{len(vencidas)} facturas en estado 'Vencido' en QuickBooks** — revisar si fueron pagadas fuera de QB o quedan pendientes:")
+                vencidas['Fecha'] = vencidas['fecha_dt'].dt.strftime('%d/%m/%Y')
+                vencidas['Monto'] = vencidas['monto'].apply(lambda x: f"S/ {x:,.2f}")
+                vencidas['Tipo'] = vencidas['tipo'].apply(lambda x: 'Comisión' if x == 'comision' else 'Costo')
+                st.dataframe(
+                    vencidas[['Fecha', 'qbo_ref', 'Tipo', 'Monto', 'qbo_estado']].rename(
+                        columns={'qbo_ref': 'Factura', 'qbo_estado': 'Estado QB', 'Tipo': 'Categoría'}
+                    ),
+                    hide_index=True, use_container_width=True
+                )
+            
+            # Facturas QB pagadas en QB pero sin abono correspondiente en MongoDB
+            pagadas_qb = facturas_qb[facturas_qb['qbo_estado'] == 'Pagada']
+            if not pagadas_qb.empty:
+                st.info(f"ℹ️ **{len(pagadas_qb)} facturas marcadas 'Pagada' en QuickBooks** — verificar si cada una tiene su abono correspondiente en la tabla de abonos (manual o QB).")
+            
+            # Diferencia total facturado vs abonado (solo comisión)
+            total_fact_comision = facturas_qb[facturas_qb['tipo'] == 'comision']['monto'].sum()
+            total_abonado_todo = abonos_qb['monto'].sum() + abonos_manual['monto'].sum()
+            diff = total_fact_comision - total_abonado_todo
+            
+            if diff > 0:
+                st.error(f"🔴 **Diferencia por cubrir: S/ {diff:,.2f}** — Total facturado en comisión (QB) supera a lo abonado (QB + manuales).")
+            elif diff < 0:
+                st.success(f"🟢 **Sobrante abonado: S/ {abs(diff):,.2f}** — Se ha abonado más de lo facturado en comisión QB. Verificar costos.")
+            else:
+                st.success("✅ **Cuadrado perfecto** — Facturación de comisión = Abonos totales.")
+                
+    except Exception as e:
+        st.error(f"Error cargando historial: {e}")
+
+# ================= TAB 5: EXPORTAR Y REPORTES =================
+with tabs[4]:
     st.markdown("### 📤 Exportación de Reportes del Periodo")
     st.write("Genera y descarga informes consolidados listos para imprimir o compartir.")
     
