@@ -25,10 +25,10 @@ triggers:
 
 **Portal:** https://secured.sirvoy.com
 
-**Credenciales:**
-- User: `Reservaciondirecta`
-- Pass: `Oliver@2601`
-- 2FA: Código enviado a `yerctech@gmail.com`
+**Credenciales (variables de entorno):**
+- User: `$SIRVOY_USER`
+- Pass: `$SIRVOY_PASS`
+- 2FA: Código enviado a `$SIRVOY_2FA_EMAIL`
 
 ### Pasos (vía Chrome DevTools):
 
@@ -87,14 +87,14 @@ tipo = 'Tarjeta' if 'tarjeta' in m or 'card' in m else \
 
 **Portal:** https://secure.micuentaweb.pe/auth/login
 
-**Credenciales (Soles):**
-- User: `jzapataramos@chamba.pe`
-- Pass: `Suzukisamurai@1213`
-- RUC: 20525260942
+**Credenciales Soles (variables de entorno):**
+- User: `$IZIPAY_BO_USER`
+- Pass: `$IZIPAY_BO_PASS`
+- RUC: `$IZIPAY_RUC`
 
-**Credenciales (USD):**
-- User: `jzapataramos@gmail.com`
-- Pass: `Suzukisamurai@1213`
+**Credenciales USD (variables de entorno):**
+- User: `$IZIPAY_BO_USD_USER`
+- Pass: `$IZIPAY_BO_USD_PASS`
 
 ### Pasos (vía browser):
 
@@ -111,9 +111,9 @@ tipo = 'Tarjeta' if 'tarjeta' in m or 'card' in m else \
 
 **Portal:** https://micuenta.izipay.pe/seguridad/login
 
-**Credenciales:**
-- User: `penalinda@yahoo.com`
-- Pass: `Suzukisamurai@1213`
+**Credenciales (variables de entorno):**
+- User: `$IZIPAY_POS_USER`
+- Pass: `$IZIPAY_POS_PASS`
 
 **⚠️ Este portal tiene reCAPTCHA — el login debe hacerlo el usuario manualmente.**
 

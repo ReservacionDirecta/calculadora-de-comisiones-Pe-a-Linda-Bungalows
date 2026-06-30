@@ -9,19 +9,22 @@ Este archivo documenta todos los flujos, credenciales y procedimientos para que 
 
 ## 🔐 Credenciales y accesos
 
-| Portal | URL | Usuario | Contraseña | Notas |
-|--------|-----|---------|------------|-------|
-| **Sirvoy** (Web) | https://secured.sirvoy.com/login | `Reservaciondirecta` | `Oliver@2601` | Envía código 2FA al email `yerctech@gmail.com` |
-| **Izipay BO** (Back Office) | https://secure.micuentaweb.pe/auth/login | `jzapataramos@chamba.pe` | `Suzukisamurai@1213` | RUC 20525260942 — portal Soles |
-| **Izipay BO (USD)** | https://secure.micuentaweb.pe/auth/login | `jzapataramos@gmail.com` | `Suzukisamurai@1213` | Portal USD — mismo login, cambiar cuenta |
-| **Izipay POS** (Mi Cuenta) | https://micuenta.izipay.pe/seguridad/login | `penalinda@yahoo.com` | `Suzukisamurai@1213` | Tiene reCAPTCHA — requiere login manual |
-| **Culqi** | https://panel.culqi.pe/#/login | `yerctech@gmail.com` | `Suzukisamurai@1213` | Exportar reportes |
-| **Openpay** | https://dashboard.openpay.pe/login | `yerctech@gmail.com` | `Suzukisamurai@1213` | Exportar reportes |
-| **Meta/FB Ads** | https://business.facebook.com/ | `yerctech@gmail.com` | — | Descargar resumen de facturación |
-| **MongoDB Local** | `mongodb://localhost:27017/pena_linda` | — | — | Base local |
-| **MongoDB Railway** | Via `MONGO_URL` env var | — | — | Base en producción |
+> **Las credenciales están en el archivo `.env` (no versionado).**
+> Copiar `.env.example` → `.env` y llenar con los valores reales.
 
-> ⚠️ **NUNCA** incluir credenciales en código fuente. Usar variables de entorno o `.env`.
+| Portal | URL | Variable de entorno (usuario) | Variable de entorno (contraseña) | Notas |
+|--------|-----|-------------------------------|----------------------------------|-------|
+| **Sirvoy** (Web) | https://secured.sirvoy.com/login | `SIRVOY_USER` | `SIRVOY_PASS` | 2FA → email `SIRVOY_2FA_EMAIL` |
+| **Izipay BO** (Back Office) | https://secure.micuentaweb.pe/auth/login | `IZIPAY_BO_USER` | `IZIPAY_BO_PASS` | RUC `IZIPAY_RUC` — portal Soles |
+| **Izipay BO (USD)** | https://secure.micuentaweb.pe/auth/login | `IZIPAY_BO_USD_USER` | `IZIPAY_BO_USD_PASS` | Portal USD |
+| **Izipay POS** (Mi Cuenta) | https://micuenta.izipay.pe/seguridad/login | `IZIPAY_POS_USER` | `IZIPAY_POS_PASS` | Requiere login manual (reCAPTCHA) |
+| **Culqi** | https://panel.culqi.pe/#/login | `CULQI_USER` | `CULQI_PASS` | Exportar reportes |
+| **Openpay** | https://dashboard.openpay.pe/login | `OPENPAY_USER` | `OPENPAY_PASS` | Exportar reportes |
+| **Meta/FB Ads** | https://business.facebook.com/ | `META_USER` | — | Descargar facturación |
+| **MongoDB Local** | `mongodb://localhost:27017/pena_linda` | — | — | Base local |
+| **MongoDB Railway** | `MONGO_URL` env var | — | — | Base en producción |
+
+> ⚠️ **NUNCA** incluir credenciales en código fuente ni en archivos versionados. Usar `.env`.
 
 ---
 
