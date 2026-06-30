@@ -230,17 +230,31 @@ Saldo_Pendiente = Adeudado − Abonos_Recibidos
 
 ```
 C:\Users\yerct\calculadora de comisiones Peña Linda Bungalows\
-├── panel_control.py              ← DASHBOARD PRINCIPAL
+├── panel_control.py              ← DASHBOARD v1 (puerto 8501)
+├── app_v2/
+│   ├── main.py                   ← DASHBOARD v2 (puerto 8503)
+│   ├── config.py                 ← Config tema y colores
+│   ├── data.py                   ← Carga MongoDB
+│   ├── components.py             ← Componentes UI reutilizables
+│   └── views/
+│       ├── dashboard.py          ← Resumen general
+│       ├── ventas.py             ← Ventas Sirvoy + gráficos
+│       ├── costos.py             ← Costos operativos
+│       ├── conciliacion.py       ← Contraste tarjeta
+│       ├── pos_upload.py         ← Carga POS CSV
+│       ├── historial.py          ← Historial QB resumido
+│       └── exportar.py           ← Export CSV por pestaña
 ├── seed_completo.py              ← Seed MongoDB (todas las fuentes)
 ├── conciliacion_pagos.py         ← CLI conciliación semanal/mensual
 ├── data_processor.py             ← Limpieza CSVs
-├── generar_pdf_semanal.py        ← Reporte PDF semanal
+├── pdf_generator.py              ← Generación PDFs semanales
+├── generate_weekly_mongo.py      ← Reportes semanales desde MongoDB
+├── import_sirvoy_update.py       ← Importar nuevo CSV Sirvoy
 ├── Dockerfile                    ← Deploy Railway
 ├── railway.json                  ← Config Railway
 ├── requirements.txt              ← Dependencias Python
-├── README.md                     ← Documentación general
 ├── AGENTS.md                     ← Este archivo (flujos para agentes)
-├── SKILLS.md                     ← Skills para Hermes Agent
+├── reportes_semanales/           ← PDFs y resúmenes generados
 └── *.csv / *.xlsx                ← Datos fuente
 ```
 
@@ -254,3 +268,90 @@ C:\Users\yerct\calculadora de comisiones Peña Linda Bungalows\
 4. **Transferencia + Efectivo en Sirvoy están confirmados** — no necesitan contraste
 5. **Solo tarjeta Sirvoy se contrasta** con plataformas (Izipay, Culqi, Openpay)
 6. **Sirvoy es el registro maestro** — las plataformas confirman el depósito digital
+
+---
+
+## 🚀 Cómo iniciar la calculadora
+
+Ambas versiones requieren que **MongoDB** esté corriendo primero.
+
+### 1. Verificar MongoDB
+
+```bash
+# Verificar que MongoDB está activo
+curl -s http://localhost:27017/ | head -c 50
+
+# Si no responde, iniciar el servicio de Windows:
+net start MongoDB
+```
+
+### 2. Iniciar v1 (original — puerto 8501)
+
+```bash
+cd "C:\Users\yerct\calculadora de comisiones Peña Linda Bungalows"
+streamlit run panel_control.py --server.port 8501 --server.headless true
+```
+
+**URL:** http://localhost:8501
+
+### 3. Iniciar v2 (modular — puerto 8503)
+
+```bash
+cd "C:\Users\yerct\calculadora de comisiones Peña Linda Bungalows"
+streamlit run app_v2/main.py --server.port 8503 --server.headless true
+```
+
+**URL:** http://localhost:8503
+
+### 4. Verificar salud
+
+```bash
+curl -s http://localhost:8501/_stcore/health
+curl -s http://localhost:8503/_stcore/health
+# Debería responder: "ok"
+```
+
+### 5. Detener servidores
+
+```bash
+# Windows PowerShell
+Get-NetTCPConnection -LocalPort 8501 -ErrorAction SilentlyContinue |
+  ForEach-Object { Stop-Process -Id $_.OwningProcess -Force }
+Get-NetTCPConnection -LocalPort 8503 -ErrorAction SilentlyContinue |
+  ForEach-Object { Stop-Process -Id $_.OwningProcess -Force }
+
+# O con taskkill
+taskkill /F /FI "tcp eq 8501" 2>nul
+taskkill /F /FI "tcp eq 8503" 2>nul
+```
+
+---
+
+## 📊 Reportes semanales
+
+Para generar los reportes semanales desde MongoDB (03/03 → fecha actual):
+
+```bash
+cd "C:\Users\yerct\calculadora de comisiones Peña Linda Bungalows"
+python generate_weekly_mongo.py
+```
+
+Los PDFs se guardan en `reportes_semanales/` y el resumen en CSV.
+Para cambiar el período, editar `START` y `END` en `generate_weekly_mongo.py`.
+
+---
+
+## 📥 Importar nuevo CSV de Sirvoy
+
+```bash
+cd "C:\Users\yerct\calculadora de comisiones Peña Linda Bungalows"
+python import_sirvoy_update.py
+```
+
+El script:
+1. Lee `payments_export-*.csv` (el archivo más reciente)
+2. Evita duplicados por huella (fecha + monto + método)
+3. Inserta solo pagos nuevos (57 en la última importación)
+4. No afecta datos de plataformas (Izipay, Culqi, etc.)
+
+Después de importar, **reiniciar los servidores** para que los dashboards reflejen los cambios.

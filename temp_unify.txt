@@ -1,0 +1,130 @@
+    def unify_data(self) -> pd.DataFrame:
+        """Unifica datos de todas las fuentes con conciliación estricta Sirvoy-Pasarelas"""
+        unified_records = []
+        
+        # 1. Preparar "Maestro de Pagos" de Sirvoy
+        sirvoy_card_master = pd.DataFrame()
+        sirvoy_direct_master = pd.DataFrame()
+        
+        if self.sirvoy_data is not None and not self.sirvoy_data.empty:
+            sirvoy_income = self.sirvoy_data[self.sirvoy_data['es_facturacion'] == False].copy()
+            
+            if 'payment_method_sirvoy_clean' in sirvoy_income.columns:
+                sirvoy_card_master = sirvoy_income[
+                    sirvoy_income['payment_method_sirvoy_clean'].str.contains('tarjeta|card|openpay|izipay|culqi', na=False)
+                ].copy()
+                sirvoy_direct_master = sirvoy_income[
+                    sirvoy_income['payment_method_sirvoy_clean'].str.contains('transferencia|efectivo|cash|bank', na=False)
+                ].copy()
+                logger.info(f"Conciliación: {len(sirvoy_card_master)} registros de tarjeta y {len(sirvoy_direct_master)} directos en Sirvoy.")
+
+        # Lógica de emparejamiento para Tarjetas
+        def get_sirvoy_match(amount, ref_id=""):
+            if sirvoy_card_master.empty: return None
+            # Match por monto (tolerancia 1.00)
+            mask = (sirvoy_card_master['monto_eur'] >= (amount - 1.0)) & (sirvoy_card_master['monto_eur'] <= (amount + 1.0))
+            matches = sirvoy_card_master[mask]
+            return matches.index[0] if not matches.empty else None
+
+        # 2. Procesar Pasarelas
+        # --------------------
+        # Izipay
+        if self.izipay_data is not None and not self.izipay_data.empty:
+            for _, row in self.izipay_data.iterrows():
+                amount_raw = row.get('Importe del pago', 0)
+                tc = 3.60 if row.get('Moneda') == 'USD' else 1.0
+                amount_gross = amount_raw * tc
+                comm_proc = (row.get('Comisión', 0) or 0) * tc
+                
+                sirvoy_idx = get_sirvoy_match(amount_gross, row.get('Transacción UUID', ''))
+                is_verified = sirvoy_idx is not None
+                if is_verified: sirvoy_card_master.drop(sirvoy_idx, inplace=True)
+                
+                comm_chamba = amount_gross * 0.05 if is_verified else 0.0
+                unified_records.append({
+                    'transaction_id': row.get('Transacción UUID', ''),
+                    'date': row.get('Fecha del pago'),
+                    'amount_gross': amount_gross, 'amount_net': amount_gross - comm_proc - comm_chamba,
+                    'currency': row.get('Moneda', 'PEN'), 'processor': 'Izipay', 'source': 'Izipay',
+                    'income_type': 'Tarjeta', 'is_verified': is_verified,
+                    'commission_processor': comm_proc, 'commission_chamba': comm_chamba,
+                    'customer_name': row.get('Comprador', ''), 'payment_method': row.get('Medio de pago', 'Tarjeta')
+                })
+
+        # Culqi
+        if self.culqi_data is not None and not self.culqi_data.empty:
+            for _, row in self.culqi_data.iterrows():
+                amount_gross = row.get('Monto VENTA', 0)
+                comm_proc = row.get('Comision TOTAL', 0)
+                sirvoy_idx = get_sirvoy_match(amount_gross, row.get('ID Venta', ''))
+                is_verified = sirvoy_idx is not None
+                if is_verified: sirvoy_card_master.drop(sirvoy_idx, inplace=True)
+                comm_chamba = amount_gross * 0.05 if is_verified else 0.0
+                unified_records.append({
+                    'transaction_id': row.get('ID Venta', ''), 'date': pd.to_datetime(row.get('Fecha de la transaccion')),
+                    'amount_gross': amount_gross, 'amount_net': amount_gross - comm_proc - comm_chamba,
+                    'currency': 'PEN', 'processor': 'Culqi', 'source': 'Culqi', 'income_type': 'Tarjeta', 'is_verified': is_verified,
+                    'commission_processor': comm_proc, 'commission_chamba': comm_chamba,
+                    'customer_name': f"{row.get('Nombres', '')} {row.get('Apellidos', '')}", 'payment_method': row.get('Marca', 'Tarjeta')
+                })
+
+        # Openpay
+        if self.openpay_data is not None and not self.openpay_data.empty:
+            for _, row in self.openpay_data.iterrows():
+                amount_gross = row.get('amount_gross', 0)
+                comm_proc = row.get('commission_processor', 0)
+                sirvoy_idx = get_sirvoy_match(amount_gross, row.get('transaction_id', ''))
+                is_verified = sirvoy_idx is not None
+                if is_verified: sirvoy_card_master.drop(sirvoy_idx, inplace=True)
+                comm_chamba = amount_gross * 0.05 if is_verified else 0.0
+                unified_records.append({
+                    'transaction_id': row.get('transaction_id', ''), 'date': row.get('date'),
+                    'amount_gross': amount_gross, 'amount_net': amount_gross - comm_proc - comm_chamba,
+                    'currency': 'PEN', 'processor': 'Openpay', 'source': 'Openpay', 'income_type': 'Tarjeta', 'is_verified': is_verified,
+                    'commission_processor': comm_proc, 'commission_chamba': comm_chamba,
+                    'customer_name': row.get('customer_name', ''), 'payment_method': row.get('payment_method', 'Tarjeta')
+                })
+
+        # 3. Procesar Directos de Sirvoy
+        if not sirvoy_direct_master.empty:
+            sirvoy_ingresos = sirvoy_direct_master[sirvoy_direct_master['monto_eur'] > 0].copy()
+            sirvoy_negativos = sirvoy_direct_master[sirvoy_direct_master['monto_eur'] < 0].copy()
+            correcciones = {}
+            for _, r in sirvoy_negativos.iterrows():
+                key = str(r.get('booking_id_sirvoy', '')) or str(r.get('reference_sirvoy', '')) or "S_REF"
+                if key not in correcciones: correcciones[key] = []
+                correcciones[key].append(r)
+            for _, row in sirvoy_ingresos.iterrows():
+                amount = row['monto_eur']
+                key = str(row.get('booking_id_sirvoy', '')) or str(row.get('reference_sirvoy', '')) or "S_REF"
+                found_corr = False
+                if key in correcciones:
+                    for i, corr in enumerate(correcciones[key]):
+                        if abs(abs(corr['monto_eur']) - amount) < 1.0:
+                            correcciones[key].pop(i); found_corr = True; break
+                if found_corr: continue
+                method = row['payment_method_sirvoy_clean']
+                inc_type = 'Efectivo' if 'efectivo' in method else 'Transferencia'
+                unified_records.append({
+                    'transaction_id': str(row.get('sirvoy_transaction_id', '')), 'date': row.get('fecha'),
+                    'amount_gross': amount, 'amount_net': amount * 0.95, 'currency': 'PEN',
+                    'processor': inc_type, 'source': 'Sirvoy', 'income_type': inc_type, 'is_verified': True,
+                    'commission_processor': 0, 'commission_chamba': amount * 0.05,
+                    'customer_name': str(row.get('description_sirvoy', '')), 'payment_method': row.get('payment_method_sirvoy', inc_type)
+                })
+
+        # 4. Gastos
+        if self.facebook_data is not None and not self.facebook_data.empty:
+            for _, row in self.facebook_data.iterrows():
+                amount_real = abs(row.get('amount', 0)) * 1.1197
+                unified_records.append({'transaction_id': row.get('transaction_id', ''), 'date': row.get('date'), 'amount_gross': -amount_real, 'amount_net': -amount_real, 'currency': 'PEN', 'processor': 'Facebook', 'source': 'Facebook Ads', 'income_type': 'Gasto', 'is_verified': True, 'commission_processor': 0, 'commission_chamba': 0, 'customer_name': 'Facebook Ads', 'payment_method': 'Ads'})
+        if hasattr(self, 'sirvoy_expenses') and self.sirvoy_expenses is not None and not self.sirvoy_expenses.empty:
+            for _, row in self.sirvoy_expenses.iterrows():
+                unified_records.append({'transaction_id': f"FEE_{row['date'].strftime('%Y%m%d')}", 'date': row['date'], 'amount_gross': row['amount_gross'], 'amount_net': row['amount_gross'], 'currency': row['currency'], 'processor': 'Sirvoy', 'source': 'Sirvoy Software', 'income_type': 'Gasto', 'is_verified': True, 'commission_processor': 0, 'commission_chamba': 0, 'customer_name': 'Sirvoy Software', 'payment_method': 'Suscripción'})
+
+        if not unified_records: return pd.DataFrame()
+        df_unified = pd.DataFrame(unified_records)
+        df_unified['date'] = pd.to_datetime(df_unified['date'], errors='coerce')
+        df_unified = df_unified.dropna(subset=['date']).sort_values('date')
+        self.unified_data = df_unified
+        return self.unified_data

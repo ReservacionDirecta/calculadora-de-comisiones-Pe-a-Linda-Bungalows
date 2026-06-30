@@ -1,0 +1,88 @@
+
+--- FORMATO CRUDO CULQI ---
+"Empresa","Comercio","Producto","ID Venta","Marca","Nro. Tarjeta","Ult. 4 digitos","Moneda","Fecha de la transaccion","Hora de la transaccion","Nombres","Apellidos","Correo Electronico","Pais","Ciudad","Direccion","Telefono","Nombre Banco","Pais Banco","Codigo Referencia","Codigo Autorizacion","ID Terminal","Devolucion","Pre-autorizacion","Monto VENTA","Venta Final","Comision Emisor","Comision Culqi","IGV Emisor","IGV Culqi","IGV TOTAL","Comision TOTAL","Monto Aproximado Abono","ID Transaccion","Serie Terminal","Monto Propina","Estado","Codigo Respuesta","Mensaje al Comercio","Mensaje al Usuario","Modo de pago","Marca QR","Tipo de Pago","Metadata","Nro Pedido","Nro orden PE","Fecha expiracion PE","ID Comercio","Lote","Ref. Lote","Descripcion","Tipo Tokenizacion "
+"PEÑA LINDA BUNGALOWS S.A.C","Peña Linda Bungalows SAC","CulqiFull","chr_live_2RZ3aIE9UK4Ij4Od","-","491257******4899","4899","PEN","2025-09-10","15:23:00","-","-","-","US","-","-","-","No definido","United States of America","996252531892510","582315","FRD57094",0,0,139.88,139.88,0,4.81,0,0.87,0.87,4.81,134.2,"000174092709","P3H2T230612005446",0,"abonada","venta_abonada","Venta abonada","Su compra ha sido exitosa.","-","Yape","Total","{""terminalID"":""FRD57094"",""captureType"":""QR"",""purchaseNumber"":""921039819"",""transactionType"":""Venta""}","-","-","-","100000000047839","489","0001","-","-"
+"PEÑA LINDA BUNGALOWS S.A.C","Peña Linda Bungalows SAC","CulqiFull","chr_live_3xemvuv7SbWA19TH","Visa","404071******0148","0148","PEN","2025-09-09","20:39:05","-","-","-","PE","-","-","-","FINANCIERA OH!","Peru","305253059474091","079814","FRD57094",0,0,679.36,679.36,8.15,15.22,0,2.74,2.74,23.37,653.25,"000398045119","P3H2T230612005446",0,"abonada","venta_abonada","Venta abonada","Su compra ha sido exitosa.","CREDITO","-","Total","{""terminalID"":""FRD57094"",""captureType"":""Contactless Chip"",""transactionID"":""000398045119"",""purchaseNumber"":""344441""}","-","-","-","100000000047839","488","0007","-","-"
+"PEÑA LINDA BUNGALOWS S.A.C","Peña Linda Bungalows SAC","CulqiFull","chr_live_1syS8REWHC7CZVvi","Visa","454775******6847","6847","PEN","2025-09-09","17:12:57","-","-","-","PE","-","-","-","BANCO INTERBANK","Peru","305252799786158","130483","FRD57094",0,0,200,200,2.4,4.48,0,0.81,0.81,6.88,192.31,"000397988524","P3H2T230612005446",0,"abonada","venta_abonada","Venta abonada","Su compra ha sido exitosa.","CREDITO","-","Total","{""terminalID"":""FRD57094"",""captureType"":""Contactless Chip"",""transactionID"":""000397988524"",""purchaseNumber"":""853337""}","-","-","-","100000000047839","488","0006","-","-"
+"PEÑA LINDA BUNGALOWS S.A.C","Peña Linda Bungalows SAC","CulqiFull","chr_live_cP1QsdGmaPpbOBVM","Visa","454775******6847","6847","PEN","2025-09-09","17:07:44","-","-","-","PE","-","-","-","BANCO INTERBANK","Peru","305252796697106","075483","FRD57094",0,0,145.38,145.38,1.74,3.26,0,0.59,0.59,5,139.79,"000397987278","P3H2T230612005446",0,"abonada","venta_abonada","Venta abonada","Su compra ha sido exitosa.","CREDITO","-","Total","{""terminalID"":""FRD57094"",""captureType"":""Contactless Chip"",""transactionID"":""000397987278"",""purchaseNumber"":""146125""}","-","-","-","100000000047839","488","0005","-","-"
+
+--- ANALIZANDO CANDIDATO CULQI: Listado_transacciones_capturadas (3).csv ---
+  Primeras 10 líneas crudas:
+    ﻿Pedido;Tipo;Fecha del pago;Estado;Importe del pago;Medio de pago;Fecha de captura;N° de remesa;Estado de conciliación;TID;Motivo del contracargo;Número de tarjeta;Fecha de expiración;Tipo de producto;Tienda;Token;Suscripción;Comprador;E-mail comprador;Dirección comprador;Complemento de dirección del comprador;Comisión;País del comprador;Resultado 3DS;Transferencia de responsabilidad.;Riesgos;Control número tarjeta;Score;Identificador del análisis;Resultado del análisis;Decisión;BIC;Comentario de conciliación;Destinatario de entrega;Dirección de entrega;Dispositivo fuente;Moneda;Moneda de remesa;Estado URL de notificación;Fecha de autorización;Fecha de creación;Fecha prevista para la transferencia de fondos;Fuente pago;IBAN;Identificador de la tienda;Identificador nacional;Idioma comprador;Importe autorizado;Importe en moneda;Importe inicial;Importe reembolsado;Inf. compl. 2;Inf. compl. 3;Inf. Complementaria.;Inf. extras;Información del usuario;IP comprador;Litigios;Modo de pago;NSU;Número autorización;Número de comercio;Número de ticket;N° terminal;Opciones de Pago;País de entrega;País del medio de pago;Ref. comprador;Secuencia;Solución e-commerce;Tarjeta presente;Teléfono comprador;Teléfono destinatario;Teléfono móvil comprador;Tipo de cliente;Tipo de entrega;Título comprador;Transacción;Transacción de origen;Transacción externa;Transacción UUID;Transportista;Velocidad de entrega
+    ;Débito;30/09/2025 11:53:48;Capturado;365.42;MASTERCARD;30/09/2025 13:00:00;457851;A analizar;n/a (no aplica);;535677XXXXXX2541;01/2028;Tarjeta débito / Particular;IZI*Pena Linda Bungalows (5620714);;;Aimee Mia Asunción Guerrero;mia.asuncion@hotmail.com;;;;;3D_SUCCESS (Proceso 3D Secure terminado);Si;No efectuado;No efectuado;27.0;7592513607346120804731;REVIEW;REVIEW;;;;;TYPE=Mobile Browser|OS_VERSION=18.6.2|OS_FAMILY=iOS|OS_COMPANY=Apple Inc.|OS=iOS|BROWSER_COMPANY=Apple Inc.|IS_MOBILE=true|IS_TABLET=false|BROWSER_VERSION=18.0|BROWSER=Safari mobile|IS_BOT=false|BROWSER_FAMILY=unknown;PEN;PEN;URL no definido;30/09/2025 11:56:34;30/09/2025 11:53:49;;Pago por formulario de recolección de datos;;84543112;48223189;Español;365.42;365.42;365.42;;;;;;;45.189.109.2;n/a (no aplica);Simple;;675723;5620714;;;Sin cuotas;;Italia;;1;;No;;;936300845;;;;916245;-;803472;717398b4220b4d7a8fac5ff576466ee4;;
+    ;Débito;30/09/2025 11:54:09;Capturado;420.0;VISA;30/09/2025 13:00:00;457851;A analizar;n/a (no aplica);;477289XXXXXX2795;08/2029;Tarjeta crédito / ;IZI*Pena Linda Bungalows (5620714);;;Lucero Razzeto;Razzetolucero@gmail.com;;;;;3D_SUCCESS (Proceso 3D Secure terminado);Si;No efectuado;No efectuado;13.0;7592512998546869604079;REVIEW;REVIEW;;;;;TYPE=Mobile Browser|OS_VERSION=18.6|OS_FAMILY=iOS|OS_COMPANY=Apple Inc.|OS=iOS|BROWSER_COMPANY=Apple Inc.|IS_MOBILE=true|IS_TABLET=false|BROWSER_VERSION=26.0|BROWSER=Safari mobile|IS_BOT=false|BROWSER_FAMILY=unknown;PEN;PEN;URL no definido;30/09/2025 11:55:37;30/09/2025 11:54:10;;Pago por formulario de recolección de datos;;84543112;75530019;Español;420.0;420.0;420.0;;;;;;;179.7.65.78;n/a (no aplica);Simple;;554572;5620714;;;Sin cuotas;;Perú;;1;;No;;;955418568;;;;942046;-;350003;67e3269adcb54943b8747b1e18264093;;
+    ;Débito;30/09/2025 15:25:03;Capturado;705.0;VISA;30/09/2025 21:00:00;473681;A analizar;n/a (no aplica);;414075XXXXXX2745;01/2027;Tarjeta crédito / ;IZI*Pena Linda Bungalows (5620714);;;Rosario Ranilla;rdranilla@hotmail.com;;;;;n/a (no aplica);No;No efectuado;No efectuado;6.0;7592640021666434704707;ACCEPT;ACCEPT;;;;;TYPE=Mobile Browser|OS_VERSION=18.6.2|OS_FAMILY=iOS|OS_COMPANY=Apple Inc.|OS=iOS|BROWSER_COMPANY=Apple Inc.|IS_MOBILE=true|IS_TABLET=false|BROWSER_VERSION=18.6|BROWSER=Safari mobile|IS_BOT=false|BROWSER_FAMILY=unknown;PEN;PEN;URL no definido;30/09/2025 15:26:42;30/09/2025 15:25:06;;Pago por formulario de recolección de datos;;84543112;41657525;Español;705.0;705.0;705.0;;;;;;;132.251.2.106;n/a (no aplica);Simple;;902495;5620714;;;Sin cuotas;;Perú;;1;;No;;;994252346;;;;920213;-;434563;49855b3b25af41ae868ba0315d945899;;
+    ;Débito;30/09/2025 15:32:53;Capturado;451.44;VISA;30/09/2025 21:00:00;473681;A analizar;n/a (no aplica);;450881XXXXXX9664;11/2028;Tarjeta crédito / ;IZI*Pena Linda Bungalows (5620714);;;Eduardo Cordova;fiocs13@gmail.com;;;;;3D_SUCCESS (Proceso 3D Secure terminado);Si;No efectuado;No efectuado;12.0;7592644969916462604292;REVIEW;REVIEW;;;;;TYPE=Browser|OS_VERSION=10.0|OS_FAMILY=Windows|OS_COMPANY=Microsoft Corporation.|OS=Windows 10|BROWSER_COMPANY=Google Inc.|IS_MOBILE=false|IS_TABLET=false|BROWSER_VERSION=140.0.0.0|BROWSER=Chrome|IS_BOT=false|BROWSER_FAMILY=Chrome;PEN;PEN;URL no definido;30/09/2025 15:35:48;30/09/2025 15:32:55;;Pago por formulario de recolección de datos;;84543112;41824358;Inglés;451.44;451.44;451.44;;;;;;;130.41.96.59;n/a (no aplica);Simple;;355244;5620714;;;Single payment (debit);;Chile;;1;;No;;;944200414;;;;936946;-;546015;ca8c60df323c4ccf98e3ab8d71ab87e5;;
+    ;Débito;01/10/2025 11:34:36;Capturado;469.0;VISA;01/10/2025 13:00:00;508701;A analizar;n/a (no aplica);;421355XXXXXX4446;03/2030;Tarjeta débito / ;IZI*Pena Linda Bungalows (5620714);;;Nelson jose Lopez chunga;nelopez2903@gmail.com;;;;;3D_SUCCESS (Proceso 3D Secure terminado);Si;No efectuado;No efectuado;27.0;7593365283776166204270;REVIEW;REVIEW;;;;;TYPE=Mobile Browser|OS_VERSION=26.0.0|OS_FAMILY=iOS|OS_COMPANY=Apple Inc.|OS=iOS|BROWSER_COMPANY=Google Inc.|IS_MOBILE=true|IS_TABLET=false|BROWSER_VERSION=140.0.7339.122|BROWSER=Chrome Mobile|IS_BOT=false|BROWSER_FAMILY=Chrome Mobile;PEN;PEN;URL no definido;01/10/2025 11:36:10;01/10/2025 11:34:37;;Pago por formulario de recolección de datos;;84543112;73938386;Español;469.0;469.0;469.0;;;;;;;179.7.82.135;n/a (no aplica);Simple;;234431;5620714;;;Sin cuotas;;Perú;;1;;No;;;943233800;;;;936298;-;156731;2408209821fb4bca9164a1296f91c402;;
+    ;Débito;01/10/2025 19:09:32;Capturado;333.97;VISA;01/10/2025 21:00:00;531951;A analizar;n/a (no aplica);;428076XXXXXX2346;09/2029;Tarjeta crédito / ;IZI*Pena Linda Bungalows (5620714);;;José Antonio Herrera Sotero;jherrera2112@gmail.com;;;;;n/a (no aplica);No;No efectuado;No efectuado;23.0;7593638323346637604083;ACCEPT;ACCEPT;;;;;TYPE=Mobile Browser|OS_VERSION=18.6|OS_FAMILY=iOS|OS_COMPANY=Apple Inc.|OS=iOS|BROWSER_COMPANY=Apple Inc.|IS_MOBILE=true|IS_TABLET=false|BROWSER_VERSION=26.0|BROWSER=Safari mobile|IS_BOT=false|BROWSER_FAMILY=unknown;PEN;PEN;URL no definido;01/10/2025 19:10:32;01/10/2025 19:09:32;;Pago por formulario de recolección de datos;;84543112;76026299;Inglés;333.97;333.97;333.97;;;;;;;104.28.115.86;n/a (no aplica);Simple;;004054;5620714;;;Single payment (debit);;Perú;;1;;No;;;922585483;;;;915653;-;537404;74adb7d2732d436b970c5a921bf3bd69;;
+    ;Débito;02/10/2025 09:24:43;Capturado;240.24;VISA;02/10/2025 13:00:00;551931;A analizar;n/a (no aplica);;491914XXXXXX1678;11/2029;Tarjeta crédito / Particular;IZI*Pena Linda Bungalows (5620714);;;JOSE RAUL MEDINA BARRANZUELA;enegrondiez@gmail.com;;;;;n/a (no aplica);No;No efectuado;No efectuado;2.0;7594151720236816904080;ACCEPT;ACCEPT;;;;;TYPE=Browser|OS_VERSION=10.0|OS_FAMILY=Windows|OS_COMPANY=Microsoft Corporation.|OS=Windows 10|BROWSER_COMPANY=Mozilla Foundation|IS_MOBILE=false|IS_TABLET=false|BROWSER_VERSION=143.0|BROWSER=Firefox|IS_BOT=false|BROWSER_FAMILY=Firefox;PEN;PEN;URL no definido;02/10/2025 09:26:12;02/10/2025 09:24:44;;Pago por formulario de recolección de datos;;84543112;45331711;Español;240.24;240.24;240.24;;;;;;;179.6.48.97;n/a (no aplica);Simple;;551156;5620714;;;Sin cuotas;;Perú;;1;;No;;;950530863;;;;928928;-;219861;2f82a0e76bff40af9902fd4ca80f477e;;
+    ;Débito;02/10/2025 12:29:15;Capturado;234.0;VISA;02/10/2025 13:00:00;551931;A analizar;n/a (no aplica);;400917XXXXXX6218;05/2030;Tarjeta crédito / ;IZI*Pena Linda Bungalows (5620714);;;Jiovanna Escobar Huaman;Vane7_2@hotmail.com;;;;;n/a (no aplica);No;No efectuado;No efectuado;5.0;7594262592276729603094;ACCEPT;ACCEPT;;;;;TYPE=Mobile Browser|OS_VERSION=10|OS_FAMILY=Android|OS_COMPANY=Google, Inc.|OS=Android|BROWSER_COMPANY=SAMSUNG|IS_MOBILE=true|IS_TABLET=false|BROWSER_VERSION=28.0|BROWSER=Mobile Samsung Browser|IS_BOT=false|BROWSER_FAMILY=unknown;PEN;PEN;URL no definido;02/10/2025 12:30:59;02/10/2025 12:30:16;;Pago por formulario de recolección de datos;;84543112;43442588;Español;234.0;234.0;234.0;;;;;;;38.25.16.45;n/a (no aplica);Intentos;;077585;5620714;;;Sin cuotas;;Perú;;2;;No;;;975020586;;;;936541;-;041769;53f39f10ba0c4310b4fcd64d8735d1c3;;
+    ;Débito;02/10/2025 12:47:07;Capturado;234.5;AMEX;02/10/2025 13:00:00;551931;A analizar;n/a (no aplica);;377754XXXXX4579;05/2030;;IZI*Pena Linda Bungalows (5620714);;;Dalia Alexa Sanchez Castro;daliasanchez.2000@gmail.com;;;;;n/a (no aplica);No;No efectuado;No efectuado;24.0;7594273005666724404716;ACCEPT;ACCEPT;;;;;TYPE=Mobile Browser|OS_VERSION=18.6.1|OS_FAMILY=iOS|OS_COMPANY=Apple Inc.|OS=iOS|BROWSER_COMPANY=Google Inc.|IS_MOBILE=true|IS_TABLET=false|BROWSER_VERSION=140.0.7339.122|BROWSER=Chrome Mobile|IS_BOT=false|BROWSER_FAMILY=Chrome Mobile;PEN;PEN;URL no definido;02/10/2025 12:48:21;02/10/2025 12:47:07;;Pago por formulario de recolección de datos;;84543112;75680495;Español;234.5;234.5;234.5;;;;;;;38.25.22.55;n/a (no aplica);Simple;;482969;5620714;;;Sin cuotas;;Perú;;1;;No;;;916409652;;;;905782;-;306885;df105daf781a48d28ac2e7204cc8306e;;
+  Cargado con éxito. Columnas: ['Pedido', 'Tipo', 'Fecha del pago', 'Estado', 'Importe del pago', 'Medio de pago', 'Fecha de captura', 'N° de remesa', 'Estado de conciliación', 'TID', 'Motivo del contracargo', 'Número de tarjeta', 'Fecha de expiración', 'Tipo de producto', 'Tienda', 'Token', 'Suscripción', 'Comprador', 'E-mail comprador', 'Dirección comprador', 'Complemento de dirección del comprador', 'Comisión', 'País del comprador', 'Resultado 3DS', 'Transferencia de responsabilidad.', 'Riesgos', 'Control número tarjeta', 'Score', 'Identificador del análisis', 'Resultado del análisis', 'Decisión', 'BIC', 'Comentario de conciliación', 'Destinatario de entrega', 'Dirección de entrega', 'Dispositivo fuente', 'Moneda', 'Moneda de remesa', 'Estado URL de notificación', 'Fecha de autorización', 'Fecha de creación', 'Fecha prevista para la transferencia de fondos', 'Fuente pago', 'IBAN', 'Identificador de la tienda', 'Identificador nacional', 'Idioma comprador', 'Importe autorizado', 'Importe en moneda', 'Importe inicial', 'Importe reembolsado', 'Inf. compl. 2', 'Inf. compl. 3', 'Inf. Complementaria.', 'Inf. extras', 'Información del usuario', 'IP comprador', 'Litigios', 'Modo de pago', 'NSU', 'Número autorización', 'Número de comercio', 'Número de ticket', 'N° terminal', 'Opciones de Pago', 'País de entrega', 'País del medio de pago', 'Ref. comprador', 'Secuencia', 'Solución e-commerce', 'Tarjeta presente', 'Teléfono comprador', 'Teléfono destinatario', 'Teléfono móvil comprador', 'Tipo de cliente', 'Tipo de entrega', 'Título comprador', 'Transacción', 'Transacción de origen', 'Transacción externa', 'Transacción UUID', 'Transportista', 'Velocidad de entrega']
+  Total registros: 150
+  Columnas detectadas: Fecha=Fecha del pago, Monto=Importe del pago, Estado=Estado
+  Total en rango (2025-09-30 - 2025-10-06): S/ 9,776.51
+  Transacciones en rango:
+    2025-09-30 11:53:48 | 365.42 | Capturado
+    2025-09-30 11:54:09 | 420.0 | Capturado
+    2025-09-30 15:25:03 | 705.0 | Capturado
+    2025-09-30 15:32:53 | 451.44 | Capturado
+    2025-10-01 11:34:36 | 469.0 | Capturado
+    2025-10-01 19:09:32 | 333.97 | Capturado
+    2025-10-02 09:24:43 | 240.24 | Capturado
+    2025-10-02 12:29:15 | 234.0 | Capturado
+    2025-10-02 12:47:07 | 234.5 | Capturado
+    2025-10-02 12:54:34 | 610.95 | Capturado
+    2025-10-02 13:45:34 | 375.62 | Capturado
+    2025-10-02 16:27:42 | 219.25 | Capturado
+    2025-10-02 16:59:11 | 290.93 | Capturado
+    2025-10-03 09:26:58 | 301.0 | Capturado
+    2025-10-03 12:27:10 | 435.4 | Capturado
+    2025-10-03 17:16:36 | 181.72 | Capturado
+    2025-10-03 18:29:53 | 665.98 | Capturado
+    2025-10-03 19:41:19 | 234.5 | Capturado
+    2025-10-03 19:46:15 | 720.0 | Capturado
+    2025-10-04 10:48:19 | 333.97 | Capturado
+    2025-10-04 11:55:03 | 309.0 | Capturado
+    2025-10-04 13:45:41 | 194.7 | Capturado
+    2025-10-05 11:17:06 | 240.24 | Capturado
+    2025-10-05 12:08:11 | 156.33 | Capturado
+    2025-10-06 10:37:23 | 370.92 | Capturado
+    2025-10-06 16:01:13 | 250.0 | Capturado
+    2025-10-06 19:00:38 | 432.43 | Capturado
+
+  Buscando monto exacto 152.6 en TODO el archivo:
+
+--- ANALIZANDO OPENPAY ---
+
+Leyendo archivo: Openpay.csv
+  Total en rango (2025-09-30 - 2025-10-06): S/ 0.00
+  Transacciones en rango:
+
+  Buscando monto exacto 561.03 en TODO el archivo:
+
+Leyendo archivo: openpay copy.csv
+  Total en rango (2025-09-30 - 2025-10-06): S/ 6,159.97
+  Transacciones en rango:
+    2025-10-02 10:11:44 | 437.92 | Completado
+    2025-10-02 16:16:25 | 156.33 | Completado
+    2025-10-02 16:42:55 | 312.66 | Completado
+    2025-10-02 19:02:40 | 234.74 | Completado
+    2025-10-02 20:05:04 | 114.98 | Completado
+    2025-10-03 10:26:49 | 514.98 | Completado
+    2025-10-03 15:36:25 | 205.98 | Completado
+    2025-10-03 20:25:44 | 200.08 | Completado
+    2025-10-04 09:50:05 | 300.08 | Completado
+    2025-10-04 14:31:40 | 234.1 | Completado
+    2025-10-04 15:11:22 | 298.85 | Completado
+    2025-10-04 15:28:15 | 146.17 | Completado
+    2025-10-04 20:15:51 | 721.64 | Completado
+    2025-10-04 20:25:50 | 220.7 | Completado
+    2025-10-04 21:34:25 | 147.47 | Completado
+    2025-10-04 21:41:37 | 473.92 | Completado
+    2025-10-05 14:46:15 | 481.54 | Completado
+    2025-10-05 16:39:27 | 146.17 | Completado
+    2025-10-06 15:58:13 | 717.22 | Completado
+    2025-10-06 18:33:55 | 94.44 | Completado
+
+  Buscando monto exacto 561.03 en TODO el archivo:

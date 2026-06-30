@@ -1,0 +1,2225 @@
+[
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_141351_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_141351",
+    "path": "data_persistente\\secured_20250930_141351_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_141351_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_141351",
+    "path": "data_persistente\\facebook_20250930_141351_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_141351_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_141351",
+    "path": "data_persistente\\sirvoy_20250930_141351_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_141352_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_141352",
+    "path": "data_persistente\\secured_20250930_141352_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_141352_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_141352",
+    "path": "data_persistente\\facebook_20250930_141352_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_141352_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_141352",
+    "path": "data_persistente\\sirvoy_20250930_141352_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_142333_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_142333",
+    "path": "data_persistente\\secured_20250930_142333_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_142333_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_142333",
+    "path": "data_persistente\\facebook_20250930_142333_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_142333_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_142333",
+    "path": "data_persistente\\sirvoy_20250930_142333_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_142333_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_142333",
+    "path": "data_persistente\\secured_20250930_142333_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_142333_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_142333",
+    "path": "data_persistente\\facebook_20250930_142333_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_142333_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_142333",
+    "path": "data_persistente\\sirvoy_20250930_142333_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_143121_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_143121",
+    "path": "data_persistente\\secured_20250930_143121_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_143121_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_143121",
+    "path": "data_persistente\\facebook_20250930_143121_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_143121_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_143121",
+    "path": "data_persistente\\sirvoy_20250930_143121_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_143122_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_143122",
+    "path": "data_persistente\\secured_20250930_143122_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_143122_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_143122",
+    "path": "data_persistente\\facebook_20250930_143122_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_143122_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_143122",
+    "path": "data_persistente\\sirvoy_20250930_143122_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_143802_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_143802",
+    "path": "data_persistente\\secured_20250930_143802_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_143802_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_143802",
+    "path": "data_persistente\\facebook_20250930_143802_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_143802_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_143802",
+    "path": "data_persistente\\sirvoy_20250930_143802_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_143806_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_143806",
+    "path": "data_persistente\\culqi_20250930_143806_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_143806_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_143806",
+    "path": "data_persistente\\secured_20250930_143806_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_143806_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_143806",
+    "path": "data_persistente\\facebook_20250930_143806_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_143806_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_143806",
+    "path": "data_persistente\\sirvoy_20250930_143806_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_144527_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_144527",
+    "path": "data_persistente\\culqi_20250930_144527_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_144527_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_144527",
+    "path": "data_persistente\\secured_20250930_144527_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_144527_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_144527",
+    "path": "data_persistente\\facebook_20250930_144527_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_144527_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_144527",
+    "path": "data_persistente\\sirvoy_20250930_144527_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_144527_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_144527",
+    "path": "data_persistente\\culqi_20250930_144527_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_144527_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_144527",
+    "path": "data_persistente\\secured_20250930_144527_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_144527_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_144527",
+    "path": "data_persistente\\facebook_20250930_144527_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_144527_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_144527",
+    "path": "data_persistente\\sirvoy_20250930_144527_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay.csv",
+    "saved_name": "izipay_20250930_145058_950d5564.csv",
+    "file_type": "izipay",
+    "size_bytes": 498542,
+    "saved_at": "20250930_145058",
+    "path": "data_persistente\\izipay_20250930_145058_950d5564.csv",
+    "hash": "950d5564"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_145058_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_145058",
+    "path": "data_persistente\\culqi_20250930_145058_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_145058_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_145058",
+    "path": "data_persistente\\secured_20250930_145058_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_145058_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_145058",
+    "path": "data_persistente\\facebook_20250930_145058_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_145058_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_145058",
+    "path": "data_persistente\\sirvoy_20250930_145058_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay.csv",
+    "saved_name": "izipay_20250930_145059_950d5564.csv",
+    "file_type": "izipay",
+    "size_bytes": 498542,
+    "saved_at": "20250930_145059",
+    "path": "data_persistente\\izipay_20250930_145059_950d5564.csv",
+    "hash": "950d5564"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_145059_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_145059",
+    "path": "data_persistente\\culqi_20250930_145059_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_145100_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_145100",
+    "path": "data_persistente\\secured_20250930_145100_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_145100_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_145100",
+    "path": "data_persistente\\facebook_20250930_145100_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_145100_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_145100",
+    "path": "data_persistente\\sirvoy_20250930_145100_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay.csv",
+    "saved_name": "izipay_20250930_145734_950d5564.csv",
+    "file_type": "izipay",
+    "size_bytes": 498542,
+    "saved_at": "20250930_145734",
+    "path": "data_persistente\\izipay_20250930_145734_950d5564.csv",
+    "hash": "950d5564"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_145734_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_145734",
+    "path": "data_persistente\\culqi_20250930_145734_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_145734_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_145734",
+    "path": "data_persistente\\secured_20250930_145734_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_145734_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_145734",
+    "path": "data_persistente\\facebook_20250930_145734_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_145734_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_145734",
+    "path": "data_persistente\\sirvoy_20250930_145734_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay.csv",
+    "saved_name": "izipay_20250930_145735_950d5564.csv",
+    "file_type": "izipay",
+    "size_bytes": 498542,
+    "saved_at": "20250930_145735",
+    "path": "data_persistente\\izipay_20250930_145735_950d5564.csv",
+    "hash": "950d5564"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_145735_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_145735",
+    "path": "data_persistente\\culqi_20250930_145735_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_145735_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_145735",
+    "path": "data_persistente\\secured_20250930_145735_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_145736_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_145736",
+    "path": "data_persistente\\facebook_20250930_145736_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_145736_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_145736",
+    "path": "data_persistente\\sirvoy_20250930_145736_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay.csv",
+    "saved_name": "izipay_20250930_152633_950d5564.csv",
+    "file_type": "izipay",
+    "size_bytes": 498542,
+    "saved_at": "20250930_152633",
+    "path": "data_persistente\\izipay_20250930_152633_950d5564.csv",
+    "hash": "950d5564"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_152633_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_152633",
+    "path": "data_persistente\\culqi_20250930_152633_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_152633_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_152633",
+    "path": "data_persistente\\secured_20250930_152633_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_152633_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_152633",
+    "path": "data_persistente\\facebook_20250930_152633_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_152633_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_152633",
+    "path": "data_persistente\\sirvoy_20250930_152633_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay.csv",
+    "saved_name": "izipay_20250930_152633_950d5564.csv",
+    "file_type": "izipay",
+    "size_bytes": 498542,
+    "saved_at": "20250930_152633",
+    "path": "data_persistente\\izipay_20250930_152633_950d5564.csv",
+    "hash": "950d5564"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_152633_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_152633",
+    "path": "data_persistente\\culqi_20250930_152633_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_152633_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_152633",
+    "path": "data_persistente\\secured_20250930_152633_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_152633_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_152633",
+    "path": "data_persistente\\facebook_20250930_152633_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_152633_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_152633",
+    "path": "data_persistente\\sirvoy_20250930_152633_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay.csv",
+    "saved_name": "izipay_20250930_152641_950d5564.csv",
+    "file_type": "izipay",
+    "size_bytes": 498542,
+    "saved_at": "20250930_152641",
+    "path": "data_persistente\\izipay_20250930_152641_950d5564.csv",
+    "hash": "950d5564"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_152641_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_152641",
+    "path": "data_persistente\\culqi_20250930_152641_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_152641_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_152641",
+    "path": "data_persistente\\secured_20250930_152641_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_152641_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_152641",
+    "path": "data_persistente\\facebook_20250930_152641_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_152641_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_152641",
+    "path": "data_persistente\\sirvoy_20250930_152641_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay.csv",
+    "saved_name": "izipay_20250930_152641_950d5564.csv",
+    "file_type": "izipay",
+    "size_bytes": 498542,
+    "saved_at": "20250930_152641",
+    "path": "data_persistente\\izipay_20250930_152641_950d5564.csv",
+    "hash": "950d5564"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_152641_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_152641",
+    "path": "data_persistente\\culqi_20250930_152641_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_152641_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_152641",
+    "path": "data_persistente\\secured_20250930_152641_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_152641_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_152641",
+    "path": "data_persistente\\facebook_20250930_152641_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_152641_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_152641",
+    "path": "data_persistente\\sirvoy_20250930_152641_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay.csv",
+    "saved_name": "izipay_20250930_152648_950d5564.csv",
+    "file_type": "izipay",
+    "size_bytes": 498542,
+    "saved_at": "20250930_152648",
+    "path": "data_persistente\\izipay_20250930_152648_950d5564.csv",
+    "hash": "950d5564"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_152648_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_152648",
+    "path": "data_persistente\\culqi_20250930_152648_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_152648_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_152648",
+    "path": "data_persistente\\secured_20250930_152648_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_152648_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_152648",
+    "path": "data_persistente\\facebook_20250930_152648_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_152648_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_152648",
+    "path": "data_persistente\\sirvoy_20250930_152648_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay.csv",
+    "saved_name": "izipay_20250930_152650_950d5564.csv",
+    "file_type": "izipay",
+    "size_bytes": 498542,
+    "saved_at": "20250930_152650",
+    "path": "data_persistente\\izipay_20250930_152650_950d5564.csv",
+    "hash": "950d5564"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_152650_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_152650",
+    "path": "data_persistente\\culqi_20250930_152650_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_152650_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_152650",
+    "path": "data_persistente\\secured_20250930_152650_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_152650_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_152650",
+    "path": "data_persistente\\facebook_20250930_152650_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_152650_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_152650",
+    "path": "data_persistente\\sirvoy_20250930_152650_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay.csv",
+    "saved_name": "izipay_20250930_152653_950d5564.csv",
+    "file_type": "izipay",
+    "size_bytes": 498542,
+    "saved_at": "20250930_152653",
+    "path": "data_persistente\\izipay_20250930_152653_950d5564.csv",
+    "hash": "950d5564"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_152653_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_152653",
+    "path": "data_persistente\\culqi_20250930_152653_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_152653_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_152653",
+    "path": "data_persistente\\secured_20250930_152653_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_152653_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_152653",
+    "path": "data_persistente\\facebook_20250930_152653_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_152653_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_152653",
+    "path": "data_persistente\\sirvoy_20250930_152653_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay.csv",
+    "saved_name": "izipay_20250930_152654_950d5564.csv",
+    "file_type": "izipay",
+    "size_bytes": 498542,
+    "saved_at": "20250930_152654",
+    "path": "data_persistente\\izipay_20250930_152654_950d5564.csv",
+    "hash": "950d5564"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_152654_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_152654",
+    "path": "data_persistente\\culqi_20250930_152654_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_152654_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_152654",
+    "path": "data_persistente\\secured_20250930_152654_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_152654_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_152654",
+    "path": "data_persistente\\facebook_20250930_152654_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_152654_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_152654",
+    "path": "data_persistente\\sirvoy_20250930_152654_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay.csv",
+    "saved_name": "izipay_20250930_153057_950d5564.csv",
+    "file_type": "izipay",
+    "size_bytes": 498542,
+    "saved_at": "20250930_153057",
+    "path": "data_persistente\\izipay_20250930_153057_950d5564.csv",
+    "hash": "950d5564"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_153057_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_153057",
+    "path": "data_persistente\\culqi_20250930_153057_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_153057_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_153057",
+    "path": "data_persistente\\secured_20250930_153057_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_153057_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_153057",
+    "path": "data_persistente\\facebook_20250930_153057_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_153057_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_153057",
+    "path": "data_persistente\\sirvoy_20250930_153057_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay.csv",
+    "saved_name": "izipay_20250930_153059_950d5564.csv",
+    "file_type": "izipay",
+    "size_bytes": 498542,
+    "saved_at": "20250930_153059",
+    "path": "data_persistente\\izipay_20250930_153059_950d5564.csv",
+    "hash": "950d5564"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_153059_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_153059",
+    "path": "data_persistente\\culqi_20250930_153059_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_153059_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_153059",
+    "path": "data_persistente\\secured_20250930_153059_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_153059_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_153059",
+    "path": "data_persistente\\facebook_20250930_153059_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_153059_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_153059",
+    "path": "data_persistente\\sirvoy_20250930_153059_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay.csv",
+    "saved_name": "izipay_20250930_153101_950d5564.csv",
+    "file_type": "izipay",
+    "size_bytes": 498542,
+    "saved_at": "20250930_153101",
+    "path": "data_persistente\\izipay_20250930_153101_950d5564.csv",
+    "hash": "950d5564"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_153101_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_153101",
+    "path": "data_persistente\\culqi_20250930_153101_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_153101_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_153101",
+    "path": "data_persistente\\secured_20250930_153101_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_153101_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_153101",
+    "path": "data_persistente\\facebook_20250930_153101_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_153101_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_153101",
+    "path": "data_persistente\\sirvoy_20250930_153101_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay.csv",
+    "saved_name": "izipay_20250930_153102_950d5564.csv",
+    "file_type": "izipay",
+    "size_bytes": 498542,
+    "saved_at": "20250930_153102",
+    "path": "data_persistente\\izipay_20250930_153102_950d5564.csv",
+    "hash": "950d5564"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_153102_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_153102",
+    "path": "data_persistente\\culqi_20250930_153102_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_153102_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_153102",
+    "path": "data_persistente\\secured_20250930_153102_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_153102_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_153102",
+    "path": "data_persistente\\facebook_20250930_153102_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_153102_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_153102",
+    "path": "data_persistente\\sirvoy_20250930_153102_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_154251_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_154251",
+    "path": "data_persistente\\culqi_20250930_154251_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_154251_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_154251",
+    "path": "data_persistente\\secured_20250930_154251_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_154251_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_154251",
+    "path": "data_persistente\\facebook_20250930_154251_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_154251_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_154251",
+    "path": "data_persistente\\sirvoy_20250930_154251_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154257_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154257",
+    "path": "data_persistente\\izipay_20250930_154257_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_154257_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_154257",
+    "path": "data_persistente\\culqi_20250930_154257_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_154257_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_154257",
+    "path": "data_persistente\\secured_20250930_154257_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_154257_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_154257",
+    "path": "data_persistente\\facebook_20250930_154257_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_154257_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_154257",
+    "path": "data_persistente\\sirvoy_20250930_154257_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154310_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154310",
+    "path": "data_persistente\\izipay_20250930_154310_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_154310_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_154310",
+    "path": "data_persistente\\culqi_20250930_154310_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_154310_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_154310",
+    "path": "data_persistente\\secured_20250930_154310_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_154310_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_154310",
+    "path": "data_persistente\\facebook_20250930_154310_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_154310_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_154310",
+    "path": "data_persistente\\sirvoy_20250930_154310_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154310_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154310",
+    "path": "data_persistente\\izipay_20250930_154310_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "culqi.csv",
+    "saved_name": "culqi_20250930_154310_1442bd6b.csv",
+    "file_type": "culqi",
+    "size_bytes": 267814,
+    "saved_at": "20250930_154310",
+    "path": "data_persistente\\culqi_20250930_154310_1442bd6b.csv",
+    "hash": "1442bd6b"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_154310_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_154310",
+    "path": "data_persistente\\secured_20250930_154310_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_154310_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_154310",
+    "path": "data_persistente\\facebook_20250930_154310_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_154310_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_154310",
+    "path": "data_persistente\\sirvoy_20250930_154310_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154327_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154327",
+    "path": "data_persistente\\izipay_20250930_154327_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_154327_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_154327",
+    "path": "data_persistente\\secured_20250930_154327_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_154327_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_154327",
+    "path": "data_persistente\\facebook_20250930_154327_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_154327_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_154327",
+    "path": "data_persistente\\sirvoy_20250930_154327_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154331_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154331",
+    "path": "data_persistente\\izipay_20250930_154331_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "culqi 2.csv",
+    "saved_name": "culqi_20250930_154331_3a456e48.csv",
+    "file_type": "culqi",
+    "size_bytes": 32422,
+    "saved_at": "20250930_154331",
+    "path": "data_persistente\\culqi_20250930_154331_3a456e48.csv",
+    "hash": "3a456e48"
+  },
+  {
+    "original_name": "sirvoy.csv",
+    "saved_name": "secured_20250930_154331_315caee7.csv",
+    "file_type": "secured",
+    "size_bytes": 210855,
+    "saved_at": "20250930_154331",
+    "path": "data_persistente\\secured_20250930_154331_315caee7.csv",
+    "hash": "315caee7"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_154331_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_154331",
+    "path": "data_persistente\\facebook_20250930_154331_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_154331_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_154331",
+    "path": "data_persistente\\sirvoy_20250930_154331_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154333_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154333",
+    "path": "data_persistente\\izipay_20250930_154333_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "culqi 2.csv",
+    "saved_name": "culqi_20250930_154333_3a456e48.csv",
+    "file_type": "culqi",
+    "size_bytes": 32422,
+    "saved_at": "20250930_154333",
+    "path": "data_persistente\\culqi_20250930_154333_3a456e48.csv",
+    "hash": "3a456e48"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_154333_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_154333",
+    "path": "data_persistente\\facebook_20250930_154333_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_154333_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_154333",
+    "path": "data_persistente\\sirvoy_20250930_154333_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154342_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154342",
+    "path": "data_persistente\\izipay_20250930_154342_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "culqi 2.csv",
+    "saved_name": "culqi_20250930_154342_3a456e48.csv",
+    "file_type": "culqi",
+    "size_bytes": 32422,
+    "saved_at": "20250930_154342",
+    "path": "data_persistente\\culqi_20250930_154342_3a456e48.csv",
+    "hash": "3a456e48"
+  },
+  {
+    "original_name": "secured.csv",
+    "saved_name": "secured_20250930_154342_81ee8882.csv",
+    "file_type": "secured",
+    "size_bytes": 34499,
+    "saved_at": "20250930_154342",
+    "path": "data_persistente\\secured_20250930_154342_81ee8882.csv",
+    "hash": "81ee8882"
+  },
+  {
+    "original_name": "facebook.csv",
+    "saved_name": "facebook_20250930_154342_07948065.csv",
+    "file_type": "facebook",
+    "size_bytes": 4715,
+    "saved_at": "20250930_154342",
+    "path": "data_persistente\\facebook_20250930_154342_07948065.csv",
+    "hash": "07948065"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_154342_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_154342",
+    "path": "data_persistente\\sirvoy_20250930_154342_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154348_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154348",
+    "path": "data_persistente\\izipay_20250930_154348_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "culqi 2.csv",
+    "saved_name": "culqi_20250930_154348_3a456e48.csv",
+    "file_type": "culqi",
+    "size_bytes": 32422,
+    "saved_at": "20250930_154348",
+    "path": "data_persistente\\culqi_20250930_154348_3a456e48.csv",
+    "hash": "3a456e48"
+  },
+  {
+    "original_name": "secured.csv",
+    "saved_name": "secured_20250930_154348_81ee8882.csv",
+    "file_type": "secured",
+    "size_bytes": 34499,
+    "saved_at": "20250930_154348",
+    "path": "data_persistente\\secured_20250930_154348_81ee8882.csv",
+    "hash": "81ee8882"
+  },
+  {
+    "original_name": "facebook 2.csv",
+    "saved_name": "facebook_20250930_154348_7ddfb39b.csv",
+    "file_type": "facebook",
+    "size_bytes": 1204,
+    "saved_at": "20250930_154348",
+    "path": "data_persistente\\facebook_20250930_154348_7ddfb39b.csv",
+    "hash": "7ddfb39b"
+  },
+  {
+    "original_name": "cobros sirvoy.csv",
+    "saved_name": "sirvoy_20250930_154348_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_154348",
+    "path": "data_persistente\\sirvoy_20250930_154348_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154418_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154418",
+    "path": "data_persistente\\izipay_20250930_154418_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "culqi 2.csv",
+    "saved_name": "culqi_20250930_154418_3a456e48.csv",
+    "file_type": "culqi",
+    "size_bytes": 32422,
+    "saved_at": "20250930_154418",
+    "path": "data_persistente\\culqi_20250930_154418_3a456e48.csv",
+    "hash": "3a456e48"
+  },
+  {
+    "original_name": "secured.csv",
+    "saved_name": "secured_20250930_154418_81ee8882.csv",
+    "file_type": "secured",
+    "size_bytes": 34499,
+    "saved_at": "20250930_154418",
+    "path": "data_persistente\\secured_20250930_154418_81ee8882.csv",
+    "hash": "81ee8882"
+  },
+  {
+    "original_name": "facebook 2.csv",
+    "saved_name": "facebook_20250930_154418_7ddfb39b.csv",
+    "file_type": "facebook",
+    "size_bytes": 1204,
+    "saved_at": "20250930_154418",
+    "path": "data_persistente\\facebook_20250930_154418_7ddfb39b.csv",
+    "hash": "7ddfb39b"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154421_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154421",
+    "path": "data_persistente\\izipay_20250930_154421_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "culqi 2.csv",
+    "saved_name": "culqi_20250930_154421_3a456e48.csv",
+    "file_type": "culqi",
+    "size_bytes": 32422,
+    "saved_at": "20250930_154421",
+    "path": "data_persistente\\culqi_20250930_154421_3a456e48.csv",
+    "hash": "3a456e48"
+  },
+  {
+    "original_name": "secured.csv",
+    "saved_name": "secured_20250930_154421_81ee8882.csv",
+    "file_type": "secured",
+    "size_bytes": 34499,
+    "saved_at": "20250930_154421",
+    "path": "data_persistente\\secured_20250930_154421_81ee8882.csv",
+    "hash": "81ee8882"
+  },
+  {
+    "original_name": "facebook 2.csv",
+    "saved_name": "facebook_20250930_154421_7ddfb39b.csv",
+    "file_type": "facebook",
+    "size_bytes": 1204,
+    "saved_at": "20250930_154421",
+    "path": "data_persistente\\facebook_20250930_154421_7ddfb39b.csv",
+    "hash": "7ddfb39b"
+  },
+  {
+    "original_name": "cobros sirvoy2.csv",
+    "saved_name": "sirvoy_20250930_154421_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_154421",
+    "path": "data_persistente\\sirvoy_20250930_154421_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154433_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154433",
+    "path": "data_persistente\\izipay_20250930_154433_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "culqi 2.csv",
+    "saved_name": "culqi_20250930_154433_3a456e48.csv",
+    "file_type": "culqi",
+    "size_bytes": 32422,
+    "saved_at": "20250930_154433",
+    "path": "data_persistente\\culqi_20250930_154433_3a456e48.csv",
+    "hash": "3a456e48"
+  },
+  {
+    "original_name": "secured.csv",
+    "saved_name": "secured_20250930_154433_81ee8882.csv",
+    "file_type": "secured",
+    "size_bytes": 34499,
+    "saved_at": "20250930_154433",
+    "path": "data_persistente\\secured_20250930_154433_81ee8882.csv",
+    "hash": "81ee8882"
+  },
+  {
+    "original_name": "facebook 2.csv",
+    "saved_name": "facebook_20250930_154434_7ddfb39b.csv",
+    "file_type": "facebook",
+    "size_bytes": 1204,
+    "saved_at": "20250930_154434",
+    "path": "data_persistente\\facebook_20250930_154434_7ddfb39b.csv",
+    "hash": "7ddfb39b"
+  },
+  {
+    "original_name": "cobros sirvoy2.csv",
+    "saved_name": "sirvoy_20250930_154434_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_154434",
+    "path": "data_persistente\\sirvoy_20250930_154434_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154437_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154437",
+    "path": "data_persistente\\izipay_20250930_154437_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "culqi 2.csv",
+    "saved_name": "culqi_20250930_154437_3a456e48.csv",
+    "file_type": "culqi",
+    "size_bytes": 32422,
+    "saved_at": "20250930_154437",
+    "path": "data_persistente\\culqi_20250930_154437_3a456e48.csv",
+    "hash": "3a456e48"
+  },
+  {
+    "original_name": "secured.csv",
+    "saved_name": "secured_20250930_154437_81ee8882.csv",
+    "file_type": "secured",
+    "size_bytes": 34499,
+    "saved_at": "20250930_154437",
+    "path": "data_persistente\\secured_20250930_154437_81ee8882.csv",
+    "hash": "81ee8882"
+  },
+  {
+    "original_name": "facebook 2.csv",
+    "saved_name": "facebook_20250930_154437_7ddfb39b.csv",
+    "file_type": "facebook",
+    "size_bytes": 1204,
+    "saved_at": "20250930_154437",
+    "path": "data_persistente\\facebook_20250930_154437_7ddfb39b.csv",
+    "hash": "7ddfb39b"
+  },
+  {
+    "original_name": "cobros sirvoy2.csv",
+    "saved_name": "sirvoy_20250930_154437_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_154437",
+    "path": "data_persistente\\sirvoy_20250930_154437_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154446_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154446",
+    "path": "data_persistente\\izipay_20250930_154446_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154457_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154457",
+    "path": "data_persistente\\izipay_20250930_154457_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154458_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154458",
+    "path": "data_persistente\\izipay_20250930_154458_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "secured.csv",
+    "saved_name": "izipay_20250930_154639_4a4bbe5d.csv",
+    "file_type": "izipay",
+    "size_bytes": 33170,
+    "saved_at": "20250930_154639",
+    "path": "data_persistente\\izipay_20250930_154639_4a4bbe5d.csv",
+    "hash": "4a4bbe5d"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154650_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154650",
+    "path": "data_persistente\\izipay_20250930_154650_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154717_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154717",
+    "path": "data_persistente\\izipay_20250930_154717_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "culqi 2.csv",
+    "saved_name": "culqi_20250930_154718_3a456e48.csv",
+    "file_type": "culqi",
+    "size_bytes": 32422,
+    "saved_at": "20250930_154718",
+    "path": "data_persistente\\culqi_20250930_154718_3a456e48.csv",
+    "hash": "3a456e48"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154728_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154728",
+    "path": "data_persistente\\izipay_20250930_154728_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "culqi 2.csv",
+    "saved_name": "culqi_20250930_154728_3a456e48.csv",
+    "file_type": "culqi",
+    "size_bytes": 32422,
+    "saved_at": "20250930_154728",
+    "path": "data_persistente\\culqi_20250930_154728_3a456e48.csv",
+    "hash": "3a456e48"
+  },
+  {
+    "original_name": "secured.csv",
+    "saved_name": "secured_20250930_154728_4a4bbe5d.csv",
+    "file_type": "secured",
+    "size_bytes": 33170,
+    "saved_at": "20250930_154728",
+    "path": "data_persistente\\secured_20250930_154728_4a4bbe5d.csv",
+    "hash": "4a4bbe5d"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154735_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154735",
+    "path": "data_persistente\\izipay_20250930_154735_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "culqi 2.csv",
+    "saved_name": "culqi_20250930_154736_3a456e48.csv",
+    "file_type": "culqi",
+    "size_bytes": 32422,
+    "saved_at": "20250930_154736",
+    "path": "data_persistente\\culqi_20250930_154736_3a456e48.csv",
+    "hash": "3a456e48"
+  },
+  {
+    "original_name": "secured.csv",
+    "saved_name": "secured_20250930_154736_4a4bbe5d.csv",
+    "file_type": "secured",
+    "size_bytes": 33170,
+    "saved_at": "20250930_154736",
+    "path": "data_persistente\\secured_20250930_154736_4a4bbe5d.csv",
+    "hash": "4a4bbe5d"
+  },
+  {
+    "original_name": "facebook 2.csv",
+    "saved_name": "facebook_20250930_154736_7ddfb39b.csv",
+    "file_type": "facebook",
+    "size_bytes": 1204,
+    "saved_at": "20250930_154736",
+    "path": "data_persistente\\facebook_20250930_154736_7ddfb39b.csv",
+    "hash": "7ddfb39b"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154742_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154742",
+    "path": "data_persistente\\izipay_20250930_154742_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "culqi 2.csv",
+    "saved_name": "culqi_20250930_154742_3a456e48.csv",
+    "file_type": "culqi",
+    "size_bytes": 32422,
+    "saved_at": "20250930_154742",
+    "path": "data_persistente\\culqi_20250930_154742_3a456e48.csv",
+    "hash": "3a456e48"
+  },
+  {
+    "original_name": "secured.csv",
+    "saved_name": "secured_20250930_154742_4a4bbe5d.csv",
+    "file_type": "secured",
+    "size_bytes": 33170,
+    "saved_at": "20250930_154742",
+    "path": "data_persistente\\secured_20250930_154742_4a4bbe5d.csv",
+    "hash": "4a4bbe5d"
+  },
+  {
+    "original_name": "facebook 2.csv",
+    "saved_name": "facebook_20250930_154742_7ddfb39b.csv",
+    "file_type": "facebook",
+    "size_bytes": 1204,
+    "saved_at": "20250930_154742",
+    "path": "data_persistente\\facebook_20250930_154742_7ddfb39b.csv",
+    "hash": "7ddfb39b"
+  },
+  {
+    "original_name": "cobros sirvoy2.csv",
+    "saved_name": "sirvoy_20250930_154742_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_154742",
+    "path": "data_persistente\\sirvoy_20250930_154742_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154749_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154749",
+    "path": "data_persistente\\izipay_20250930_154749_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "culqi 2.csv",
+    "saved_name": "culqi_20250930_154749_3a456e48.csv",
+    "file_type": "culqi",
+    "size_bytes": 32422,
+    "saved_at": "20250930_154749",
+    "path": "data_persistente\\culqi_20250930_154749_3a456e48.csv",
+    "hash": "3a456e48"
+  },
+  {
+    "original_name": "secured.csv",
+    "saved_name": "secured_20250930_154749_4a4bbe5d.csv",
+    "file_type": "secured",
+    "size_bytes": 33170,
+    "saved_at": "20250930_154749",
+    "path": "data_persistente\\secured_20250930_154749_4a4bbe5d.csv",
+    "hash": "4a4bbe5d"
+  },
+  {
+    "original_name": "facebook 2.csv",
+    "saved_name": "facebook_20250930_154749_7ddfb39b.csv",
+    "file_type": "facebook",
+    "size_bytes": 1204,
+    "saved_at": "20250930_154749",
+    "path": "data_persistente\\facebook_20250930_154749_7ddfb39b.csv",
+    "hash": "7ddfb39b"
+  },
+  {
+    "original_name": "cobros sirvoy2.csv",
+    "saved_name": "sirvoy_20250930_154750_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_154750",
+    "path": "data_persistente\\sirvoy_20250930_154750_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay 2.csv",
+    "saved_name": "izipay_20250930_154750_8facc5e3.csv",
+    "file_type": "izipay",
+    "size_bytes": 69038,
+    "saved_at": "20250930_154750",
+    "path": "data_persistente\\izipay_20250930_154750_8facc5e3.csv",
+    "hash": "8facc5e3"
+  },
+  {
+    "original_name": "culqi 2.csv",
+    "saved_name": "culqi_20250930_154750_3a456e48.csv",
+    "file_type": "culqi",
+    "size_bytes": 32422,
+    "saved_at": "20250930_154750",
+    "path": "data_persistente\\culqi_20250930_154750_3a456e48.csv",
+    "hash": "3a456e48"
+  },
+  {
+    "original_name": "secured.csv",
+    "saved_name": "secured_20250930_154750_4a4bbe5d.csv",
+    "file_type": "secured",
+    "size_bytes": 33170,
+    "saved_at": "20250930_154750",
+    "path": "data_persistente\\secured_20250930_154750_4a4bbe5d.csv",
+    "hash": "4a4bbe5d"
+  },
+  {
+    "original_name": "facebook 2.csv",
+    "saved_name": "facebook_20250930_154750_7ddfb39b.csv",
+    "file_type": "facebook",
+    "size_bytes": 1204,
+    "saved_at": "20250930_154750",
+    "path": "data_persistente\\facebook_20250930_154750_7ddfb39b.csv",
+    "hash": "7ddfb39b"
+  },
+  {
+    "original_name": "cobros sirvoy2.csv",
+    "saved_name": "sirvoy_20250930_154750_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_154750",
+    "path": "data_persistente\\sirvoy_20250930_154750_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "culqi 2.csv",
+    "saved_name": "culqi_20250930_155446_3a456e48.csv",
+    "file_type": "culqi",
+    "size_bytes": 32422,
+    "saved_at": "20250930_155446",
+    "path": "data_persistente\\culqi_20250930_155446_3a456e48.csv",
+    "hash": "3a456e48"
+  },
+  {
+    "original_name": "secured.csv",
+    "saved_name": "secured_20250930_155446_4a4bbe5d.csv",
+    "file_type": "secured",
+    "size_bytes": 33170,
+    "saved_at": "20250930_155446",
+    "path": "data_persistente\\secured_20250930_155446_4a4bbe5d.csv",
+    "hash": "4a4bbe5d"
+  },
+  {
+    "original_name": "facebook 2.csv",
+    "saved_name": "facebook_20250930_155446_7ddfb39b.csv",
+    "file_type": "facebook",
+    "size_bytes": 1204,
+    "saved_at": "20250930_155446",
+    "path": "data_persistente\\facebook_20250930_155446_7ddfb39b.csv",
+    "hash": "7ddfb39b"
+  },
+  {
+    "original_name": "cobros sirvoy2.csv",
+    "saved_name": "sirvoy_20250930_155446_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_155446",
+    "path": "data_persistente\\sirvoy_20250930_155446_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "secured.csv",
+    "saved_name": "secured_20250930_155447_4a4bbe5d.csv",
+    "file_type": "secured",
+    "size_bytes": 33170,
+    "saved_at": "20250930_155447",
+    "path": "data_persistente\\secured_20250930_155447_4a4bbe5d.csv",
+    "hash": "4a4bbe5d"
+  },
+  {
+    "original_name": "facebook 2.csv",
+    "saved_name": "facebook_20250930_155447_7ddfb39b.csv",
+    "file_type": "facebook",
+    "size_bytes": 1204,
+    "saved_at": "20250930_155447",
+    "path": "data_persistente\\facebook_20250930_155447_7ddfb39b.csv",
+    "hash": "7ddfb39b"
+  },
+  {
+    "original_name": "cobros sirvoy2.csv",
+    "saved_name": "sirvoy_20250930_155447_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_155447",
+    "path": "data_persistente\\sirvoy_20250930_155447_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "culqi 2 - culqi 2.csv",
+    "saved_name": "secured_20250930_155451_371ba3a9.csv",
+    "file_type": "secured",
+    "size_bytes": 28138,
+    "saved_at": "20250930_155451",
+    "path": "data_persistente\\secured_20250930_155451_371ba3a9.csv",
+    "hash": "371ba3a9"
+  },
+  {
+    "original_name": "facebook 2.csv",
+    "saved_name": "facebook_20250930_155451_7ddfb39b.csv",
+    "file_type": "facebook",
+    "size_bytes": 1204,
+    "saved_at": "20250930_155451",
+    "path": "data_persistente\\facebook_20250930_155451_7ddfb39b.csv",
+    "hash": "7ddfb39b"
+  },
+  {
+    "original_name": "cobros sirvoy2.csv",
+    "saved_name": "sirvoy_20250930_155451_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_155451",
+    "path": "data_persistente\\sirvoy_20250930_155451_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "facebook 2.csv",
+    "saved_name": "facebook_20250930_155455_7ddfb39b.csv",
+    "file_type": "facebook",
+    "size_bytes": 1204,
+    "saved_at": "20250930_155455",
+    "path": "data_persistente\\facebook_20250930_155455_7ddfb39b.csv",
+    "hash": "7ddfb39b"
+  },
+  {
+    "original_name": "cobros sirvoy2.csv",
+    "saved_name": "sirvoy_20250930_155455_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_155455",
+    "path": "data_persistente\\sirvoy_20250930_155455_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "secured2.csv",
+    "saved_name": "secured_20250930_155500_4a4bbe5d.csv",
+    "file_type": "secured",
+    "size_bytes": 33170,
+    "saved_at": "20250930_155500",
+    "path": "data_persistente\\secured_20250930_155500_4a4bbe5d.csv",
+    "hash": "4a4bbe5d"
+  },
+  {
+    "original_name": "facebook 2.csv",
+    "saved_name": "facebook_20250930_155500_7ddfb39b.csv",
+    "file_type": "facebook",
+    "size_bytes": 1204,
+    "saved_at": "20250930_155500",
+    "path": "data_persistente\\facebook_20250930_155500_7ddfb39b.csv",
+    "hash": "7ddfb39b"
+  },
+  {
+    "original_name": "cobros sirvoy2.csv",
+    "saved_name": "sirvoy_20250930_155500_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_155500",
+    "path": "data_persistente\\sirvoy_20250930_155500_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "culqi 2 - culqi 2.csv",
+    "saved_name": "culqi_20250930_155503_371ba3a9.csv",
+    "file_type": "culqi",
+    "size_bytes": 28138,
+    "saved_at": "20250930_155503",
+    "path": "data_persistente\\culqi_20250930_155503_371ba3a9.csv",
+    "hash": "371ba3a9"
+  },
+  {
+    "original_name": "secured2.csv",
+    "saved_name": "secured_20250930_155503_4a4bbe5d.csv",
+    "file_type": "secured",
+    "size_bytes": 33170,
+    "saved_at": "20250930_155503",
+    "path": "data_persistente\\secured_20250930_155503_4a4bbe5d.csv",
+    "hash": "4a4bbe5d"
+  },
+  {
+    "original_name": "facebook 2.csv",
+    "saved_name": "facebook_20250930_155503_7ddfb39b.csv",
+    "file_type": "facebook",
+    "size_bytes": 1204,
+    "saved_at": "20250930_155503",
+    "path": "data_persistente\\facebook_20250930_155503_7ddfb39b.csv",
+    "hash": "7ddfb39b"
+  },
+  {
+    "original_name": "cobros sirvoy2.csv",
+    "saved_name": "sirvoy_20250930_155503_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_155503",
+    "path": "data_persistente\\sirvoy_20250930_155503_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "izipay 2 - izipay 2.csv",
+    "saved_name": "izipay_20250930_155508_d81b98a6.csv",
+    "file_type": "izipay",
+    "size_bytes": 69021,
+    "saved_at": "20250930_155508",
+    "path": "data_persistente\\izipay_20250930_155508_d81b98a6.csv",
+    "hash": "d81b98a6"
+  },
+  {
+    "original_name": "culqi 2 - culqi 2.csv",
+    "saved_name": "culqi_20250930_155508_371ba3a9.csv",
+    "file_type": "culqi",
+    "size_bytes": 28138,
+    "saved_at": "20250930_155508",
+    "path": "data_persistente\\culqi_20250930_155508_371ba3a9.csv",
+    "hash": "371ba3a9"
+  },
+  {
+    "original_name": "secured2.csv",
+    "saved_name": "secured_20250930_155508_4a4bbe5d.csv",
+    "file_type": "secured",
+    "size_bytes": 33170,
+    "saved_at": "20250930_155508",
+    "path": "data_persistente\\secured_20250930_155508_4a4bbe5d.csv",
+    "hash": "4a4bbe5d"
+  },
+  {
+    "original_name": "facebook 2.csv",
+    "saved_name": "facebook_20250930_155508_7ddfb39b.csv",
+    "file_type": "facebook",
+    "size_bytes": 1204,
+    "saved_at": "20250930_155508",
+    "path": "data_persistente\\facebook_20250930_155508_7ddfb39b.csv",
+    "hash": "7ddfb39b"
+  },
+  {
+    "original_name": "cobros sirvoy2.csv",
+    "saved_name": "sirvoy_20250930_155508_64218e95.csv",
+    "file_type": "sirvoy",
+    "size_bytes": 22879,
+    "saved_at": "20250930_155508",
+    "path": "data_persistente\\sirvoy_20250930_155508_64218e95.csv",
+    "hash": "64218e95"
+  },
+  {
+    "original_name": "culqi 2 - culqi 2.csv",
+    "saved_name": "culqi_20250930_155639_371ba3a9.csv",
+    "file_type": "culqi",
+    "size_bytes": 28138,
+    "saved_at": "20250930_155639",
+    "path": "data_persistente\\culqi_20250930_155639_371ba3a9.csv",
+    "hash": "371ba3a9"
+  },
+  {
+    "original_name": "izipay 2 - izipay 2.csv",
+    "saved_name": "izipay_20250930_155659_d81b98a6.csv",
+    "file_type": "izipay",
+    "size_bytes": 69021,
+    "saved_at": "20250930_155659",
+    "path": "data_persistente\\izipay_20250930_155659_d81b98a6.csv",
+    "hash": "d81b98a6"
+  },
+  {
+    "original_name": "culqi 2 - culqi 2.csv",
+    "saved_name": "culqi_20250930_155659_371ba3a9.csv",
+    "file_type": "culqi",
+    "size_bytes": 28138,
+    "saved_at": "20250930_155659",
+    "path": "data_persistente\\culqi_20250930_155659_371ba3a9.csv",
+    "hash": "371ba3a9"
+  },
+  {
+    "original_name": "izipay 2 - izipay 2.csv",
+    "saved_name": "izipay_20250930_155707_d81b98a6.csv",
+    "file_type": "izipay",
+    "size_bytes": 69021,
+    "saved_at": "20250930_155707",
+    "path": "data_persistente\\izipay_20250930_155707_d81b98a6.csv",
+    "hash": "d81b98a6"
+  },
+  {
+    "original_name": "culqi 2 - culqi 2.csv",
+    "saved_name": "culqi_20250930_155707_371ba3a9.csv",
+    "file_type": "culqi",
+    "size_bytes": 28138,
+    "saved_at": "20250930_155707",
+    "path": "data_persistente\\culqi_20250930_155707_371ba3a9.csv",
+    "hash": "371ba3a9"
+  },
+  {
+    "original_name": "izipay 2 - izipay 2.csv",
+    "saved_name": "izipay_20250930_155708_d81b98a6.csv",
+    "file_type": "izipay",
+    "size_bytes": 69021,
+    "saved_at": "20250930_155708",
+    "path": "data_persistente\\izipay_20250930_155708_d81b98a6.csv",
+    "hash": "d81b98a6"
+  },
+  {
+    "original_name": "culqi 2 - culqi 2.csv",
+    "saved_name": "culqi_20250930_155708_371ba3a9.csv",
+    "file_type": "culqi",
+    "size_bytes": 28138,
+    "saved_at": "20250930_155708",
+    "path": "data_persistente\\culqi_20250930_155708_371ba3a9.csv",
+    "hash": "371ba3a9"
+  },
+  {
+    "original_name": "izipay 2 - izipay 2.csv",
+    "saved_name": "izipay_20250930_155708_d81b98a6.csv",
+    "file_type": "izipay",
+    "size_bytes": 69021,
+    "saved_at": "20250930_155708",
+    "path": "data_persistente\\izipay_20250930_155708_d81b98a6.csv",
+    "hash": "d81b98a6"
+  },
+  {
+    "original_name": "culqi 2 - culqi 2.csv",
+    "saved_name": "culqi_20250930_155708_371ba3a9.csv",
+    "file_type": "culqi",
+    "size_bytes": 28138,
+    "saved_at": "20250930_155708",
+    "path": "data_persistente\\culqi_20250930_155708_371ba3a9.csv",
+    "hash": "371ba3a9"
+  },
+  {
+    "original_name": "izipay 2 - izipay 2.csv",
+    "saved_name": "izipay_20250930_155708_d81b98a6.csv",
+    "file_type": "izipay",
+    "size_bytes": 69021,
+    "saved_at": "20250930_155708",
+    "path": "data_persistente\\izipay_20250930_155708_d81b98a6.csv",
+    "hash": "d81b98a6"
+  },
+  {
+    "original_name": "culqi 2 - culqi 2.csv",
+    "saved_name": "culqi_20250930_155708_371ba3a9.csv",
+    "file_type": "culqi",
+    "size_bytes": 28138,
+    "saved_at": "20250930_155708",
+    "path": "data_persistente\\culqi_20250930_155708_371ba3a9.csv",
+    "hash": "371ba3a9"
+  },
+  {
+    "original_name": "izipay 2 - izipay 2.csv",
+    "saved_name": "izipay_20250930_155708_d81b98a6.csv",
+    "file_type": "izipay",
+    "size_bytes": 69021,
+    "saved_at": "20250930_155708",
+    "path": "data_persistente\\izipay_20250930_155708_d81b98a6.csv",
+    "hash": "d81b98a6"
+  },
+  {
+    "original_name": "culqi 2 - culqi 2.csv",
+    "saved_name": "culqi_20250930_155708_371ba3a9.csv",
+    "file_type": "culqi",
+    "size_bytes": 28138,
+    "saved_at": "20250930_155708",
+    "path": "data_persistente\\culqi_20250930_155708_371ba3a9.csv",
+    "hash": "371ba3a9"
+  },
+  {
+    "original_name": "izipay 2 - izipay 2.csv",
+    "saved_name": "izipay_20250930_155709_d81b98a6.csv",
+    "file_type": "izipay",
+    "size_bytes": 69021,
+    "saved_at": "20250930_155709",
+    "path": "data_persistente\\izipay_20250930_155709_d81b98a6.csv",
+    "hash": "d81b98a6"
+  },
+  {
+    "original_name": "culqi 2 - culqi 2.csv",
+    "saved_name": "culqi_20250930_155709_371ba3a9.csv",
+    "file_type": "culqi",
+    "size_bytes": 28138,
+    "saved_at": "20250930_155709",
+    "path": "data_persistente\\culqi_20250930_155709_371ba3a9.csv",
+    "hash": "371ba3a9"
+  },
+  {
+    "original_name": "izipay 2 - izipay 2.csv",
+    "saved_name": "izipay_20250930_155709_d81b98a6.csv",
+    "file_type": "izipay",
+    "size_bytes": 69021,
+    "saved_at": "20250930_155709",
+    "path": "data_persistente\\izipay_20250930_155709_d81b98a6.csv",
+    "hash": "d81b98a6"
+  },
+  {
+    "original_name": "culqi 2 - culqi 2.csv",
+    "saved_name": "culqi_20250930_155709_371ba3a9.csv",
+    "file_type": "culqi",
+    "size_bytes": 28138,
+    "saved_at": "20250930_155709",
+    "path": "data_persistente\\culqi_20250930_155709_371ba3a9.csv",
+    "hash": "371ba3a9"
+  },
+  {
+    "original_name": "culqi 2 - culqi 2.csv",
+    "saved_name": "culqi_20250930_155811_371ba3a9.csv",
+    "file_type": "culqi",
+    "size_bytes": 28138,
+    "saved_at": "20250930_155811",
+    "path": "data_persistente\\culqi_20250930_155811_371ba3a9.csv",
+    "hash": "371ba3a9"
+  },
+  {
+    "original_name": "izipay 2 - izipay 2.csv",
+    "saved_name": "izipay_20250930_155819_d81b98a6.csv",
+    "file_type": "izipay",
+    "size_bytes": 69021,
+    "saved_at": "20250930_155819",
+    "path": "data_persistente\\izipay_20250930_155819_d81b98a6.csv",
+    "hash": "d81b98a6"
+  },
+  {
+    "original_name": "izipay 2 - izipay 2.csv",
+    "saved_name": "izipay_20250930_155929_d81b98a6.csv",
+    "file_type": "izipay",
+    "size_bytes": 69021,
+    "saved_at": "20250930_155929",
+    "path": "data_persistente\\izipay_20250930_155929_d81b98a6.csv",
+    "hash": "d81b98a6"
+  }
+]
