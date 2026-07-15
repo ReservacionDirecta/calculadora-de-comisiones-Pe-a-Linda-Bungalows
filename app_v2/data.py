@@ -81,10 +81,12 @@ def calc_kpis(df, cobros_df, fi, ff, ts):
     plataformas_all = sv_sales[plataformas_mask]
     tb_plataformas = float(plataformas_all[plataformas_all["amount"] > 0]["amount"].sum())
 
-    # Recibido = Sirvoy neto (base real del hotel)
-    # Nota: Hay discrepancia entre montos MongoDB y Sirvoy page
-    # Sirvoy page muestra montos menores por filtrado interno
-    # Usamos el total neto de Sirvoy como base
+    # Confirmado = Transferencia + Efectivo (Sirvoy neto) + Plataformas
+    sv_transf = float(sv_sirvoy_all[sv_sirvoy_all["tipo_pago"] == "Transferencia"]["amount"].sum())
+    sv_efect = float(sv_sirvoy_all[sv_sirvoy_all["tipo_pago"] == "Efectivo"]["amount"].sum())
+    tb_confirmado = sv_transf + sv_efect + tb_plataformas
+
+    # Recibido = Sirvoy neto (base real)
     tb_recibido = tb_sirvoy
 
     # Links
@@ -234,6 +236,7 @@ def calc_kpis(df, cobros_df, fi, ff, ts):
         "tb_sirvoy": tb_sirvoy,
         "tb_recibido": tb_recibido,
         "tb_plataformas": tb_plataformas,
+        "tb_confirmado": tb_confirmado,
         "comision": comision,
         "total_costos": total_costos,
         "costo_fb": costo_fb,
