@@ -6,7 +6,10 @@ import streamlit as st
 
 import os
 
+# Railway MongoDB requires authSource=admin
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017/pena_linda")
+if "authSource" not in MONGO_URL and "interchange.proxy.rlwy.net" in MONGO_URL:
+    MONGO_URL += "&authSource=admin" if "?" in MONGO_URL else "?authSource=admin"
 
 
 @st.cache_data(ttl=300)
