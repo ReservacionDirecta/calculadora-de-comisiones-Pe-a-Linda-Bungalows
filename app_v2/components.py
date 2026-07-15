@@ -87,6 +87,7 @@ def generate_weekly_pdf(ws, we, ventas_bruto, reversiones, costs_list, abonos_li
     from reportlab.lib import colors as rc
     from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, HRFlowable
     from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+    from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 
     comision = ventas_bruto * comision_pct
     total_costos = sum(d.get('monto', 0) for d in costs_list)

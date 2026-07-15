@@ -97,6 +97,7 @@ page_options = {
     "📤 POS": "POS",
     "📋 Historial": "Historial",
     "📤 Exportar": "Exportar",
+    "🤖 Agente": "Agente",
 }
 
 current_idx = list(page_options.values()).index(st.session_state.active_page) if st.session_state.active_page in page_options.values() else 0
@@ -138,3 +139,6 @@ elif page == "Historial":
 elif page == "Exportar":
     from views.exportar import render as r
     r(df, k, fi, ff, sv=df, sv_date_filtered=k["df_f"])
+elif page == "Agente":
+    from views.agente import render as r
+    r(df, k, t, fi, ff, MONGO_URL)
