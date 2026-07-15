@@ -240,9 +240,8 @@ tb_sirvoy = float(sv_sirvoy_all['amount'].sum())
 plataformas_all = sv_sales_f[sv_sales_f['fuente'].isin(['Izipay','Culqi','Openpay'])]
 tb_plataformas = float(plataformas_all[plataformas_all['amount'] > 0]['amount'].sum())
 
-# Recibido = Sirvoy Transferencia + Sirvoy Efectivo + Plataformas
-sv_transf_efect = sv_sirvoy_all[sv_sirvoy_all['tipo_pago'].isin(['Transferencia','Efectivo'])]['amount'].sum()
-tb_recibido = float(sv_transf_efect) + tb_plataformas
+# Recibido = Sirvoy neto (base real del hotel)
+tb_recibido = tb_sirvoy
 
 # Links en periodo
 la = sv_date_filtered[sv_date_filtered['es_link']].copy()
