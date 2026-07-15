@@ -36,8 +36,10 @@ def render(k, t, show_usd=False, usd_rate=3.6):
         sub_costos = fmt_both(k["total_costos"]) if show_usd else f"FB {k['costo_fb']:,.0f} · SV {k['costo_sv']:,.0f} · Asis {k['costo_as']:,.0f}"
         bento_kpi("💸 Costos", k["total_costos"], sub_costos, t["sun"])
     with cols[4]:
-        sub_comision = fmt_both(k["comision_desde_mar"]) if show_usd else "5% desde 03/03/2026"
-        bento_kpi("📊 Comisión Acum.", k["comision_desde_mar"], sub_comision, "#8b5cf6")
+        comision_periodo = k.get("comision_periodo", k["comision"])
+        comision_hist = k["comision_desde_mar"]
+        sub_comision = f"Período: {fmt_both(comision_periodo)} | Histórico: {fmt_both(comision_hist)}" if show_usd else f"Período: S/ {comision_periodo:,.2f} | Hist: S/ {comision_hist:,.2f}"
+        bento_kpi("📊 Comisión Acum.", comision_hist, sub_comision, "#8b5cf6")
 
     st.markdown("</div>", unsafe_allow_html=True)
 
