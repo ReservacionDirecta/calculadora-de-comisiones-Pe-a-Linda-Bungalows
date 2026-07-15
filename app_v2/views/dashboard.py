@@ -78,6 +78,10 @@ def render(k, t, show_usd=False, usd_rate=3.6):
     # ─── Insights y Análisis ───
     st.markdown("---")
     st.markdown("### 🧠 Insights y Análisis")
+    fi_k = k.get('fi', None)
+    ff_k = k.get('ff', None)
+    if fi_k and ff_k:
+        st.caption(f"Período: {fi_k.strftime('%d/%m/%Y')} a {ff_k.strftime('%d/%m/%Y')}")
     for insight in k.get("insights", []):
         st.markdown(f"- {insight}")
 

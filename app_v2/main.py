@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Panel de Control v2 — Peña Linda Bungalows
-App modular, con vista hotelero/admin y carga de POS.
-Corre en puerto separado del original.
-"""
+# Panel de Control v2 — Peña Linda Bungalows
+# Optimizado: lazy imports, caching, movil
 import streamlit as st
 import pandas as pd
 import os
@@ -12,45 +8,42 @@ from datetime import datetime
 
 st.set_page_config(page_title="Peña Linda · Panel v2", page_icon="🏝️", layout="wide")
 
-# ─── Imports locales ───
+# ─── Imports lazy (solo lo esencial al inicio) ───
 from config import get_theme, inject_css
 from data import load_all, calc_kpis
-from components import bento_kpi, alert_box, export_buttons, get_yscale
 
-# ─── Sesión: tema ───
+# ─── Sesión ───
 if "is_dark" not in st.session_state:
     st.session_state.is_dark = False
+if "active_page" not in st.session_state:
+    st.session_state.active_page = "Calculadora"
 
 def toggle_theme():
     st.session_state.is_dark = not st.session_state.is_dark
 
 t = get_theme(st.session_state.is_dark)
-
-# ─── CSS ───
 inject_css(t)
 
-# ─── Carga de datos (cacheada 5 min) ───
+# ─── Carga de datos (cacheada) ───
 df, cobros_df, db_status = load_all()
 if df.empty:
-    st.error("❌ No se pudieron cargar datos de MongoDB.")
+    st.error("No se pudieron cargar datos de MongoDB.")
     st.stop()
 
-# ─── Sidebar ───
+# ─── Sidebar compacto ───
 with st.sidebar:
-    st.markdown(f"## 🏝️ Panel v2")
-    st.caption(f"Estado: {db_status}")
+    st.markdown("## 🏝️ Panel v2")
+    st.caption(f"{db_status}")
 
-    st.button("🌙/☀️ Tema", on_click=toggle_theme, use_container_width=True)
+    col_t1, col_t2 = st.columns(2)
+    with col_t1:
+        st.button("🌙/☀️", on_click=toggle_theme, use_container_width=True, key="theme_btn")
+    with col_t2:
+        if st.button("🔄", use_container_width=True, key="refresh_btn"):
+            st.cache_data.clear()
+            st.rerun()
 
-    if st.button("🔄 Actualizar datos", use_container_width=True, type="primary"):
-        st.cache_data.clear()
-        st.session_state.ultima_actualizacion = datetime.now().strftime("%H:%M:%S")
-        st.rerun()
-
-    if "ultima_actualizacion" in st.session_state:
-        st.caption(f"Última: {st.session_state.ultima_actualizacion}")
-
-    # --- Fechas ---
+    # Fechas
     fecha_min = df["date_pe"].min().date()
     fecha_max = df["date_pe"].max().date()
 
@@ -72,45 +65,29 @@ with st.sidebar:
         else:
             fi, ff = fecha_min, fecha_max
 
-    ts = st.multiselect("Métodos de Pago",
+    ts = st.multiselect("Métodos",
                         ["Tarjeta", "Transferencia", "Efectivo", "Otros"],
                         default=["Tarjeta", "Transferencia", "Efectivo"])
-    escala_log = st.checkbox("Escala logarítmica")
 
-    with st.expander("💱 Moneda"):
-        show_usd = st.checkbox("Mostrar valores en USD", value=st.session_state.get("show_usd", False))
-        st.session_state.show_usd = show_usd
-        usd_rate = st.number_input("Tipo de cambio PEN/USD", min_value=1.0, max_value=10.0,
-                                   value=st.session_state.get("usd_rate", 3.6), step=0.1, format="%.2f")
-        st.session_state.usd_rate = usd_rate
-        st.caption(f"1 USD = S/ {usd_rate:.2f}")
-
-    st.markdown("---")
     st.caption(f"v2 · {datetime.now().strftime('%d/%m/%Y')}")
 
-# ─── Variable global ───
+# ─── Variables globales ───
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017/pena_linda")
 show_usd = st.session_state.get("show_usd", False)
 usd_rate = st.session_state.get("usd_rate", 3.6)
 
-
-# ─── Calcular KPIs ───
+# ─── KPIs (calculados por rango) ───
 k = calc_kpis(df, cobros_df, fi, ff, ts)
 
-# ─── HEADER ───
+# ─── Header ───
 st.markdown(f"""
 <div class="shad-header">
     <h1>🏝️ Peña Linda Bungalows</h1>
-    <p>Período: {fi.strftime('%d/%m/%Y')} a {ff.strftime('%d/%m/%Y')} · {db_status}</p>
+    <p>{fi.strftime('%d/%m/%Y')} a {ff.strftime('%d/%m/%Y')}</p>
 </div>
 """, unsafe_allow_html=True)
 
-from views.exportar import render as r_export
-
-# ─── NAVEGACIÓN CON SESSION_STATE (preserva pestaña activa) ───
-if "active_page" not in st.session_state:
-    st.session_state.active_page = "Calculadora"
-
+# ─── Navegación (preserva pestaña) ───
 page_options = {
     "🧮 Calculadora": "Calculadora",
     "🏠 Dashboard": "Dashboard",
@@ -121,50 +98,43 @@ page_options = {
     "📋 Historial": "Historial",
     "📤 Exportar": "Exportar",
 }
-page_labels = list(page_options.keys())
-page_values = list(page_options.values())
 
-# Encontrar índice actual
-current_idx = page_values.index(st.session_state.active_page) if st.session_state.active_page in page_values else 0
+current_idx = list(page_options.values()).index(st.session_state.active_page) if st.session_state.active_page in page_options.values() else 0
 
 selected = st.radio(
-    "Navegación:",
-    page_options.keys(),
-    index=current_idx,
-    horizontal=True,
-    key="nav_radio",
-    label_visibility="collapsed",
+    "Nav:", list(page_options.keys()),
+    index=current_idx, horizontal=True,
+    key="nav_radio", label_visibility="collapsed",
 )
 
-# Actualizar session_state
 new_page = page_options[selected]
 if new_page != st.session_state.active_page:
     st.session_state.active_page = new_page
 
-# ─── RENDERIZAR PÁGINA SELECCIONADA ───
-from views.calculadora_deuda import render as r_calc
-from views.dashboard import render as r_dash
-from views.ventas import render as r_ventas
-from views.costos import render as r_costos
-from views.conciliacion import render as r_conc
-from views.pos_upload import render as r_pos
-from views.historial import render as r_hist
-
+# ─── Lazy render por página ───
 page = st.session_state.active_page
 
 if page == "Calculadora":
-    r_calc(df, k, t, fi, ff, MONGO_URL)
+    from views.calculadora_deuda import render as r
+    r(df, k, t, fi, ff, MONGO_URL)
 elif page == "Dashboard":
-    r_dash(k, t, show_usd=show_usd, usd_rate=usd_rate)
+    from views.dashboard import render as r
+    r(k, t)
 elif page == "Ventas":
-    r_ventas(df, k, t, fi, ff, escala_log)
+    from views.ventas import render as r
+    r(df, k, t, fi, ff)
 elif page == "Costos":
-    r_costos(df, k, t, fi, ff, MONGO_URL)
+    from views.costos import render as r
+    r(df, k, t, fi, ff, MONGO_URL)
 elif page == "Conciliar":
-    r_conc(df, k, t, fi, ff, MONGO_URL)
+    from views.conciliacion import render as r
+    r(df, k, t, fi, ff, MONGO_URL)
 elif page == "POS":
-    r_pos(MONGO_URL)
+    from views.pos_upload import render as r
+    r(MONGO_URL)
 elif page == "Historial":
-    r_hist(df, k, fi, ff, MONGO_URL)
+    from views.historial import render as r
+    r(df, k, fi, ff, MONGO_URL)
 elif page == "Exportar":
-    r_export(df, k, fi, ff, sv=df, sv_date_filtered=k["df_f"])
+    from views.exportar import render as r
+    r(df, k, fi, ff, sv=df, sv_date_filtered=k["df_f"])

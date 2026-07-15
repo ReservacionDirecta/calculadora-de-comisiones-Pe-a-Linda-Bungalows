@@ -1,29 +1,19 @@
-# data.py - Carga única de datos y cálculos
+# data.py - Carga optimizada con caching
 import pandas as pd
 from datetime import datetime
 from pymongo import MongoClient
 import streamlit as st
-
 import os
 
-# Railway MongoDB requires authSource=admin
+# MongoDB connection
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017/pena_linda")
-
-# Ensure authSource=admin for Railway MongoDB
-if "interchange.proxy.rlwy.net" in MONGO_URL:
-    if "authSource" not in MONGO_URL:
-        if "?" in MONGO_URL:
-            MONGO_URL += "&authSource=admin"
-        else:
-            MONGO_URL += "?authSource=admin"
+if "interchange.proxy.rlwy.net" in MONGO_URL and "authSource" not in MONGO_URL:
+    MONGO_URL += "&authSource=admin" if "?" in MONGO_URL else "?authSource=admin"
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=300, show_spinner=False)
 def load_all():
-    """
-    Carga pagos y cobros desde MongoDB en UNA sola operación.
-    Retorna (df, cobros_df, db_status)
-    """
+    """Carga pagos y cobros desde MongoDB."""
     try:
         cli = MongoClient(MONGO_URL, serverSelectionTimeoutMS=10000)
         cli.admin.command("ping")
@@ -175,26 +165,62 @@ def calc_kpis(df, cobros_df, fi, ff, ts):
     adeudado_periodo = comision_periodo + costos_periodo
     saldo_pendiente_periodo = max(0.0, adeudado_periodo - abonos_periodo)
 
-    # ─── Insights automáticos ───
+    # ─── Insights automáticos (ajustados al rango de fechas) ───
     insights = []
+
+    # Período
+    dias = (ff - fi).days + 1
+    insights.append(f"📅 **Período:** {fi.strftime('%d/%m/%Y')} a {ff.strftime('%d/%m/%Y')} ({dias} días)")
+
+    # Ventas
+    if tb_sirvoy > 0:
+        insights.append(f"📊 **Ventas Sirvoy:** S/ {tb_sirvoy:,.2f} ({tx} transacciones)")
+    else:
+        insights.append("⚠️ **Sin ventas Sirvoy** en este período.")
+
+    # Comisión
+    if comision > 0:
+        insights.append(f"💰 **Comisión 5%:** S/ {comision:,.2f}")
+
+    # Costos
     if total_costos > 0:
         fb_pct = (costo_fb / total_costos * 100) if total_costos > 0 else 0
         sv_pct = (costo_sv / total_costos * 100) if total_costos > 0 else 0
         as_pct = (costo_as / total_costos * 100) if total_costos > 0 else 0
-        insights.append(f"📱 **Facebook Ads** representa el **{fb_pct:.1f}%** del total de costos (S/ {costo_fb:,.2f}).")
-        insights.append(f"🖥️ **Sirvoy** representa el **{sv_pct:.1f}%** de los costos (S/ {costo_sv:,.2f}).")
-        insights.append(f"👤 **Asistente** representa el **{as_pct:.1f}%** de los costos (S/ {costo_as:,.2f}).")
+        insights.append(f"💸 **Costos operativos:** S/ {total_costos:,.2f}")
+        insights.append(f"  - Facebook Ads: S/ {costo_fb:,.2f} ({fb_pct:.1f}%)")
+        insights.append(f"  - Sirvoy: S/ {costo_sv:,.2f} ({sv_pct:.1f}%)")
+        insights.append(f"  - Asistente: S/ {costo_as:,.2f} ({as_pct:.1f}%)")
 
+    # Ticket promedio
     if tx > 0:
-        insights.append(f"🎫 **Ticket promedio:** S/ {prom:,.2f} por transacción ({tx} tx en el período).")
+        insights.append(f"🎫 **Ticket promedio:** S/ {prom:,.2f} ({tx} transacciones)")
 
-    if roi_pct > 0:
-        insights.append(f"📈 **ROI acumulado:** Por cada S/ 1 invertido, se generaron **S/ {roi_x_sol:.2f}** en ventas netas.")
-    else:
-        insights.append(f"⚠️ **ROI negativo:** Los costos y comisión superan las ventas netas del período.")
+    # Plataformas
+    if tb_plataformas > 0:
+        insights.append(f"💳 **Plataformas:** S/ {tb_plataformas:,.2f} (confirmación de pagos con tarjeta)")
 
+    # Recibido
+    if tb_recibido > 0:
+        insights.append(f"✅ **Recibido:** S/ {tb_recibido:,.2f} (Transferencia + Efectivo + Plataformas)")
+
+    # ROI del período
+    if inversion_periodo > 0:
+        if ganancia_periodo > 0:
+            insights.append(f"📈 **ROI período:** +{roi_periodo_pct:.1f}% — Por cada S/ 1 invertido, S/ {roi_periodo_x_sol:.2f} en ventas")
+        else:
+            insights.append(f"⚠️ **ROI período negativo:** Los costos y comisión superan las ventas del período.")
+
+    # Contraste tarjeta
     if lk > 0:
-        insights.append(f"⏳ **{lk:,.2f}** en tarjeta Sirvoy sin contraste en plataformas — posible demora en depósito.")
+        insights.append(f"⏳ **S/ {lk:,.2f}** en tarjeta Sirvoy sin contraste en plataformas — posible demora en depósito.")
+
+    # Acumulado histórico
+    if adeudado > 0:
+        insights.append(f"📋 **Deuda acumulada (desde 03/03):** S/ {adeudado:,.2f}")
+        if total_abonos > 0:
+            insights.append(f"  - Abonos: S/ {total_abonos:,.2f}")
+            insights.append(f"  - Pendiente: S/ {saldo_pendiente:,.2f}")
 
     # ─── Pagos recibidos (abonos desde pagos, como fallback) ───
     pagos_recibidos = df[df["fuente"] == "Abono Chamba"]
@@ -247,4 +273,6 @@ def calc_kpis(df, cobros_df, fi, ff, ts):
         "abonos_periodo": abonos_periodo,
         "adeudado_periodo": adeudado_periodo,
         "saldo_pendiente_periodo": saldo_pendiente_periodo,
+        "fi": fi,
+        "ff": ff,
     }

@@ -1,17 +1,8 @@
-# components.py - Componentes reutilizables
+# components.py - Componentes reutilizables (optimizado)
 import streamlit as st
 import pandas as pd
 import io
 from datetime import datetime, timedelta
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.units import cm
-from reportlab.lib import colors as rc
-from reportlab.platypus import (
-    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle,
-    HRFlowable
-)
-from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
-from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 
 # ─── Export helpers ───
 def df_to_csv(df):
@@ -31,7 +22,6 @@ def df_to_excel(df):
 
 # ─── Bento KPI card ───
 def bento_kpi(label, value, sub, color, fmt="S/ {:,.2f}"):
-    """Renderiza una card del bento grid."""
     if isinstance(value, (int, float)):
         val_str = fmt.format(value)
     else:
@@ -45,7 +35,7 @@ def bento_kpi(label, value, sub, color, fmt="S/ {:,.2f}"):
     """, unsafe_allow_html=True)
 
 
-# ─── Alerta / acción ───
+# ─── Alerta ───
 def alert_box(title, body, action_html=""):
     st.markdown(f"""
     <div class="alert-box">
@@ -91,7 +81,13 @@ def get_yscale(escala_log):
 
 # ─── Weekly PDF Report (like v1) ───
 def generate_weekly_pdf(ws, we, ventas_bruto, reversiones, costs_list, abonos_list, devoluciones_list=None, comision_pct=0.05):
-    """Genera un PDF invoice-style con reportlab. Devuelve bytes."""
+    """Genera un PDF invoice-style con reportlab (lazy import)."""
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.units import cm
+    from reportlab.lib import colors as rc
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, HRFlowable
+    from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+
     comision = ventas_bruto * comision_pct
     total_costos = sum(d.get('monto', 0) for d in costs_list)
     total_abonos = sum(d.get('monto', 0) for d in abonos_list)
