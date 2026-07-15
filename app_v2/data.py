@@ -8,8 +8,14 @@ import os
 
 # Railway MongoDB requires authSource=admin
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017/pena_linda")
-if "authSource" not in MONGO_URL and "interchange.proxy.rlwy.net" in MONGO_URL:
-    MONGO_URL += "&authSource=admin" if "?" in MONGO_URL else "?authSource=admin"
+
+# Ensure authSource=admin for Railway MongoDB
+if "interchange.proxy.rlwy.net" in MONGO_URL:
+    if "authSource" not in MONGO_URL:
+        if "?" in MONGO_URL:
+            MONGO_URL += "&authSource=admin"
+        else:
+            MONGO_URL += "?authSource=admin"
 
 
 @st.cache_data(ttl=300)
@@ -19,13 +25,13 @@ def load_all():
     Retorna (df, cobros_df, db_status)
     """
     try:
-        cli = MongoClient(MONGO_URL, serverSelectionTimeoutMS=5000)
+        cli = MongoClient(MONGO_URL, serverSelectionTimeoutMS=10000)
         cli.admin.command("ping")
         docs = list(cli["pena_linda"]["pagos"].find({}, {"hash": 0}))
         cobros_docs = list(cli["pena_linda"]["cobros"].find({}))
         cli.close()
         if not docs:
-            return pd.DataFrame(), pd.DataFrame(), "⚠️ BD vacía"
+            return pd.DataFrame(), pd.DataFrame(), "BD vacia"
 
         # ─── DataFrame principal (pagos) ───
         df = pd.DataFrame(docs)
@@ -55,7 +61,7 @@ def load_all():
         return df, cobros_df, f"MongoDB ({len(df):,} docs)"
 
     except Exception as e:
-        return pd.DataFrame(), pd.DataFrame(), f"❌ Error: {e}"
+        return pd.DataFrame(), pd.DataFrame(), f"Error MongoDB: {str(e)[:100]}"
 
 
 def calc_kpis(df, cobros_df, fi, ff, ts):

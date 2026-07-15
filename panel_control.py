@@ -23,8 +23,14 @@ CARPETA = os.path.dirname(os.path.abspath(__file__))
 
 # Conexión a MongoDB (local / Railway)
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017/pena_linda")
-if "authSource" not in MONGO_URL and "interchange.proxy.rlwy.net" in MONGO_URL:
-    MONGO_URL += "&authSource=admin" if "?" in MONGO_URL else "?authSource=admin"
+
+# Ensure authSource=admin for Railway MongoDB
+if "interchange.proxy.rlwy.net" in MONGO_URL:
+    if "authSource" not in MONGO_URL:
+        if "?" in MONGO_URL:
+            MONGO_URL += "&authSource=admin"
+        else:
+            MONGO_URL += "?authSource=admin"
 
 st.set_page_config(page_title="Peña Linda — Panel de Control", layout="wide", page_icon="🏝️")
 
