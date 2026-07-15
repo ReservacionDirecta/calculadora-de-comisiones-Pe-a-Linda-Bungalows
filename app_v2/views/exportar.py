@@ -2,7 +2,12 @@ import streamlit as st
 import pandas as pd
 import io
 from datetime import datetime, timedelta, date
-from app_v2.components import df_to_csv, df_to_excel, generate_weekly_pdf, export_buttons
+import sys
+import os
+
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from components import df_to_csv, df_to_excel, generate_weekly_pdf, export_buttons
 
 
 def render(df, k, fi, ff, sv, sv_date_filtered):
