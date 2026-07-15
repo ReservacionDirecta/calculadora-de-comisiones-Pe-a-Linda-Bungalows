@@ -82,13 +82,17 @@ def render(df, k, t, fi, ff, escala_log):
     # ── Tab 3: Comisiones ──
     with v_tab3:
         st.markdown("**💰 Comisión Chamba Digital (5% sobre ventas Sirvoy)**")
+        st.caption(f"Período: {fi.strftime('%d/%m/%Y')} a {ff.strftime('%d/%m/%Y')}")
         col_c1, col_c2, col_c3 = st.columns(3)
         with col_c1:
-            st.metric("Vendido (Período)", f"S/ {k['tb_sirvoy']:,.2f}")
+            st.metric("Vendido (Período)", f"S/ {k['tb_sirvoy']:,.2f}",
+                      help="Ventas Sirvoy netas (positivos + negativos) en el rango seleccionado")
         with col_c2:
-            st.metric("Comisión (Período)", f"S/ {k['comision']:,.2f}")
+            st.metric("Comisión (Período)", f"S/ {k['comision']:,.2f}",
+                      help="5% sobre vendido del período seleccionado")
         with col_c3:
-            st.metric("Comisión Acumulada (desde 03/03)", f"S/ {k['comision_desde_mar']:,.2f}")
+            st.metric("Comisión Acumulada (desde 03/03)", f"S/ {k['comision_desde_mar']:,.2f}",
+                      help="Acumulado histórico desde 03/03/2026 (no depende del filtro)")
 
         st.markdown("---")
         st.markdown("**📈 Evolución**")

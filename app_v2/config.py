@@ -54,7 +54,8 @@ def inject_css(t):
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 * {{ font-family: 'Inter', system-ui, -apple-system, sans-serif; }}
 .stApp {{ background: {bg}; }}
-h1, h2, h3, h4, h5, h6, p, span, label, div {{ color: {text}; }}
+h1, h2, h3, h4, h5, h6 {{ color: {text} !important; }}
+.stMarkdown p, .stText p {{ color: {text} !important; }}
 
 /* ─── SIDEBAR completo (fondo + todos los widgets) ─── */
 section[data-testid="stSidebar"],
@@ -65,81 +66,8 @@ section[data-testid="stSidebar"] .st-emotion-cache-1wrcr25,  /* sidebar content 
 section[data-testid="stSidebar"] section[data-testid="stSidebarContent"] {{
     background: {bg} !important;
 }}
-/* Expander dentro del sidebar */
-section[data-testid="stSidebar"] .streamlit-expanderHeader {{
-    background: {bg_card} !important;
-    color: {text} !important;
-    border: 1px solid {border} !important;
-    border-radius: 8px !important;
-}}
-section[data-testid="stSidebar"] .streamlit-expanderContent {{
-    background: {bg_card} !important;
-    border: 1px solid {border} !important;
-    border-top: none !important;
-    border-radius: 0 0 8px 8px !important;
-    padding: 8px 12px !important;
-}}
-/* Radio buttons */
-section[data-testid="stSidebar"] div[role="radiogroup"] {{
-    background: transparent !important;
-}}
-section[data-testid="stSidebar"] div[role="radiogroup"] label {{
-    background: transparent !important;
-    color: {text} !important;
-}}
-section[data-testid="stSidebar"] div[role="radiogroup"] label > div:first-child {{
-    background-color: {bg_card} !important;
-}}
-/* Date input */
-section[data-testid="stSidebar"] div[data-baseweb="input"] {{
-    background-color: {bg_card} !important;
-    border: 1px solid {border} !important;
-    border-radius: 8px !important;
-}}
-section[data-testid="stSidebar"] div[data-baseweb="input"] input {{
-    background-color: {bg_card} !important;
-    color: {text} !important;
-}}
-/* Select / dropdown */
-section[data-testid="stSidebar"] div[data-baseweb="select"] > div {{
-    background-color: {bg_card} !important;
-    border: 1px solid {border} !important;
-}}
-/* Multiselect */
-section[data-testid="stSidebar"] div[data-baseweb="tag"] {{
-    background-color: {t["primary"]}22 !important;
-    color: {text} !important;
-}}
-section[data-testid="stSidebar"] div[data-baseweb="select"] > div {{
-    background-color: {bg_card} !important;
-}}
-/* Checkbox */
-section[data-testid="stSidebar"] .stCheckbox label {{
-    color: {text} !important;
-}}
-section[data-testid="stSidebar"] .stCheckbox label > div:first-child {{
-    background-color: {bg_card} !important;
-    border: 1px solid {border} !important;
-}}
-/* Selectbox */
-section[data-testid="stSidebar"] div[data-testid="stSelectbox"] > div {{
-    background-color: {bg_card} !important;
-    border: 1px solid {border} !important;
-    border-radius: 8px !important;
-}}
-/* Buttons in sidebar */
-section[data-testid="stSidebar"] .stButton button {{
-    background: {bg_card} !important;
-    color: {text} !important;
-    border: 1px solid {border} !important;
-}}
-section[data-testid="stSidebar"] .stButton button[kind="primary"] {{
-    background: {t["seafoam"]} !important;
-    color: white !important;
-}}
 /* Caption / muted text */
-section[data-testid="stSidebar"] .stCaption, 
-section[data-testid="stSidebar"] .st-emotion-cache-1aeihzq {{
+section[data-testid="stSidebar"] .stCaption {{
     color: {text2} !important;
 }}
 /* Sidebar hr */

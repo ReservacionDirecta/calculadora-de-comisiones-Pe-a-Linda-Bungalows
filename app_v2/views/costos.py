@@ -66,7 +66,8 @@ def render(df, k, t, fi, ff, MONGO_URL):
             nueva_cat = st.selectbox("Categoría", ["Facebook Ads", "Sirvoy", "Asistente", "Otro"])
             nuevo_ref = st.text_input("Concepto / Referencia", placeholder="Ej: Campaña Junio...")
 
-            if st.form_submit_button("💾 Guardar Costo", type="primary", disabled=(nuevo_monto <= 0)):
+            submitted = st.form_submit_button("💾 Guardar Costo", type="primary")
+            if submitted and nuevo_monto > 0:
                 try:
                     from pymongo import MongoClient
                     import hashlib

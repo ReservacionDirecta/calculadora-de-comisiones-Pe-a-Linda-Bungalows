@@ -77,11 +77,21 @@ with st.sidebar:
                         default=["Tarjeta", "Transferencia", "Efectivo"])
     escala_log = st.checkbox("Escala logarítmica")
 
+    with st.expander("💱 Moneda"):
+        show_usd = st.checkbox("Mostrar valores en USD", value=st.session_state.get("show_usd", False))
+        st.session_state.show_usd = show_usd
+        usd_rate = st.number_input("Tipo de cambio PEN/USD", min_value=1.0, max_value=10.0,
+                                   value=st.session_state.get("usd_rate", 3.6), step=0.1, format="%.2f")
+        st.session_state.usd_rate = usd_rate
+        st.caption(f"1 USD = S/ {usd_rate:.2f}")
+
     st.markdown("---")
     st.caption(f"v2 · {datetime.now().strftime('%d/%m/%Y')}")
 
 # ─── Variable global ───
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017/pena_linda")
+show_usd = st.session_state.get("show_usd", False)
+usd_rate = st.session_state.get("usd_rate", 3.6)
 
 
 # ─── Calcular KPIs ───
@@ -97,54 +107,64 @@ st.markdown(f"""
 
 from views.exportar import render as r_export
 
-# ─── TABS PRINCIPALES ───
-# Orden: primero lo que el hotelero necesita ver
-tabs = st.tabs([
-    "🧮 Calculadora",
-    "🏠 Dashboard",
-    "📊 Ventas",
-    "💸 Costos",
-    "🔄 Conciliar",
-    "📤 POS",
-    "📋 Historial",
-    "📤 Exportar",
-])
+# ─── NAVEGACIÓN CON SESSION_STATE (preserva pestaña activa) ───
+if "active_page" not in st.session_state:
+    st.session_state.active_page = "Calculadora"
 
-# ─── TAB 0: Calculadora de Deuda (v3) ───
-with tabs[0]:
-    from views.calculadora_deuda import render as r_calc
+page_options = {
+    "🧮 Calculadora": "Calculadora",
+    "🏠 Dashboard": "Dashboard",
+    "📊 Ventas": "Ventas",
+    "💸 Costos": "Costos",
+    "🔄 Conciliar": "Conciliar",
+    "📤 POS": "POS",
+    "📋 Historial": "Historial",
+    "📤 Exportar": "Exportar",
+}
+page_labels = list(page_options.keys())
+page_values = list(page_options.values())
+
+# Encontrar índice actual
+current_idx = page_values.index(st.session_state.active_page) if st.session_state.active_page in page_values else 0
+
+selected = st.radio(
+    "Navegación:",
+    page_options.keys(),
+    index=current_idx,
+    horizontal=True,
+    key="nav_radio",
+    label_visibility="collapsed",
+)
+
+# Actualizar session_state
+new_page = page_options[selected]
+if new_page != st.session_state.active_page:
+    st.session_state.active_page = new_page
+
+# ─── RENDERIZAR PÁGINA SELECCIONADA ───
+from views.calculadora_deuda import render as r_calc
+from views.dashboard import render as r_dash
+from views.ventas import render as r_ventas
+from views.costos import render as r_costos
+from views.conciliacion import render as r_conc
+from views.pos_upload import render as r_pos
+from views.historial import render as r_hist
+
+page = st.session_state.active_page
+
+if page == "Calculadora":
     r_calc(df, k, t, fi, ff, MONGO_URL)
-
-# ─── TAB 1: Dashboard ───
-with tabs[1]:
-    from views.dashboard import render as r_dash
-    r_dash(k, t)
-
-# ─── TAB 2: Ventas ───
-with tabs[2]:
-    from views.ventas import render as r_ventas
+elif page == "Dashboard":
+    r_dash(k, t, show_usd=show_usd, usd_rate=usd_rate)
+elif page == "Ventas":
     r_ventas(df, k, t, fi, ff, escala_log)
-
-# ─── TAB 3: Costos ───
-with tabs[3]:
-    from views.costos import render as r_costos
+elif page == "Costos":
     r_costos(df, k, t, fi, ff, MONGO_URL)
-
-# ─── TAB 4: Conciliación ───
-with tabs[4]:
-    from views.conciliacion import render as r_conc
+elif page == "Conciliar":
     r_conc(df, k, t, fi, ff, MONGO_URL)
-
-# ─── TAB 5: POS Upload ───
-with tabs[5]:
-    from views.pos_upload import render as r_pos
+elif page == "POS":
     r_pos(MONGO_URL)
-
-# ─── TAB 6: Historial ───
-with tabs[6]:
-    from views.historial import render as r_hist
+elif page == "Historial":
     r_hist(df, k, fi, ff, MONGO_URL)
-
-# ─── TAB 7: Exportar ───
-with tabs[7]:
-    r_export(df, k, fi, ff, df, df)  # last two: sv, sv_date_filtered (same as df for now)
+elif page == "Exportar":
+    r_export(df, k, fi, ff, sv=df, sv_date_filtered=k["df_f"])

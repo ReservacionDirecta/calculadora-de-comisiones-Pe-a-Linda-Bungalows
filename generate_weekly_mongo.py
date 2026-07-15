@@ -30,10 +30,10 @@ def load_data(db):
     df = pd.DataFrame(raw)
 
     # Parse fechas
-    if "date_pe" in df.columns:
-        df["date"] = pd.to_datetime(df["date_pe"], errors="coerce")
-    elif "fecha" in df.columns:
-        df["date"] = pd.to_datetime(df["fecha"], errors="coerce")
+    if "fecha" in df.columns:
+        df["date"] = pd.to_datetime(df["fecha"], errors="coerce").dt.tz_localize(None)
+    elif "date_pe" in df.columns:
+        df["date"] = pd.to_datetime(df["date_pe"], errors="coerce").dt.tz_localize(None)
     df = df.dropna(subset=["date"]).sort_values("date")
 
     # Parse montos
@@ -109,6 +109,8 @@ def process_week(week_df, week_label):
         "Gasto_Asistente": asis,
         "Total_Gastos": fb + sv + asis,
         "Neto": neto,
+        "Devoluciones": 0,
+        "Monto_Devoluciones": 0,
     }
 
 def main():
@@ -147,6 +149,22 @@ def main():
             continue
 
         stats = process_week(week_df, label)
+
+        devoluciones = []
+        negativos = week_df[(week_df["income_type"].isin(["Tarjeta", "Transferencia", "Efectivo"])) & (week_df["monto"] < 0)]
+        if not negativos.empty:
+            for _, r in negativos.iterrows():
+                devoluciones.append({
+                    "monto": float(r["monto"]),
+                    "fecha": r.get("date", ""),
+                    "metodo": str(r.get("metodo", r.get("source", ""))),
+                    "referencia": str(r.get("referencia", r.get("transaction_id", ""))),
+                })
+            stats["Devoluciones"] = len(devoluciones)
+            stats["Monto_Devoluciones"] = sum(d["monto"] for d in devoluciones)
+        else:
+            stats["Devoluciones"] = 0
+            stats["Monto_Devoluciones"] = 0
         summary.append(stats)
 
         # Preparar columnas para PDFGenerator
@@ -214,12 +232,14 @@ def main():
     print(f"\n{'='*60}")
     print("✅ REPORTES SEMANALES COMPLETADOS")
     print(f"{'='*60}")
-    print(f"{'Semana':<18} {'Bruto':>12} {'Comis 5%':>12} {'Gastos':>12} {'Neto':>12}")
-    print(f"{'-'*18} {'-'*12} {'-'*12} {'-'*12} {'-'*12}")
+    print(f"{'Semana':<18} {'Bruto':>12} {'Comis 5%':>12} {'Gastos':>12} {'Devol':>8} {'Neto':>12}")
+    print(f"{'-'*18} {'-'*12} {'-'*12} {'-'*12} {'-'*8} {'-'*12}")
     for s in summary:
-        print(f"{s['Semana']:<18} S/ {s['Bruto']:>8,.2f} S/ {s['Comision_5']:>8,.2f} S/ {s['Total_Gastos']:>8,.2f} S/ {s['Neto']:>8,.2f}")
-    print(f"{'-'*18} {'-'*12} {'-'*12} {'-'*12} {'-'*12}")
-    print(f"{'TOTAL':<18} S/ {total_bruto:>8,.2f} S/ {total_comision:>8,.2f} S/ {total_gastos:>8,.2f} S/ {total_neto:>8,.2f}")
+        ndev = s.get('Devoluciones', 0)
+        dev_mark = f"({ndev})" if ndev > 0 else ""
+        print(f"{s['Semana']:<18} S/ {s['Bruto']:>8,.2f} S/ {s['Comision_5']:>8,.2f} S/ {s['Total_Gastos']:>8,.2f} {dev_mark:>7} S/ {s['Neto']:>8,.2f}")
+    print(f"{'-'*18} {'-'*12} {'-'*12} {'-'*12} {'-'*8} {'-'*12}")
+    print(f"{'TOTAL':<18} S/ {total_bruto:>8,.2f} S/ {total_comision:>8,.2f} S/ {total_gastos:>8,.2f}        S/ {total_neto:>8,.2f}")
     print(f"\n📊 Comisión 5% acumulada: S/ {total_comision:,.2f}")
     print(f"📄 Reportes en: reportes_semanales/")
 

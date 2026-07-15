@@ -148,9 +148,7 @@ def load_data():
         df = pd.DataFrame(docs)
         df['date'] = pd.to_datetime(df['fecha'], errors='coerce')
         
-        is_cost_or_abono = df['tipo_pago'].isin(['Costo', 'Abono']) | df['fuente'].isin(['Abono Chamba', 'Saldo Base'])
-        df['date_pe'] = df['date'].dt.tz_localize('UTC', ambiguous='NaT').dt.tz_convert('America/Lima')
-        df.loc[is_cost_or_abono, 'date_pe'] = df.loc[is_cost_or_abono, 'date'].dt.tz_localize('America/Lima', ambiguous='NaT')
+        df['date_pe'] = df['date'].dt.tz_localize('America/Lima', ambiguous='NaT')
         
         df['amount'] = pd.to_numeric(df['monto'], errors='coerce')
         df = df.dropna(subset=['date_pe']).sort_values('date_pe').reset_index(drop=True)
@@ -219,13 +217,24 @@ with st.sidebar:
 # Ventas e ingresos en el periodo filtrado
 sv_date_filtered = sv[(sv['date_pe'].dt.date >= fi) & (sv['date_pe'].dt.date <= ff)]
 is_sale = ~sv_date_filtered['tipo_pago'].isin(['Costo']) & ~sv_date_filtered['fuente'].isin(['Abono Chamba', 'Saldo Base'])
+
+# Sirvoy total NETO (incluye positivos y negativos, como Sirvoy pagina)
+sv_sirvoy_all = sv_date_filtered[is_sale & (sv_date_filtered['fuente']=='Sirvoy')]
+
+# Para desglose: filtrar por tipo seleccionado
 sv_sales_f = sv_date_filtered[is_sale & sv_date_filtered['tipo_pago'].isin(ts)]
 sv_sales_sirvoy = sv_sales_f[sv_sales_f['fuente']=='Sirvoy']
 
-tb_sirvoy = float(sv_sales_sirvoy['amount'].sum())
-tb_plataformas = float(sv_sales_f[sv_sales_f['fuente'].isin(['Izipay','Culqi','Openpay'])]['amount'].sum())
-sv_transf_efect = sv_sales_sirvoy[sv_sales_sirvoy['tipo_pago'].isin(['Transferencia','Efectivo'])]['amount'].sum()
-tb_recibido = tb_plataformas + float(sv_transf_efect)
+# Total Sirvoy = NETO (positivos + negativos), igual que Sirvoy pagina
+tb_sirvoy = float(sv_sirvoy_all['amount'].sum())
+
+# Plataformas: solo pagos positivos (excluir depósitos Izipay POS negativos)
+plataformas_all = sv_sales_f[sv_sales_f['fuente'].isin(['Izipay','Culqi','Openpay'])]
+tb_plataformas = float(plataformas_all[plataformas_all['amount'] > 0]['amount'].sum())
+
+# Recibido = Sirvoy Transferencia + Sirvoy Efectivo + Plataformas
+sv_transf_efect = sv_sirvoy_all[sv_sirvoy_all['tipo_pago'].isin(['Transferencia','Efectivo'])]['amount'].sum()
+tb_recibido = float(sv_transf_efect) + tb_plataformas
 
 # Links en periodo
 la = sv_date_filtered[sv_date_filtered['es_link']].copy()
@@ -252,9 +261,9 @@ costo_sv = float(costos[costos['fuente']=='Costo Sirvoy']['amount'].sum())
 costo_as = float(costos[costos['fuente']=='Costo Asistente']['amount'].sum())
 costo_saldo = float(costos[costos['fuente']=='Saldo Base']['amount'].sum())
 
-# Ticket promedio y conteo de transacciones
-prom = float(sv_sales_sirvoy['amount'].mean()) if not sv_sales_sirvoy.empty else 0.0
-tx = len(sv_sales_sirvoy)
+# Ticket promedio y conteo de transacciones (sobre todos los Sirvoy del periodo)
+prom = float(sv_sirvoy_all['amount'].mean()) if not sv_sirvoy_all.empty else 0.0
+tx = len(sv_sirvoy_all)
 
 # ═══ CÁLCULOS ACUMULADOS DE DEUDA (DESDE 03/03/2026) ═══
 fecha_base = pd.Timestamp("2026-03-03").date()
@@ -1015,11 +1024,14 @@ with tabs[2]:
                 
         with sa2:
             st.markdown("#### 📝 Registrar Nuevo Abono")
-            ab_fecha = st.date_input("Fecha del Abono", datetime.now(), key="reg_abono_date")
-            ab_monto = st.number_input("Monto Abonado (S/)", min_value=0.0, step=100.0, format="%.2f", key="reg_abono_monto")
-            ab_ref = st.text_input("Referencia bancaria / Canal", placeholder="Ej: Transf. BCP...", key="reg_abono_ref")
-            
-            if st.button("💾 Guardar Abono", type="primary", use_container_width=True, disabled=(ab_monto <= 0)):
+            with st.form("form_nuevo_abono", clear_on_submit=True):
+                ab_fecha = st.date_input("Fecha del Abono", datetime.now())
+                ab_monto = st.number_input("Monto Abonado (S/)", min_value=0.0, step=100.0, format="%.2f")
+                ab_ref = st.text_input("Referencia bancaria / Canal", placeholder="Ej: Transf. BCP...")
+                
+                guardar_abono = st.form_submit_button("💾 Guardar Abono", type="primary", use_container_width=True)
+                
+            if guardar_abono and ab_monto > 0:
                 try:
                     cli = MongoClient(MONGO_URL, serverSelectionTimeoutMS=2000)
                     doc = {

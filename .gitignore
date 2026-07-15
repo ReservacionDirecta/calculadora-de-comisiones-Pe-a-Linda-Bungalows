@@ -1,9 +1,61 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+.eggs/
+venv/
+env/
+.venv/
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.kilocode/
+.kiro/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data files (sensitive/large)
 *.csv
 *.xlsx
 *.pdf
-.kilocode/
-__pycache__/
-.env
-venv/
-.kiro/
 *.log
+*.json
+
+# Streamlit
+.streamlit/
+
+# Temporary scripts (scratch/analysis)
+analyze_*.py
+check_*.py
+compare_*.py
+debug_*.py
+extract_*.py
+find_*.py
+fix_*.py
+import_*.py
+insert_*.py
+read_pdf.py
+search_*.py
+test_*.py
+verify_*.py
+final_*.py
+temp_*
+tmp_*
+
+# Generated reports
+reportes_semanales/
+Informe Financiero*.html

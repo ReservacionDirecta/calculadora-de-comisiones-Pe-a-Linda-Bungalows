@@ -13,14 +13,19 @@ def render(df, k, t, fi, ff, MONGO_URL):
     # ── TAB 1: Contraste Tarjeta ──
     with con_t1:
         st.markdown("**💳 Contraste: Sirvoy Tarjeta vs Plataformas**")
+        # Calcular Sirvoy Tarjeta (solo tipo Tarjeta)
+        sv_tarjeta = float(k["sv_sirvoy"][k["sv_sirvoy"]["tipo_pago"] == "Tarjeta"]["amount"].sum()) if not k["sv_sirvoy"].empty else 0.0
         c1, c2, c3 = st.columns(3)
         with c1:
-            st.metric("Sirvoy (Tarjeta)", f"S/ {k['tb_sirvoy']:,.2f}")
+            st.metric("Sirvoy (Tarjeta)", f"S/ {sv_tarjeta:,.2f}",
+                      help="Total pagos con tarjeta registrados en Sirvoy")
         with c2:
-            st.metric("Recibido (Plataformas)", f"S/ {k['tb_plataformas']:,.2f}")
+            st.metric("Recibido (Plataformas)", f"S/ {k['tb_plataformas']:,.2f}",
+                      help="Total confirmado por Izipay/Culqi/Openpay")
         with c3:
-            st.metric("⏳ Pendiente confirmar", f"S/ {k['lk']:,.2f}",
-                      delta=f"{k['lk']:,.2f}", delta_color="inverse" if k["lk"] > 0 else "normal")
+            lk_val = max(0.0, sv_tarjeta - k['tb_plataformas'])
+            st.metric("⏳ Pendiente confirmar", f"S/ {lk_val:,.2f}",
+                      delta=f"{lk_val:,.2f}", delta_color="inverse" if lk_val > 0 else "normal")
 
         if k["lk"] > 0:
             st.warning(f"⚠️ **S/ {k['lk']:,.2f}** en pagos con tarjeta aún no respaldados por plataformas. "
@@ -147,10 +152,14 @@ def render(df, k, t, fi, ff, MONGO_URL):
 
         with sa2:
             st.markdown("**📝 Nuevo Abono**")
-            ab_fecha = st.date_input("Fecha", datetime.now(), key="ab_fecha")
-            ab_monto = st.number_input("Monto (S/)", min_value=0.0, step=100.0, format="%.2f", key="ab_monto")
-            ab_ref = st.text_input("Referencia", placeholder="Ej: Transf. BCP...", key="ab_ref")
-            if st.button("💾 Guardar", type="primary", disabled=(ab_monto <= 0), use_container_width=True):
+            with st.form("form_nuevo_abono_v2", clear_on_submit=True):
+                ab_fecha = st.date_input("Fecha", datetime.now())
+                ab_monto = st.number_input("Monto (S/)", min_value=0.0, step=100.0, format="%.2f")
+                ab_ref = st.text_input("Referencia", placeholder="Ej: Transf. BCP...")
+                
+                guardar_abono = st.form_submit_button("💾 Guardar", type="primary", use_container_width=True)
+                
+            if guardar_abono and ab_monto > 0:
                 try:
                     import hashlib
                     cli = MongoClient(MONGO_URL, serverSelectionTimeoutMS=2000)

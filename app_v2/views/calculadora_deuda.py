@@ -4,7 +4,7 @@
 import streamlit as st
 import pandas as pd
 from pymongo import MongoClient
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 DEBT_START = date(2026, 3, 3)
 
@@ -332,6 +332,126 @@ def render(df, k, t, fi, ff, MONGO_URL):
     with col4:
         st.metric("💳 Abonos", f"S/ {abonos_total:,.2f}")
 
+    # ─── ACUMULADOS DEL PERÍODO SELECCIONADO ───
+    st.markdown("---")
+    st.markdown(f"### 📅 Acumulados del Período: {fi.strftime('%d/%m/%Y')} a {ff.strftime('%d/%m/%Y')}")
+
+    # Consultar MongoDB para el período seleccionado
+    try:
+        cli_p = MongoClient(MONGO_URL, serverSelectionTimeoutMS=3000)
+        db_p = cli_p['pena_linda']
+
+        fi_dt = datetime.combine(fi, datetime.min.time())
+        ff_dt = datetime.combine(ff, datetime.max.time())
+
+        # Sirvoy del período
+        sirvoy_periodo = list(db_p['pagos'].find({
+            'fuente': 'Sirvoy',
+            'fecha': {'$gte': fi_dt, '$lte': ff_dt}
+        }))
+        montos_sv_p = [d['monto'] for d in sirvoy_periodo]
+        bruto_p = sum(m for m in montos_sv_p if m > 0)
+        reversiones_p = sum(m for m in montos_sv_p if m < 0)
+        neto_p = bruto_p + reversiones_p
+        comision_p = neto_p * 0.05
+
+        # Costos del período
+        costos_periodo = list(db_p['pagos'].find({
+            'fuente': {'$in': ['Costo FB Ads', 'Costo Sirvoy', 'Costo Asistente', 'Costo Extra']},
+            'fecha': {'$gte': fi_dt, '$lte': ff_dt}
+        }))
+        total_costos_p = sum(d['monto'] for d in costos_periodo)
+
+        # Abonos del período
+        abonos_periodo = list(db_p['cobros'].find({
+            'tipo': 'abono',
+            'fecha': {'$gte': fi_dt, '$lte': ff_dt}
+        }))
+        total_abonos_p = sum(d['monto'] for d in abonos_periodo)
+        abonos_count_p = len(abonos_periodo)
+
+        cli_p.close()
+
+        # Mostrar métricas del período
+        col_p1, col_p2, col_p3, col_p4 = st.columns(4)
+        with col_p1:
+            st.metric("📊 Ventas Netas", f"S/ {neto_p:,.2f}", help="Sirvoy neto en el período seleccionado")
+        with col_p2:
+            st.metric("💰 Comisión 5%", f"S/ {comision_p:,.2f}", help="5% sobre neto del período")
+        with col_p3:
+            st.metric("💸 Costos", f"S/ {total_costos_p:,.2f}", help="Costos operativos del período")
+        with col_p4:
+            st.metric("💳 Abonos", f"S/ {total_abonos_p:,.2f}", help=f"{abonos_count_p} registros en el período")
+
+        # Desglose del período
+        adeudado_p = comision_p + total_costos_p
+        saldo_p = max(0.0, adeudado_p - total_abonos_p)
+
+        col_pd1, col_pd2 = st.columns(2)
+        with col_pd1:
+            st.markdown("**Resumen Período:**")
+            st.write(f"- Comisión + Costos: **S/ {adeudado_p:,.2f}**")
+            st.write(f"- Abonos recibidos: **S/ {total_abonos_p:,.2f}**")
+            st.write(f"- Saldo período: **S/ {saldo_p:,.2f}**")
+        with col_pd2:
+            st.markdown("**Comparativa con Histórico:**")
+            st.write(f"- Histórico (desde 03/03): **S/ {resto:,.2f}**")
+            st.write(f"- Período seleccionado: **S/ {saldo_p:,.2f}**")
+            diff = resto - saldo_p
+            st.write(f"- Diferencia: **S/ {diff:,.2f}**")
+
+    except Exception as e:
+        st.error(f"Error calculando período: {e}")
+
+    # ─── Exportar Resumen de Deuda ───
+    st.markdown("#### 📤 Exportar Resumen de Deuda")
+    resumen = pd.DataFrame([{
+        "Concepto": "Ventas Bruto",
+        "Monto": bruto
+    }, {
+        "Concepto": "Reversiones",
+        "Monto": reversiones
+    }, {
+        "Concepto": "Ventas Netas",
+        "Monto": neto
+    }, {
+        "Concepto": "Comisión Chamba 5%",
+        "Monto": comision
+    }, {
+        "Concepto": "Costo Facebook Ads",
+        "Monto": costo_fb
+    }, {
+        "Concepto": "Costo Sirvoy",
+        "Monto": costo_sv
+    }, {
+        "Concepto": "Costo Asistente",
+        "Monto": costo_as
+    }, {
+        "Concepto": "Costo Extra",
+        "Monto": costo_ex
+    }, {
+        "Concepto": "Total Costos",
+        "Monto": total_costos
+    }, {
+        "Concepto": "Saldo Base",
+        "Monto": saldo_base
+    }, {
+        "Concepto": "Total Adeudado",
+        "Monto": adeudado
+    }, {
+        "Concepto": "Total Abonado",
+        "Monto": abonos_total
+    }, {
+        "Concepto": "Saldo Pendiente",
+        "Monto": resto
+    }])
+    from components import export_buttons
+    exp1, exp2 = st.columns([1, 3])
+    with exp1:
+        st.caption(f"Al {datetime.now().strftime('%d/%m/%Y')}")
+    with exp2:
+        export_buttons("deuda_res", resumen, "20260303", datetime.now().strftime('%Y%m%d'), "Resumen_Deuda")
+
     # Desglose de costos extra (si hay)
     if costo_ex > 0:
         with st.expander("➕ Detalle de Costos Extra"):
@@ -351,3 +471,117 @@ def render(df, k, t, fi, ff, MONGO_URL):
                     ), hide_index=True, use_container_width=True)
             except:
                 pass
+
+    # ═══════════════════════════════════════════════
+    # 📅 REPORTES SEMANALES CONSOLIDADOS
+    # ═══════════════════════════════════════════════
+    st.markdown("---")
+    st.markdown("### 📅 Reportes Semanales Consolidados (Martes a Lunes)")
+    st.caption("Genera y descarga el reporte semanal de ventas, comisiones, costos y abonos.")
+
+    start_w = date(2026, 3, 3)
+    end_w = datetime.now().date()
+
+    weeks = []
+    cw = start_w
+    while cw <= end_w:
+        ws, we = cw, cw + timedelta(days=6)
+        weeks.append((ws, we, f"Semana: {ws.strftime('%d/%m/%Y')} al {we.strftime('%d/%m/%Y')}"))
+        cw += timedelta(days=7)
+    weeks.reverse()
+
+    sel = st.selectbox("Seleccionar período semanal:", options=range(len(weeks)),
+                        format_func=lambda i: weeks[i][2], index=1, key="w_sel_debt")
+
+    if sel is not None:
+        ws, we, wl = weeks[sel]
+        # Cargar data de la semana
+        try:
+            cli_w = MongoClient(MONGO_URL, serverSelectionTimeoutMS=3000)
+            dbw = cli_w['pena_linda']
+            docs_w = list(dbw['pagos'].find({
+                'fuente': 'Sirvoy',
+                'fecha': {'$gte': datetime(ws.year, ws.month, ws.day),
+                           '$lte': datetime(we.year, we.month, we.day, 23, 59, 59)}
+            }))
+            costos_w = list(dbw['pagos'].find({
+                'fuente': {'$in': ['Costo FB Ads', 'Costo Sirvoy', 'Costo Asistente', 'Costo Extra']},
+                'fecha': {'$gte': datetime(ws.year, ws.month, ws.day),
+                           '$lte': datetime(we.year, we.month, we.day, 23, 59, 59)}
+            }))
+            abonos_w = list(dbw['cobros'].find({
+                'tipo': 'abono',
+                'fecha': {'$gte': datetime(ws.year, ws.month, ws.day),
+                           '$lte': datetime(we.year, we.month, we.day, 23, 59, 59)}
+            }))
+            cli_w.close()
+        except Exception as e:
+            st.error(f"Error cargando datos semanales: {e}")
+            docs_w = costos_w = abonos_w = []
+
+        m_sv = sum(d['monto'] for d in docs_w)
+        v_bruto = sum(d['monto'] for d in docs_w if d['monto'] > 0)
+        v_neg = sum(d['monto'] for d in docs_w if d['monto'] < 0)
+        m_cost = sum(d['monto'] for d in costos_w)
+        m_abon = sum(d['monto'] for d in abonos_w)
+        m_com = (v_bruto + v_neg) * 0.05
+
+        cw1, cw2, cw3, cw4 = st.columns(4)
+        with cw1:
+            st.metric("💰 Ventas Bruto", f"S/ {v_bruto:,.2f}", f"{len(docs_w)} tx")
+        with cw2:
+            st.metric("📋 Comisión 5%", f"S/ {m_com:,.2f}")
+        with cw3:
+            st.metric("💸 Costos", f"S/ {m_cost:,.2f}")
+        with cw4:
+            st.metric("💳 Abonos", f"S/ {m_abon:,.2f}")
+
+        v_neto = v_bruto + v_neg
+        st.metric("📊 Ventas Netas (Bruto + Reversiones)",
+                   f"S/ {v_neto:,.2f}",
+                   f"{len([d for d in docs_w if d['monto'] < 0])} rev, S/ {v_neg:,.2f}")
+
+        dw1, dw2 = st.columns(2)
+        with dw1:
+            st.markdown("##### 💸 Gastos de la Semana")
+            if costos_w:
+                cdf = pd.DataFrame(costos_w)
+                cdf['Fecha'] = pd.to_datetime(cdf['fecha']).dt.strftime('%d/%m/%Y')
+                cdf['Monto'] = cdf['monto'].apply(lambda x: f"S/ {x:,.2f}")
+                st.dataframe(cdf[['Fecha', 'fuente', 'monto']].rename(
+                    columns={'fuente': 'Concepto', 'monto': 'Monto'}), hide_index=True, use_container_width=True)
+            else:
+                st.info("Sin gastos en esta semana.")
+        with dw2:
+            st.markdown("##### 💳 Abonos de la Semana")
+            if abonos_w:
+                adf = pd.DataFrame(abonos_w)
+                adf['Fecha'] = pd.to_datetime(adf['fecha']).dt.strftime('%d/%m/%Y')
+                adf['Monto'] = adf['monto'].apply(lambda x: f"S/ {x:,.2f}")
+                st.dataframe(adf[['Fecha', 'Monto', 'detalle']].rename(
+                    columns={'detalle': 'Concepto'}), hide_index=True, use_container_width=True)
+            else:
+                st.info("Sin abonos en esta semana.")
+
+        # Tabla resumen para exportar
+        reporte_df = pd.DataFrame([
+            {"Concepto": "Ventas Bruto", "Monto": v_bruto},
+            {"Concepto": "Reversiones", "Monto": v_neg},
+            {"Concepto": "Ventas Netas", "Monto": v_bruto + v_neg},
+            {"Concepto": "Comisión Chamba 5%", "Monto": m_com},
+            {"Concepto": "Costos Operativos", "Monto": m_cost},
+            {"Concepto": "Abonos Recibidos", "Monto": m_abon},
+        ])
+        from components import generate_weekly_pdf
+        pdf_bytes = generate_weekly_pdf(ws, we, v_bruto + v_neg, v_neg, costos_w, abonos_w)
+        st.download_button(
+            "⬇️ Descargar Reporte Semanal PDF",
+            data=pdf_bytes,
+            file_name=f"Reporte_Semanal_{ws.strftime('%Y%m%d')}_{we.strftime('%Y%m%d')}.pdf",
+            mime="application/pdf",
+            use_container_width=True,
+            key=f"dl_pdf_sem_{ws.strftime('%Y%m%d')}"
+        )
+        export_buttons(f"semanal_{ws.strftime('%Y%m%d')}", reporte_df,
+                        ws.strftime('%Y%m%d'), we.strftime('%Y%m%d'),
+                        f"Reporte_Semanal_{ws.strftime('%Y%m%d')}")

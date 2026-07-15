@@ -28,10 +28,9 @@ def load_all():
         df = pd.DataFrame(docs)
         df["date"] = pd.to_datetime(df["fecha"], errors="coerce")
 
-        # Timezone: costos/abonos en America/Lima, resto UTC→Lima
-        is_cost_or_abono = df["tipo_pago"].isin(["Costo", "Abono"]) | df["fuente"].isin(["Abono Chamba", "Saldo Base"])
-        df["date_pe"] = df["date"].dt.tz_localize("UTC", ambiguous="NaT").dt.tz_convert("America/Lima")
-        df.loc[is_cost_or_abono, "date_pe"] = df.loc[is_cost_or_abono, "date"].dt.tz_localize("America/Lima", ambiguous="NaT")
+        # Timezone: todas las fechas en America/Lima (hotel en Peru)
+        # Sirvoy guarda fechas midnight Lima, Izipay tambien usa hora Lima
+        df["date_pe"] = df["date"].dt.tz_localize("America/Lima", ambiguous="NaT")
 
         df["amount"] = pd.to_numeric(df["monto"], errors="coerce")
         df = df.dropna(subset=["date_pe"]).sort_values("date_pe").reset_index(drop=True)
@@ -65,15 +64,28 @@ def calc_kpis(df, cobros_df, fi, ff, ts):
     mask = (df["date_pe"].dt.date >= fi) & (df["date_pe"].dt.date <= ff)
     df_f = df[mask].copy()
 
-    # Ventas del período
-    is_sale = ~df_f["tipo_pago"].isin(["Costo"]) & ~df_f["fuente"].isin(["Abono Chamba", "Saldo Base"])
+    # Ventas del período - Sirvoy total (NETO: incluye positivos y negativos)
+    # El total de Sirvoy debe ser el neto (como lo muestra Sirvoy en su página)
+    # Excluir Izipay POS (son depósitos del POS al banco, no ventas Sirvoy)
+    is_sale = ~df_f["tipo_pago"].isin(["Costo"]) & ~df_f["fuente"].isin(["Abono Chamba", "Saldo Base", "Izipay POS"])
+    sv_sirvoy_all = df_f[is_sale & (df_f["fuente"] == "Sirvoy")]
+
+    # Para gráficos/desglose: filtrar por tipo seleccionado (excluyendo Izipay POS)
     sv_sales = df_f[is_sale & df_f["tipo_pago"].isin(ts)]
     sv_sirvoy = sv_sales[sv_sales["fuente"] == "Sirvoy"]
 
-    tb_sirvoy = float(sv_sirvoy["amount"].sum())
-    tb_plataformas = float(sv_sales[sv_sales["fuente"].isin(["Izipay", "Culqi", "Openpay"])]["amount"].sum())
-    sv_transf_efect = float(sv_sirvoy[sv_sirvoy["tipo_pago"].isin(["Transferencia", "Efectivo"])]["amount"].sum())
-    tb_recibido = tb_plataformas + sv_transf_efect
+    # Total Sirvoy = NETO (positivos + negativos), igual que Sirvoy página
+    tb_sirvoy = float(sv_sirvoy_all["amount"].sum())
+
+    # Plataformas: solo pagos positivos (excluir depósitos Izipay POS negativos)
+    plataformas_mask = sv_sales["fuente"].isin(["Izipay", "Culqi", "Openpay"])
+    plataformas_all = sv_sales[plataformas_mask]
+    tb_plataformas = float(plataformas_all[plataformas_all["amount"] > 0]["amount"].sum())
+
+    # Recibido = Sirvoy Transferencia + Sirvoy Efectivo + Plataformas
+    # Las plataformas son confirmación de pagos con tarjeta (solo positivos)
+    sv_transf_efect = float(sv_sirvoy_all[sv_sirvoy_all["tipo_pago"].isin(["Transferencia", "Efectivo"])]["amount"].sum())
+    tb_recibido = sv_transf_efect + tb_plataformas
 
     # Links
     la = df_f[df_f["es_link"]].copy()
@@ -96,9 +108,12 @@ def calc_kpis(df, cobros_df, fi, ff, ts):
     costo_as = float(costos[costos["fuente"] == "Costo Asistente"]["amount"].sum())
     costo_saldo = float(costos[costos["fuente"] == "Saldo Base"]["amount"].sum())
 
-    # Ticket promedio
-    prom = float(sv_sirvoy["amount"].mean()) if not sv_sirvoy.empty else 0.0
-    tx = len(sv_sirvoy)
+    # Porcentaje costos vs ingresos netos (recibido)
+    costos_recibido_pct = (total_costos / tb_recibido * 100) if tb_recibido > 0 else 0.0
+
+    # Ticket promedio (sobre todos los Sirvoy del periodo)
+    prom = float(sv_sirvoy_all["amount"].mean()) if not sv_sirvoy_all.empty else 0.0
+    tx = len(sv_sirvoy_all)
 
     # ─── Cálculos acumulados desde 03/03/2026 ───
     fecha_base = pd.Timestamp("2026-03-03").date()
@@ -127,6 +142,50 @@ def calc_kpis(df, cobros_df, fi, ff, ts):
     # Adeudado = Saldo Base + Comisión acumulada + Costos acumulados (todo desde 03/03)
     adeudado = saldo_base_hist + comision_desde_mar + total_costos_hist
     saldo_pendiente = max(0.0, adeudado - total_abonos)
+
+    # ─── ROI (acumulado desde 03/03) ───
+    neto_desde_mar = float(sv_desde_mar["amount"].sum())
+    inversion_hist = comision_desde_mar + total_costos_hist
+    ganancia_hist = neto_desde_mar - inversion_hist
+    roi_pct = (ganancia_hist / inversion_hist * 100) if inversion_hist > 0 else 0.0
+    roi_x_sol = (neto_desde_mar / inversion_hist) if inversion_hist > 0 else 0.0
+
+    # ROI del período filtrado
+    inversion_periodo = comision + total_costos
+    ganancia_periodo = tb_sirvoy - inversion_periodo
+    roi_periodo_pct = (ganancia_periodo / inversion_periodo * 100) if inversion_periodo > 0 else 0.0
+    roi_periodo_x_sol = (tb_sirvoy / inversion_periodo) if inversion_periodo > 0 else 0.0
+
+    # ─── Acumulados del PERÍODO filtrado ───
+    comision_periodo = float(sv_sirvoy_all["amount"].sum() * 0.05)
+    costos_periodo = float(costos_sin_base["amount"].sum())
+    abonos_periodo = 0.0
+    if not cobros_df.empty and not cobros_df["fecha_dt"].isna().all():
+        mask_periodo = (cobros_df["fecha_dt"].dt.date >= fi) & (cobros_df["fecha_dt"].dt.date <= ff)
+        abonos_periodo = float(cobros_df.loc[mask_periodo & (cobros_df["tipo"] == "abono"), "monto"].sum())
+    adeudado_periodo = comision_periodo + costos_periodo
+    saldo_pendiente_periodo = max(0.0, adeudado_periodo - abonos_periodo)
+
+    # ─── Insights automáticos ───
+    insights = []
+    if total_costos > 0:
+        fb_pct = (costo_fb / total_costos * 100) if total_costos > 0 else 0
+        sv_pct = (costo_sv / total_costos * 100) if total_costos > 0 else 0
+        as_pct = (costo_as / total_costos * 100) if total_costos > 0 else 0
+        insights.append(f"📱 **Facebook Ads** representa el **{fb_pct:.1f}%** del total de costos (S/ {costo_fb:,.2f}).")
+        insights.append(f"🖥️ **Sirvoy** representa el **{sv_pct:.1f}%** de los costos (S/ {costo_sv:,.2f}).")
+        insights.append(f"👤 **Asistente** representa el **{as_pct:.1f}%** de los costos (S/ {costo_as:,.2f}).")
+
+    if tx > 0:
+        insights.append(f"🎫 **Ticket promedio:** S/ {prom:,.2f} por transacción ({tx} tx en el período).")
+
+    if roi_pct > 0:
+        insights.append(f"📈 **ROI acumulado:** Por cada S/ 1 invertido, se generaron **S/ {roi_x_sol:.2f}** en ventas netas.")
+    else:
+        insights.append(f"⚠️ **ROI negativo:** Los costos y comisión superan las ventas netas del período.")
+
+    if lk > 0:
+        insights.append(f"⏳ **{lk:,.2f}** en tarjeta Sirvoy sin contraste en plataformas — posible demora en depósito.")
 
     # ─── Pagos recibidos (abonos desde pagos, como fallback) ───
     pagos_recibidos = df[df["fuente"] == "Abono Chamba"]
@@ -163,4 +222,20 @@ def calc_kpis(df, cobros_df, fi, ff, ts):
         "costos_sin_base": costos_sin_base,
         "pagos_recibidos": pagos_recibidos,
         "df_f": df_f,
+        "neto_desde_mar": neto_desde_mar,
+        "inversion_hist": inversion_hist,
+        "ganancia_hist": ganancia_hist,
+        "roi_pct": roi_pct,
+        "roi_x_sol": roi_x_sol,
+        "inversion_periodo": inversion_periodo,
+        "ganancia_periodo": ganancia_periodo,
+        "roi_periodo_pct": roi_periodo_pct,
+        "roi_periodo_x_sol": roi_periodo_x_sol,
+        "costos_recibido_pct": costos_recibido_pct,
+        "insights": insights,
+        "comision_periodo": comision_periodo,
+        "costos_periodo": costos_periodo,
+        "abonos_periodo": abonos_periodo,
+        "adeudado_periodo": adeudado_periodo,
+        "saldo_pendiente_periodo": saldo_pendiente_periodo,
     }
