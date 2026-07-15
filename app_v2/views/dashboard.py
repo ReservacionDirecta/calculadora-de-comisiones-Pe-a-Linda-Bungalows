@@ -25,12 +25,13 @@ def render(k, t, show_usd=False, usd_rate=3.6):
         sub_vendido = f"{k['tx']} tx · {fmt_both(k['tb_sirvoy'])}" if show_usd else f"{k['tx']} transacciones Sirvoy"
         bento_kpi("📈 Vendido", k["tb_sirvoy"], sub_vendido, t["primary"])
     with cols[1]:
-        sub_recibido = fmt_both(k["tb_recibido"]) if show_usd else "Plataformas + Transf/Efectivo"
-        bento_kpi("✅ Recibido", k["tb_recibido"], sub_recibido, t["seafoam"])
+        confirmado = k["tb_plataformas"]
+        sub_confirm = fmt_both(confirmado) if show_usd else f"{confirmado/k['tb_sirvoy']*100:.1f}% del vendido"
+        bento_kpi("✅ Confirmado", confirmado, sub_confirm, t["seafoam"])
     with cols[2]:
-        pend = k["tb_sirvoy"] - k["tb_recibido"]
-        sub_pend = fmt_both(k["lk"]) if show_usd else f"Incluye S/ {k['lk']:,.0f} tarjeta por confirmar"
-        bento_kpi("⏳ Pendiente", pend, sub_pend, t["coral"] if pend > 0 else t["seafoam"])
+        pend = max(0, k["tb_sirvoy"] - k["tb_plataformas"])
+        sub_pend = fmt_both(pend) if show_usd else f"Tarjeta sin confirmar"
+        bento_kpi("⏳ Por Confirmar", pend, sub_pend, t["coral"] if pend > 0 else t["seafoam"])
     with cols[3]:
         sub_costos = fmt_both(k["total_costos"]) if show_usd else f"FB {k['costo_fb']:,.0f} · SV {k['costo_sv']:,.0f} · Asis {k['costo_as']:,.0f}"
         bento_kpi("💸 Costos", k["total_costos"], sub_costos, t["sun"])
