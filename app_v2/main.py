@@ -123,7 +123,7 @@ elif page == "Dashboard":
     r(k, t)
 elif page == "Ventas":
     from views.ventas import render as r
-    r(df, k, t, fi, ff)
+    r(df, k, t, fi, ff, st.session_state.get("escala_log", False))
 elif page == "Costos":
     from views.costos import render as r
     r(df, k, t, fi, ff, MONGO_URL)
