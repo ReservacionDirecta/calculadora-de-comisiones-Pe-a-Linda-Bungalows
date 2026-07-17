@@ -318,8 +318,72 @@ def render(df, k, t, fi, ff, MONGO_URL):
     </div>
     """, unsafe_allow_html=True)
 
+    # ─── SECCIÓN 6: Deuda Futura (reservas confirmadas con pago pendiente) ───
+    # Lee la colección comisiones_futuras (reservas futuras con su comisión calculada al 5%).
+    try:
+        cli_f = MongoClient(MONGO_URL, serverSelectionTimeoutMS=3000)
+        db_f = cli_f['pena_linda']
+        res_fut = db_f['comisiones_futuras'].find_one({'tipo': 'resumen'})
+        cli_f.close()
+        if res_fut:
+            fut_monto = float(res_fut.get('monto_pendiente', 0.0))
+            fut_comision = float(res_fut.get('comision', 0.0))
+            fut_count = int(res_fut.get('reservas', 0))
+        else:
+            fut_monto = fut_comision = 0.0
+            fut_count = 0
+    except Exception:
+        fut_monto = fut_comision = 0.0
+        fut_count = 0
+
+    # Total combinado: deuda vigente (resto) + deuda futura (comisión de reservas pendientes)
+    total_pendiente_pagar = max(0.0, resto) + fut_comision
+
+    st.markdown(f"""
+    <hr style="{line_style}">
+    <div class="calc-section">
+        <div class="calc-section-title">🔮 Deuda Futura (Reservas Confirmadas)</div>
+        <div class="calc-row">
+            <span class="label">Reservas con pago pendiente</span>
+            <span class="value">{fut_count} reservas</span>
+        </div>
+        <div class="calc-row">
+            <span class="label">Monto pendiente por cobrar</span>
+            <span class="value" style="color:#f59e0b;font-weight:600;">S/ {fut_monto:,.2f}</span>
+        </div>
+        <div class="calc-row">
+            <span class="label">Comisión 5% calculada</span>
+            <span class="value" style="color:#8b5cf6;font-weight:700;">S/ {fut_comision:,.2f}</span>
+        </div>
+    </div>
+    <hr style="{line_style}">
+    <div class="calc-section" style="margin-top:12px;">
+        <div class="calc-section-title" style="font-size:0.85rem;">🧾 TOTAL PENDIENTE POR PAGAR</div>
+        <div class="calc-row total" style="padding-top:4px;">
+            <span class="label">Deuda Vigente + Deuda Futura</span>
+            <span class="value">S/ {total_pendiente_pagar:,.2f}</span>
+        </div>
+        <div style="text-align:center;margin-top:6px;font-size:0.78rem;color:{muted};">
+            S/ {max(0.0, resto):,.2f} (vigente) + S/ {fut_comision:,.2f} (futura)
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
     # ─── Resumen ejecutivo ───
     st.markdown("</div>", unsafe_allow_html=True)
+
+    # Métricas de deuda futura (fuera de la tarjeta, junto al resumen ejecutivo)
+    if fut_comision > 0 or fut_monto > 0:
+        st.markdown("---")
+        st.markdown("#### 🔮 Deuda Futura — Reservas Confirmadas")
+        st.caption("Comisión 5% sobre el monto pendiente de cobro de reservas futuras (fuente: comisiones_futuras).")
+        cf1, cf2, cf3 = st.columns(3)
+        with cf1:
+            st.metric("🏨 Reservas Pendientes", f"{fut_count}")
+        with cf2:
+            st.metric("💵 Monto por Cobrar", f"S/ {fut_monto:,.2f}")
+        with cf3:
+            st.metric("💰 Comisión Futura 5%", f"S/ {fut_comision:,.2f}")
 
     st.markdown("---")
     col1, col2, col3, col4 = st.columns(4)
@@ -399,6 +463,22 @@ def render(df, k, t, fi, ff, MONGO_URL):
             st.write(f"- Período seleccionado: **S/ {saldo_p:,.2f}**")
             diff = resto - saldo_p
             st.write(f"- Diferencia: **S/ {diff:,.2f}**")
+
+            # ─── Comisiones futuras pendientes (reservas confirmadas con pago pendiente) ───
+            try:
+                cli_f = MongoClient(MONGO_URL, serverSelectionTimeoutMS=3000)
+                res_fut = cli_f['pena_linda']['comisiones_futuras'].find_one({'tipo': 'resumen'})
+                cli_f.close()
+                if res_fut:
+                    fut_monto_p = float(res_fut.get('monto_pendiente', 0.0))
+                    fut_comision_p = float(res_fut.get('comision', 0.0))
+                    fut_count_p = int(res_fut.get('reservas', 0))
+                    st.markdown("**🔮 Comisiones Futuras Pendientes:**")
+                    st.write(f"- Reservas con pago pendiente: **{fut_count_p}**")
+                    st.write(f"- Monto por cobrar: **S/ {fut_monto_p:,.2f}**")
+                    st.write(f"- Comisión 5% calculada: **S/ {fut_comision_p:,.2f}**")
+            except Exception:
+                pass
 
     except Exception as e:
         st.error(f"Error calculando período: {e}")

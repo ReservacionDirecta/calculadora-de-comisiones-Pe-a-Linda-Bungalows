@@ -226,6 +226,20 @@ def calc_kpis(df, cobros_df, fi, ff, ts):
             insights.append(f"  - Abonos: S/ {total_abonos:,.2f}")
             insights.append(f"  - Pendiente: S/ {saldo_pendiente:,.2f}")
 
+    # Comisiones futuras pendientes (reservas confirmadas con pago pendiente)
+    try:
+        cli_f = MongoClient(MONGO_URL, serverSelectionTimeoutMS=3000)
+        res_fut = cli_f["pena_linda"]["comisiones_futuras"].find_one({"tipo": "resumen"})
+        cli_f.close()
+        if res_fut:
+            fut_monto = float(res_fut.get("monto_pendiente", 0.0))
+            fut_comision = float(res_fut.get("comision", 0.0))
+            fut_count = int(res_fut.get("reservas", 0))
+            if fut_comision > 0:
+                insights.append(f"🔮 **Comisiones futuras pendientes:** {fut_count} reservas · S/ {fut_monto:,.2f} por cobrar → comisión 5% = S/ {fut_comision:,.2f}")
+    except Exception:
+        pass
+
     # ─── Pagos recibidos (abonos desde pagos, como fallback) ───
     pagos_recibidos = df[df["fuente"] == "Abono Chamba"]
     if not pagos_recibidos.empty:
