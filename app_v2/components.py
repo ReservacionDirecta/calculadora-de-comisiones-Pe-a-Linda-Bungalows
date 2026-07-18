@@ -79,9 +79,54 @@ def get_yscale(escala_log):
     return dict(type="log") if escala_log else {}
 
 
+# ─── Deuda Futura (reservas confirmadas con pago pendiente) ───
+def get_deuda_futura(mongo_url=None):
+    """Lee la colección comisiones_futuras y devuelve el resumen de la deuda futura.
+
+    Retorna dict: {
+        'reservas': int,
+        'monto_pendiente': float,   # monto por cobrar de reservas futuras
+        'comision': float,          # comisión 5% sobre el monto pendiente
+        'fuente': str
+    }
+    Si no hay datos, devuelve ceros (no lanza).
+    """
+    from pymongo import MongoClient
+    import os
+    url = mongo_url or os.environ.get("MONGO_URL", "mongodb://localhost:27017/pena_linda")
+    try:
+        cli = MongoClient(url, serverSelectionTimeoutMS=4000)
+        col = cli["pena_linda"]["comisiones_futuras"]
+        res = col.find_one({"tipo": "resumen"})
+        if res:
+            out = {
+                "reservas": int(res.get("reservas", 0)),
+                "monto_pendiente": float(res.get("monto_pendiente", 0.0) or 0.0),
+                "comision": float(res.get("comision", 0.0) or 0.0),
+                "fuente": res.get("fuente", "comisiones_futuras"),
+            }
+            cli.close()
+            return out
+        # Fallback: calcular desde el detalle
+        det = list(col.find({"tipo": "reserva_futura"}))
+        cli.close()
+        if not det:
+            return {"reservas": 0, "monto_pendiente": 0.0, "comision": 0.0, "fuente": "sin datos"}
+        n = len(det)
+        monto = sum(float(d.get("pendiente", d.get("monto_pendiente", 0.0)) or 0.0) for d in det)
+        return {"reservas": n, "monto_pendiente": round(monto, 2),
+                "comision": round(monto * 0.05, 2), "fuente": "calculado desde detalle"}
+    except Exception:
+        return {"reservas": 0, "monto_pendiente": 0.0, "comision": 0.0, "fuente": "error de conexión"}
+
+
 # ─── Weekly PDF Report (like v1) ───
-def generate_weekly_pdf(ws, we, ventas_bruto, reversiones, costs_list, abonos_list, devoluciones_list=None, comision_pct=0.05):
-    """Genera un PDF invoice-style con reportlab (lazy import)."""
+def generate_weekly_pdf(ws, we, ventas_bruto, reversiones, costs_list, abonos_list, devoluciones_list=None, comision_pct=0.05, deuda_futura=None):
+    """Genera un PDF invoice-style con reportlab (lazy import).
+
+    deuda_futura: dict opcional de get_deuda_futura() — comisión 5% sobre reservas
+    confirmadas con pago pendiente. Se suma al subtotal como concepto aparte.
+    """
     from reportlab.lib.pagesizes import A4
     from reportlab.lib.units import cm
     from reportlab.lib import colors as rc
@@ -92,7 +137,13 @@ def generate_weekly_pdf(ws, we, ventas_bruto, reversiones, costs_list, abonos_li
     comision = ventas_bruto * comision_pct
     total_costos = sum(d.get('monto', 0) for d in costs_list)
     total_abonos = sum(d.get('monto', 0) for d in abonos_list)
-    subtotal = comision + total_costos
+
+    # Deuda futura (reservas confirmadas con pago pendiente) — comisión 5% aparte
+    df_comision = float((deuda_futura or {}).get("comision", 0.0) or 0.0)
+    df_reservas = int((deuda_futura or {}).get("reservas", 0) or 0)
+    df_monto = float((deuda_futura or {}).get("monto_pendiente", 0.0) or 0.0)
+
+    subtotal = comision + total_costos + df_comision
     saldo_pend = subtotal - total_abonos
 
     buffer = io.BytesIO()
@@ -187,6 +238,15 @@ N.° de registro de IGV: 20604661476"""
                       Paragraph("1", cell_style),
                       Paragraph(f"{c.get('monto', 0):,.2f}", cell_style),
                       Paragraph(f"{c.get('monto', 0):,.2f}", cell_style)])
+
+    # Deuda futura (reservas confirmadas con pago pendiente) — comisión 5% aparte
+    if df_comision > 0:
+        items.append([Paragraph(we.strftime('%d/%m/%Y'), cell_style),
+                      Paragraph(f"<b>Comisión 5% — Reservas Futuras Confirmadas (Pendiente de cobro)</b><br/>"
+                                f"{df_reservas} reservas · Monto por cobrar S/. {df_monto:,.2f}", cell_left),
+                      Paragraph("1", cell_style),
+                      Paragraph(f"{df_comision:,.2f}", cell_style),
+                      Paragraph(f"{df_comision:,.2f}", cell_style)])
 
     total_cell = ParagraphStyle('TotCell', parent=styles['Normal'], fontSize=8, alignment=TA_RIGHT, fontName='Helvetica-Bold')
     items.append([Paragraph("", cell_style),

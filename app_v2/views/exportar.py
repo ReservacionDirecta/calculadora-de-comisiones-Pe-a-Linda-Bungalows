@@ -7,7 +7,7 @@ import os
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from components import df_to_csv, df_to_excel, generate_weekly_pdf, export_buttons
+from components import df_to_csv, df_to_excel, generate_weekly_pdf, export_buttons, get_deuda_futura
 
 
 def render(df, k, fi, ff, sv, sv_date_filtered):
@@ -83,6 +83,12 @@ def render(df, k, fi, ff, sv, sv_date_filtered):
                 _abonos = sum(d["monto"] for d in _db["cobros"].find({"tipo": "abono"}))
                 _adeudado = _saldo_base + _comision + _total_costos
                 _pendiente = max(0.0, _adeudado - _abonos)
+                # Deuda futura (reservas confirmadas con pago pendiente)
+                from components import get_deuda_futura
+                _df = get_deuda_futura(os.environ.get("MONGO_URL", "mongodb://localhost:27017/pena_linda"))
+                _df_comision = float(_df.get("comision", 0.0) or 0.0)
+                _df_monto = float(_df.get("monto_pendiente", 0.0) or 0.0)
+                _df_reservas = int(_df.get("reservas", 0) or 0)
                 _cli.close()
 
                 elems = []
@@ -102,7 +108,9 @@ def render(df, k, fi, ff, sv, sv_date_filtered):
                     ['Saldo Base heredado (03/03)', f'S/ {_saldo_base:,.2f}'],
                     ['Abonos recibidos', f'S/ {_abonos:,.2f}'],
                     ['Deuda Pendiente', f'S/ {_pendiente:,.2f}'],
-                ], [230, 130])
+                    ['🔮 Reservas Futuras Confirmadas (pendientes)', f'{_df_reservas} reservas · S/ {_df_monto:,.2f} por cobrar'],
+                    ['🔮 Comisión 5% Reservas Futuras', f'S/ {_df_comision:,.2f}'],
+                ], [260, 160])
 
                 elems.append(Spacer(1, 15))
                 elems.append(HRFlowable(width="100%", thickness=0.5, color=rc.HexColor('#CCC')))
@@ -326,6 +334,20 @@ def render(df, k, fi, ff, sv, sv_date_filtered):
             ], [200, 160]))
             elems.append(Spacer(1, 12))
 
+            # 7. Deuda Futura (reservas confirmadas con pago pendiente)
+            from components import get_deuda_futura
+            _df = get_deuda_futura(os.environ.get("MONGO_URL", "mongodb://localhost:27017/pena_linda"))
+            _df_comision = float(_df.get("comision", 0.0) or 0.0)
+            _df_monto = float(_df.get("monto_pendiente", 0.0) or 0.0)
+            _df_reservas = int(_df.get("reservas", 0) or 0)
+            elems.append(Paragraph("7. Deuda Futura — Reservas Confirmadas (Pendiente de Cobro)", styles.get('SectionD', styles['Normal'])))
+            elems.append(make_table([
+                ['Concepto', 'Monto (S/)'],
+                [f'Reservas con pago pendiente ({_df_reservas})', f'{_df_monto:,.2f}'],
+                ['Comisión 5% (sobre monto pendiente)', f'{_df_comision:,.2f}'],
+            ], [200, 160]))
+            elems.append(Spacer(1, 12))
+
             # Resultado
             elems.append(HRFlowable(width="100%", thickness=1, color=rc.HexColor('#1B365D')))
             elems.append(Spacer(1, 6))
@@ -334,7 +356,9 @@ def render(df, k, fi, ff, sv, sv_date_filtered):
                 ['Formula', 'Monto (S/)'],
                 ['Adeudado (Saldo Base + Comisión + Costos)', f'{adeudado:,.2f}'],
                 ['- Abonos de Peña Linda', f'{-abonos_total:,.2f}'],
-                ['DEUDA PENDIENTE', f'{pendiente:,.2f}'],
+                ['DEUDA PENDIENTE (vigente)', f'{pendiente:,.2f}'],
+                ['+ Comisión Reservas Futuras (pendientes)', f'{_df_comision:,.2f}'],
+                ['TOTAL PENDIENTE POR PAGAR', f'{pendiente + _df_comision:,.2f}'],
             ], [260, 120]))
 
             elems.append(Spacer(1, 20))
@@ -602,15 +626,38 @@ def render(df, k, fi, ff, sv, sv_date_filtered):
         total_abon = df_abon["Monto"].sum() if not df_abon.empty else 0
         comision = total_sv * 0.05
 
+        # Deuda futura (reservas confirmadas con pago pendiente)
+        from components import get_deuda_futura
+        _df = get_deuda_futura(MONGO_URL_C)
+        df_comision = float(_df.get("comision", 0.0) or 0.0)
+        df_monto = float(_df.get("monto_pendiente", 0.0) or 0.0)
+        df_reservas = int(_df.get("reservas", 0) or 0)
+
         resumen_rows = [
             {"Concepto": "Ventas Sirvoy (neto)", "Monto": total_sv},
             {"Concepto": "Comisión 5%", "Monto": comision},
             {"Concepto": "Plataformas (confirmación tarjeta)", "Monto": total_plat},
             {"Concepto": "Costos operativos", "Monto": total_cost},
             {"Concepto": "Abonos recibidos", "Monto": total_abon},
-            {"Concepto": "Saldo pendiente", "Monto": comision + total_cost - total_abon},
+            {"Concepto": f"Reservas Futuras ({df_reservas}) — monto pendiente", "Monto": df_monto},
+            {"Concepto": "Comisión 5% Reservas Futuras", "Monto": df_comision},
+            {"Concepto": "Saldo pendiente (vigente)", "Monto": comision + total_cost - total_abon + df_comision},
         ]
         df_res = pd.DataFrame(resumen_rows)
+
+        # Hoja de reservas futuras
+        fut_docs = list(db_c["comisiones_futuras"].find({"tipo": "reserva_futura"}))
+        fut_rows = []
+        for d in fut_docs:
+            fut_rows.append({
+                "INV": d.get("inv", ""),
+                "Reserva": d.get("reserva", d.get("reserva_id", "")),
+                "Monto Pendiente": float(d.get("pendiente", d.get("monto_pendiente", 0.0)) or 0.0),
+                "Pagado": float(d.get("pagado", 0.0) or 0.0),
+                "Comisión 5%": float(d.get("comision_5_pct", 0.0) or 0.0),
+                "Fuente": d.get("fuente", ""),
+            })
+        df_fut = pd.DataFrame(fut_rows).sort_values("Monto Pendiente", ascending=False) if fut_rows else pd.DataFrame()
 
         cli_c.close()
 
@@ -626,6 +673,8 @@ def render(df, k, fi, ff, sv, sv_date_filtered):
                 df_cost.to_excel(writer, sheet_name="Costos", index=False)
             if not df_abon.empty:
                 df_abon.to_excel(writer, sheet_name="Abonos", index=False)
+            if not df_fut.empty:
+                df_fut.to_excel(writer, sheet_name="Reservas Futuras", index=False)
 
         st.download_button(
             "⬇️ Descargar Excel Contador",
@@ -783,6 +832,7 @@ def render(df, k, fi, ff, sv, sv_date_filtered):
             costs_list=costs_list,
             abonos_list=abonos_list,
             devoluciones_list=devoluciones_list,
+            deuda_futura=get_deuda_futura(os.environ.get("MONGO_URL", "mongodb://localhost:27017/pena_linda")),
         )
 
         st.download_button(
