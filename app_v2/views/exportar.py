@@ -12,6 +12,7 @@ from components import df_to_csv, df_to_excel, generate_weekly_pdf, export_butto
 
 def render(df, k, fi, ff, sv, sv_date_filtered):
     import os as _os
+    from components import get_deuda_futura
     # Deuda futura (reservas confirmadas con pago pendiente) — disponible para HTML y CSV
     _df_fut = get_deuda_futura(_os.environ.get("MONGO_URL", "mongodb://localhost:27017/pena_linda"))
     st.markdown("## 📤 Exportar Reportes")
