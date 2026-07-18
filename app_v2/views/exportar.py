@@ -11,6 +11,9 @@ from components import df_to_csv, df_to_excel, generate_weekly_pdf, export_butto
 
 
 def render(df, k, fi, ff, sv, sv_date_filtered):
+    import os as _os
+    # Deuda futura (reservas confirmadas con pago pendiente) — disponible para HTML y CSV
+    _df_fut = get_deuda_futura(_os.environ.get("MONGO_URL", "mongodb://localhost:27017/pena_linda"))
     st.markdown("## 📤 Exportar Reportes")
     st.write("Genera y descarga informes consolidados listos para imprimir o compartir.")
 
@@ -65,7 +68,7 @@ def render(df, k, fi, ff, sv, sv_date_filtered):
 
                 # === Cálculo desde MongoDB (deuda desde 03/03, coherente con HTML H1 y calculadora v3) ===
                 from pymongo import MongoClient as _MC
-                _cli = _MC(os.environ.get("MONGO_URL", "mongodb://localhost:27017/pena_linda"), serverSelectionTimeoutMS=5000)
+                _cli = _MC(_os.environ.get("MONGO_URL", "mongodb://localhost:27017/pena_linda"), serverSelectionTimeoutMS=5000)
                 _db = _cli["pena_linda"]
                 _DEBT = datetime(2026, 3, 3)
                 _sv = list(_db["pagos"].find({"fuente": "Sirvoy", "fecha": {"$gte": _DEBT}}))
@@ -84,8 +87,7 @@ def render(df, k, fi, ff, sv, sv_date_filtered):
                 _adeudado = _saldo_base + _comision + _total_costos
                 _pendiente = max(0.0, _adeudado - _abonos)
                 # Deuda futura (reservas confirmadas con pago pendiente)
-                from components import get_deuda_futura
-                _df = get_deuda_futura(os.environ.get("MONGO_URL", "mongodb://localhost:27017/pena_linda"))
+                _df = get_deuda_futura(_os.environ.get("MONGO_URL", "mongodb://localhost:27017/pena_linda"))
                 _df_comision = float(_df.get("comision", 0.0) or 0.0)
                 _df_monto = float(_df.get("monto_pendiente", 0.0) or 0.0)
                 _df_reservas = int(_df.get("reservas", 0) or 0)
@@ -144,6 +146,27 @@ def render(df, k, fi, ff, sv, sv_date_filtered):
         try:
             with open("Informe Financiero Peña Linda H1 2026.html", "r", encoding="utf-8") as fh:
                 html_code = fh.read()
+            # Inyectar sección de Deuda Futura (reservas confirmadas con pago pendiente)
+            _df_res = int(_df_fut.get("reservas", 0) or 0)
+            _df_mon = float(_df_fut.get("monto_pendiente", 0.0) or 0.0)
+            _df_com = float(_df_fut.get("comision", 0.0) or 0.0)
+            _bloque_fut = f"""
+  <section style="margin:32px 0;padding:24px;background:#F5F8FC;border:1px solid #1B365D;border-radius:12px;">
+    <h2 style="color:#1B365D;margin-top:0;">🔮 Deuda Futura — Reservas Confirmadas con Pago Pendiente</h2>
+    <p style="color:#444;font-size:15px;">Comisión del 5% sobre el monto pendiente de cobro de reservas futuras ya confirmadas (fuente: comisiones_futuras).</p>
+    <table style="width:100%;border-collapse:collapse;font-size:15px;">
+      <tr style="background:#1B365D;color:#fff;"><th style="padding:8px;text-align:left;">Indicador</th><th style="padding:8px;text-align:right;">Valor</th></tr>
+      <tr><td style="padding:8px;border-bottom:1px solid #ddd;">Reservas con pago pendiente</td><td style="padding:8px;border-bottom:1px solid #ddd;text-align:right;">{_df_res} reservas</td></tr>
+      <tr style="background:#F5F8FC;"><td style="padding:8px;border-bottom:1px solid #ddd;">Monto pendiente por cobrar</td><td style="padding:8px;border-bottom:1px solid #ddd;text-align:right;">S/ {_df_mon:,.2f}</td></tr>
+      <tr><td style="padding:8px;border-bottom:1px solid #ddd;">Comisión 5% calculada</td><td style="padding:8px;border-bottom:1px solid #ddd;text-align:right;">S/ {_df_com:,.2f}</td></tr>
+    </table>
+    <p style="color:#666;font-size:12px;margin-top:12px;">Generado automáticamente por el Panel v2 · {datetime.now().strftime('%d/%m/%Y %H:%M')}</p>
+  </section>
+"""
+            if "</body>" in html_code:
+                html_code = html_code.replace("</body>", _bloque_fut + "</body>", 1)
+            else:
+                html_code = html_code + _bloque_fut
             st.download_button("⬇️ Descargar Reporte H1 2026 HTML", html_code.encode("utf-8"),
                                "Informe_Financiero_Pena_Linda_H1_2026.html", "text/html",
                                use_container_width=True)
@@ -335,7 +358,6 @@ def render(df, k, fi, ff, sv, sv_date_filtered):
             elems.append(Spacer(1, 12))
 
             # 7. Deuda Futura (reservas confirmadas con pago pendiente)
-            from components import get_deuda_futura
             _df = get_deuda_futura(os.environ.get("MONGO_URL", "mongodb://localhost:27017/pena_linda"))
             _df_comision = float(_df.get("comision", 0.0) or 0.0)
             _df_monto = float(_df.get("monto_pendiente", 0.0) or 0.0)
@@ -382,15 +404,31 @@ def render(df, k, fi, ff, sv, sv_date_filtered):
     st.markdown("### 📋 Exportar por Pestaña")
     st.write("Descarga solo los datos de una sección específica.")
 
-    tab_names = ["Ventas", "Costos", "Conciliación"]
+    tab_names = ["Ventas", "Costos", "Conciliación", "Reservas Futuras"]
+
+    # Datos de reservas futuras (reservas confirmadas con pago pendiente) — _df_fut ya calculado al inicio de render()
+    from pymongo import MongoClient as _MCf
+    try:
+        _cli_fut = _MCf(_os.environ.get("MONGO_URL", "mongodb://localhost:27017/pena_linda"), serverSelectionTimeoutMS=5000)
+        _docs_fut = list(_cli_fut["pena_linda"]["comisiones_futuras"].find({"tipo": "reserva_futura"}))
+        _cli_fut.close()
+        _fut_rows = [{"INV": d.get("inv", ""), "Monto Pendiente": float(d.get("pendiente", 0.0) or 0.0),
+                      "Comisión 5%": float(d.get("comision_5_pct", 0.0) or 0.0)} for d in _docs_fut]
+        _df_fut_tab = pd.DataFrame(_fut_rows) if _fut_rows else pd.DataFrame(columns=["INV", "Monto Pendiente", "Comisión 5%"])
+    except Exception:
+        _df_fut_tab = pd.DataFrame(columns=["INV", "Monto Pendiente", "Comisión 5%"])
+
     tab_data = [
         k["sv_sirvoy"],
         k["costos_sin_base"],
         k.get("pendientes_link", pd.DataFrame()),
+        _df_fut_tab,
     ]
 
     for name, tab_df in zip(tab_names, tab_data):
         with st.expander(f"📥 {name}"):
+            if name == "Reservas Futuras":
+                st.caption(f"🔮 {int(_df_fut.get('reservas', 0) or 0)} reservas · S/ {float(_df_fut.get('monto_pendiente', 0.0) or 0.0):,.2f} pendiente · Comisión 5%: S/ {float(_df_fut.get('comision', 0.0) or 0.0):,.2f}")
             if tab_df is not None and not tab_df.empty:
                 display_df = tab_df.copy()
                 if "date_pe" in display_df.columns:
@@ -627,7 +665,6 @@ def render(df, k, fi, ff, sv, sv_date_filtered):
         comision = total_sv * 0.05
 
         # Deuda futura (reservas confirmadas con pago pendiente)
-        from components import get_deuda_futura
         _df = get_deuda_futura(MONGO_URL_C)
         df_comision = float(_df.get("comision", 0.0) or 0.0)
         df_monto = float(_df.get("monto_pendiente", 0.0) or 0.0)
